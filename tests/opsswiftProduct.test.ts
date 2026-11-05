@@ -13,6 +13,13 @@ describe('OpsSwift LTS product contract', () => {
     expect(read('electron-builder.yml')).toContain('appId: com.lyitech.opsswift')
     expect(read('LICENSE')).toContain('Copyright (c) 2026 OpsMaxx contributors')
   })
+  it('supplies a Windows icon large enough to package', () => {
+    const icon = readFileSync(resolve('build/icon.ico'))
+    expect(icon.readUInt16LE(2)).toBe(1)
+    expect(icon.readUInt16LE(4)).toBeGreaterThan(0)
+    expect(icon[6] === 0 ? 256 : icon[6]).toBeGreaterThanOrEqual(256)
+    expect(icon[7] === 0 ? 256 : icon[7]).toBeGreaterThanOrEqual(256)
+  })
   it('preserves encrypted storage identity while keeping product data in a separate directory', () => {
     const portable = read('src/main/portable.ts')
     expect(portable).toContain("app.setName('OpsMaxx')")
