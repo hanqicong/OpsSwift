@@ -8,7 +8,7 @@ import type { MessageKey } from './i18n'
 //
 // It is emphatically NOT part (b), a third-party extension API. The two share a
 // registry and almost nothing else, and letting (a) drift into (b) by accident
-// is the failure this file is written to prevent. OpsMaxx's whole thesis is
+// is the failure this file is written to prevent. OpsSwift's whole thesis is
 // that credentials never leave it; code we did not write, running in-process
 // with access to `credentialResolver`, is a vault with no lock. (b) needs a real
 // sandbox and a capability-scoped API. It is a product, not a refactor.
@@ -450,7 +450,7 @@ export const MODULES: ModuleDef[] = [
   // Still `operate` and still OFF by default. The consequence has not changed:
   // this hands the verb to somebody else's scheduler and then has no say in it,
   // and it remains the weakest undo in the registry -- patch and broadcast at
-  // least act through a connection OpsMaxx holds and can drop.
+  // least act through a connection OpsSwift holds and can drop.
   {
     id: 'cicdTrigger',
     surface: 'operate',
@@ -577,7 +577,7 @@ export function modulesOnSurface(surface: ModuleSurface): ModuleDef[] {
  *    that was already a known bug.
  *
  *  - `addy` is about THE USER'S OWN DEVICES. Not one estate host appears on
- *    it: the rows are the laptops and desktops this person runs OpsMaxx on,
+ *    it: the rows are the laptops and desktops this person runs OpsSwift on,
  *    and the numbers are about an account on a relay rather than about
  *    anything being administered. It also fails the "another fact about the
  *    estate" test in the other direction -- a person opens it when something

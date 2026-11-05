@@ -29,7 +29,7 @@ export const MIN_PASSPHRASE = 12
 export interface BackupPayload {
   version: 1
   createdAt: string
-  app: string // OpsMaxx version that wrote the bundle
+  app: string // OpsSwift version that wrote the bundle
   // Non-secret application state (workspaces, folders, servers, databases…).
   data: unknown | null
   // Credentials, unsealed from the OS keychain. Only ever exists inside the
@@ -143,13 +143,13 @@ interface BackupDestinationBase {
 
 export interface LocalBackupDestination extends BackupDestinationBase {
   kind: 'local'
-  /** Absolute path on the machine running OpsMaxx. */
+  /** Absolute path on the machine running OpsSwift. */
   directory: string
 }
 
 export interface SftpBackupDestination extends BackupDestinationBase {
   kind: 'sftp'
-  /** A server already configured in OpsMaxx. Its credentials are resolved
+  /** A server already configured in OpsSwift. Its credentials are resolved
    *  through credentialResolver, exactly as the terminal and file browser do —
    *  this destination stores no credential of its own. */
   serverId: string
@@ -791,7 +791,7 @@ export interface BackupAlarm {
 /**
  * How late a backup may be before it is worth interrupting somebody.
  *
- * TWO periods, not one. OpsMaxx only backs up while it is running, so a
+ * TWO periods, not one. OpsSwift only backs up while it is running, so a
  * daily schedule on a laptop that was shut overnight is routinely a few hours
  * late and that is not a fault. Two missed periods is not lateness, it is a
  * schedule that has stopped.

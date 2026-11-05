@@ -363,7 +363,7 @@ function RekeyRow(): React.JSX.Element {
   const [open, setOpen] = useState(false)
   const [busy, setBusy] = useState(false)
   // Copies set aside and not decided yet. A re-key drops every one of them
-  // (OpsMaxx offers only the current key's, and the relay deletes the rest),
+  // (OpsSwift offers only the current key's, and the relay deletes the rest),
   // and one of them may be the only place a set-aside vault exists — so the
   // number is said before the button, not discovered after.
   const [waiting, setWaiting] = useState(0)
@@ -1119,7 +1119,7 @@ function AccountFingerprint({ words }: { words: string[] }): React.JSX.Element {
 /**
  * Try again, without quitting.
  *
- * Every failure to attach had exactly one remedy — restart OpsMaxx — and
+ * Every failure to attach had exactly one remedy — restart OpsSwift — and
  * nothing on the screen said so. A relay down for a minute, or a laptop woken
  * on a different network, cost a restart.
  */

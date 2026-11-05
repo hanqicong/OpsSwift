@@ -1,5 +1,5 @@
 /**
- * The shared contract between OpsMaxx and addy.
+ * The shared contract between OpsSwift and addy.
  *
  * Collection NAMES are the load-bearing part. A name appears in every sealed
  * object's AAD, so a client writing `servers` and a client reading `Servers`
@@ -281,7 +281,7 @@ export interface ConflictCopy {
   createdAt: string
   /**
    * True when `device` and `createdAt` are only the relay's word: a copy kept
-   * by OpsMaxx 0.59.0, or one that could not be opened. False when both came
+   * by OpsSwift 0.59.0, or one that could not be opened. False when both came
    * from inside the sealed copy, where neither the relay nor a removed device
    * can have written them. The chooser says which, because for the vault they
    * are the whole basis of the choice.

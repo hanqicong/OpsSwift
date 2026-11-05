@@ -23,7 +23,7 @@ function fakeContents(current: string) {
 
 describe('the will-navigate guard (SEC-M9)', () => {
   it('prevents the main window leaving the app', () => {
-    const contents = fakeContents('file:///Applications/OpsMaxx.app/renderer/index.html')
+    const contents = fakeContents('file:///Applications/OpsSwift.app/renderer/index.html')
     guardNavigation(contents)
     expect(contents.navigate('https://example.com')).toBe(true)
     expect(contents.navigate('file:///etc/passwd')).toBe(true)

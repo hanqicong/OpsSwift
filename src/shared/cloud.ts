@@ -1,7 +1,7 @@
 /**
  * Cloud-native SSH targets: what one is, and what counts as a valid one.
  *
- * OpsMaxx reaches a GCE, EC2 or Azure VM by asking the user's own `gcloud`,
+ * OpsSwift reaches a GCE, EC2 or Azure VM by asking the user's own `gcloud`,
  * `aws` or `az` to broker the connection — never by carrying it. The CLI mints
  * a short-lived credential and, where the machine has no reachable address,
  * opens a tunnel; the existing ssh2 stack then connects to what it handed back.
@@ -229,7 +229,7 @@ export const CLOUD_FAULT_MESSAGE: Record<CloudFault, string> = Object.defineProp
  */
 export const CLOUD_FAULT_HINT_KEY: Record<CloudFault, MessageKey | null> = {
   // Deliberately empty: which tool, and how it is installed, differs per
-  // provider and per platform, and the caller already knows both. OpsMaxx never
+  // provider and per platform, and the caller already knows both. OpsSwift never
   // installs one itself.
   'cli-not-installed': null,
   'cli-unsupported-version': 'shared.cloud.hint.cliUnsupportedVersion',

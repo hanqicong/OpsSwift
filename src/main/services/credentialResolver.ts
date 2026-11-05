@@ -5,6 +5,8 @@ import type { CredentialShape } from '../../shared/credentialShape'
 import { vaultEntriesForResolve, vaultStatus } from './vault'
 import { VpnError } from './vpn/errors'
 import type { SshHop } from '../../shared/ssh'
+import { sshCompatibilityFromTags } from '../../shared/networkDevice'
+import { defaultSshCompatibility } from './sshPolicy'
 import { VAULT_LOCKED } from '../../shared/vault'
 import type { VaultEntry } from '../../shared/vault'
 import type { VpnProfile, VpnSecretField, VpnSecretRef, VpnSpec } from '../../shared/vpn'
@@ -95,6 +97,12 @@ function applyVaultEntry<T extends SshHop>(cfg: T, entry: VaultEntry): void {
 // exactly the same way a human-driven terminal/SFTP session does, so there is
 // only one place that ever reads a server's stored secret.
 export function resolveSecrets<T extends SshHop & { serverId?: string }>(cfg: T): T {
+  // The renderer, monitors and saved jump hops historically omitted this field.
+  // Resolve it with the stored credential so every SSH entry uses the saved policy.
+  // An explicit form value, including strict, wins when testing an unsaved edit.
+  if (cfg.sshCompatibility === undefined) {
+    cfg.sshCompatibility = sshCompatibilityFromTags(cfg.serverId ? getCachedServer(cfg.serverId)?.tags : undefined, defaultSshCompatibility())
+  }
   /**
    * The saved record's method wins over the caller's for Certificate.
    *

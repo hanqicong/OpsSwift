@@ -4,6 +4,7 @@ import type { CloudTarget } from '../../../shared/cloud'
 import { getCachedDatabase, getCachedServer } from '../mcpDataCache'
 import { vpnForDatabase, vpnForServer } from './dependencies'
 import { resolveChainSecrets } from '../credentialResolver'
+import { remoteTransport } from '../../../shared/remoteProtocol'
 
 // Which VPN a connection rides, resolved in main from the saved record rather
 // than sent by the renderer.
@@ -163,6 +164,14 @@ export function withVpnTransportDb(cfg: DbConnectConfig): DbConnectConfig {
  * `resolveChainSecrets` reappears on an SSH path.
  */
 export function preparedSshTarget<T extends SshHop & { serverId?: string; hops?: SshHop[] }>(
+  cfg: T
+): T & { vpnProfileId?: string; serverName?: string; cloudTarget?: CloudTarget } {
+  const transport = remoteTransport(cfg.serverId ? getCachedServer(cfg.serverId)?.tags : undefined)
+  if (transport !== 'ssh' && transport !== 'windows-ssh') throw new Error('Use the dedicated protocol MCP tools for this saved connection; SSH shell/SFTP is disabled')
+  return preparedProtocolTarget(cfg)
+}
+/** Same secret/trust/route resolution, without pretending a non-SSH target is a shell server. */
+export function preparedProtocolTarget<T extends SshHop & { serverId?: string; hops?: SshHop[] }>(
   cfg: T
 ): T & { vpnProfileId?: string; serverName?: string; cloudTarget?: CloudTarget } {
   // A revision only when the caller did not state one.

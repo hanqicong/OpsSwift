@@ -167,7 +167,7 @@ describe('a refusal by the policy', () => {
 describe('a request nobody was asked about', () => {
   it('is not attributed to the operator', () => {
     const o = auditOutcome(
-      e({ approval: 'not-asked', result: 'denied', error: 'OpsMaxx did not ask: the same action was denied moments ago' })
+      e({ approval: 'not-asked', result: 'denied', error: 'OpsSwift did not ask: the same action was denied moments ago' })
     )
     expect(o.label).toBe('Denied — not asked')
     expect(o.decidedBy).not.toBe('you')

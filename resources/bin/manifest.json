@@ -7,9 +7,9 @@
       "version": "0.22.3"
     },
     "darwin-arm64/opsmaxx-netd": {
-      "sha256": "38fe80ab58d1a6dbce5cdb576f4f11706a46df195246f635fac2e8921e9137f6",
-      "size": 10726194,
-      "version": "0.22.3"
+      "sha256": "c4e62b836330b751cbee38b36790f737b098242be2c8f88162d2b32e287efa0d",
+      "size": 30059552,
+      "version": "0.60.2"
     },
     "linux-x64/opsmaxx-netd": {
       "sha256": "55a04ea1366e4eeca64081f88da6e0fb6419f24c16434f9be71360c090d882e5",
@@ -37,8 +37,8 @@
       "version": "0.71.0"
     },
     "darwin-arm64/frpc": {
-      "sha256": "1059ed86cd57595d3b06438edf89cd9fc4c5f3d1ac7be948ef7d0189098233bb",
-      "size": 14656706,
+      "sha256": "3d497a5f2f522b480026c196d25224e5e279cdd73e852b25e8353bf9f8a519dd",
+      "size": 14591328,
       "version": "0.71.0"
     },
     "linux-x64/frpc": {
@@ -77,8 +77,8 @@
       "version": "2.6.22"
     },
     "darwin-arm64/openvpn": {
-      "sha256": "a959cebe528bc7422538fb91b5e482eb99d928be619b1d3f98a6ba01742d3c46",
-      "size": 6070424,
+      "sha256": "538be2ba156eeb41c7fb212aee857fbfeb3a3fb4bc533f052c03a43444251ac5",
+      "size": 6056480,
       "version": "2.6.22"
     },
     "darwin-x64/opsmaxx-addyd": {
@@ -87,9 +87,9 @@
       "version": "0.48.0"
     },
     "darwin-arm64/opsmaxx-addyd": {
-      "sha256": "c30f3820b970432008c98cdf46b6ca4fb90f55f8ecf3e7636d52b9ee2e1564fc",
-      "size": 9698114,
-      "version": "0.48.0"
+      "sha256": "b1541651623b47746f8c2108658cdede866dc8f8e905f1bb347176d6bfe866fe",
+      "size": 9811472,
+      "version": "0.60.2"
     },
     "linux-x64/opsmaxx-addyd": {
       "sha256": "562f552a90f340f458b905b438515d43558b2d5fd25dc4ca5e6aa1402920eed8",

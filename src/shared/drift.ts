@@ -454,7 +454,7 @@ export function driftWatch(id: string): DriftWatch | undefined {
 export interface DriftNormaliseContext {
   /** The host's own hostname, as the metrics probe reported it. */
   hostname?: string
-  /** The server's name in OpsMaxx, which is often the short hostname. */
+  /** The server's name in OpsSwift, which is often the short hostname. */
   serverName?: string
   /**
    * The comment character the `comments` rule uses, from the WATCH.

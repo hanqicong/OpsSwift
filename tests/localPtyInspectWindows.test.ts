@@ -3,7 +3,7 @@ import type { WebContents } from 'electron'
 import type { LocalShell, LocalShellKind } from '../src/shared/local'
 
 /**
- * Why a Windows terminal OpsMaxx opened captured nothing.
+ * Why a Windows terminal OpsSwift opened captured nothing.
  *
  * Reported as: "in windows traffic capture nothing showed up when i ran it
  * with terminals opsmaxx opens i tried curl and it didn't show up." The panel
@@ -99,7 +99,7 @@ import { childEnv, localConnect, localNotifyInspectStopped } from '../src/main/s
 /** The proxy the inspector is listening on. Values a stale variable could not
  *  coincidentally match. */
 const PROXY = 'http://127.0.0.1:58653'
-const CERT = 'C:\\Users\\x\\AppData\\Roaming\\OpsMaxx\\inspect\\opsmaxx-inspector-ca.crt'
+const CERT = 'C:\\Users\\x\\AppData\\Roaming\\OpsSwift\\inspect\\opsmaxx-inspector-ca.crt'
 
 /** inspectEnv()'s documented shape: both casings of each proxy variable,
  *  because on a POSIX machine they are two different variables and real tools
@@ -272,7 +272,7 @@ describe('a shell is told what is true of it', () => {
     const { wc, sent } = fakeWebContents()
     await localConnect(wc, { sessionId: 'p7', shellId: 'win32-pwsh', cols: 80, rows: 24 })
     const text = output(sent, 'p7')
-    expect(text).toContain('routed through OpsMaxx traffic capture')
+    expect(text).toContain('routed through OpsSwift traffic capture')
     expect(text).not.toContain('Invoke-WebRequest')
   })
 
@@ -285,7 +285,7 @@ describe('a shell is told what is true of it', () => {
     await localConnect(wc, { sessionId: 'w', shellId: 'win32-wsl', cols: 80, rows: 24 })
     const text = output(sent, 'w')
     expect(text).toContain('nothing you run here is captured')
-    expect(text).not.toContain('routed through OpsMaxx traffic capture')
+    expect(text).not.toContain('routed through OpsSwift traffic capture')
   })
 
   it('says nothing when capture is off', async () => {

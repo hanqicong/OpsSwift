@@ -240,7 +240,7 @@ describe('nothing an agent can reach imports the rule engine', () => {
       .map((e) => `${relative(ROOT, e.from)} imports '${e.spec}'`)
     expect(
       offenders,
-      `A module reachable from the MCP bridge or the OpsMaxx CLI now imports the rule ` +
+      `A module reachable from the MCP bridge or the OpsSwift CLI now imports the rule ` +
         `engine.\n\n${offenders.join('\n')}\n\n` +
         `DURABILITY DEFEATS REVOCATION, and a rule is the worst case of it. denyAllPending() ` +
         `resolves requests that are PENDING; a rule between firings has none — no request, no ` +
@@ -266,7 +266,7 @@ describe('nothing an agent can reach imports the rule engine', () => {
 
 describe('the AI permission model has no word for a rule', () => {
   // The word "rule" is not owned by this file. A FIREWALL rule is a line in a
-  // packet filter on somebody else's machine; a OpsMaxx rule is a standing
+  // packet filter on somebody else's machine; a OpsSwift rule is a standing
   // consent record on this one, which is the thing below has no safe setting.
   // `firewallRules` is reviewed and named here rather than let through by a
   // looser regex, and rather than renamed to dodge one — a consent label that
@@ -302,7 +302,7 @@ describe('the AI permission model has no word for a rule', () => {
   // The honest caveat, recorded rather than argued away: the kill switch does
   // not reach a build the provider has already accepted. STOP ALL AI ACCESS
   // resolves pending approvals and clears elevations; it cannot cancel a run
-  // on infrastructure OpsMaxx does not administer, and it takes away the
+  // on infrastructure OpsSwift does not administer, and it takes away the
   // AGENT's cancel along with everything else.
   //
   // What makes that acceptable rather than merely admitted is the other half,

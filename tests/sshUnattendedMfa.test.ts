@@ -108,8 +108,9 @@ describe('the unpooled walker', () => {
   it('passes it to every hop and to the target, not only the first', () => {
     const i = SSH.indexOf('async function openChainDirect(')
     const body = SSH.slice(i, SSH.indexOf('// ---------------------------------------------------------------- pooling', i))
-    expect(body).toContain('connectClient(hops[i], sock, allowPrompt)')
-    expect(body).toContain('connectClient(cfg, sock, allowPrompt)')
+    expect(body).toContain('connectClient(hops[i], previous ? () => hopForward(previous, hops[i]')
+    expect(body).toContain('connectClient(cfg, previous ? () => hopForward(previous, cfg')
+    expect(body.match(/: undefined, allowPrompt\)/g)).toHaveLength(2)
     // Nothing left taking the default, which is what the old code did twice.
     expect(body).not.toMatch(/connectClient\([^)]*sock\)/)
   })

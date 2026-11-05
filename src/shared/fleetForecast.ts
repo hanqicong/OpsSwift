@@ -340,7 +340,7 @@ export function capacityDigest(report: CapacityReport, hostName: string): string
     return (
       `${hostName}: nothing has been recorded in the last ${window}, so there is nothing to ` +
       `forecast. This does not mean the server has spare capacity. Samples are collected while ` +
-      `OpsMaxx is running with background checking on, and kept for ${report.retainedDays} days.`
+      `OpsSwift is running with background checking on, and kept for ${report.retainedDays} days.`
     )
   }
   return [`${hostName} - capacity over the last ${window}.`, ...report.trends.map(trendLine)].join(

@@ -161,27 +161,11 @@ describe('macOS file-access usage descriptions', () => {
   })
 })
 
-describe('a macOS artifact cannot claim an architecture its node_modules does not carry', () => {
-  const dmg = (cfg.mac.target ?? []).find((t) => t.target === 'dmg')
-
-  it('builds both mac architectures from the one build', () => {
-    // Intel Macs are still a shipped target and the release notes link an x64
-    // dmg by name.
-    expect(dmg?.arch).toEqual(['x64', 'arm64'])
-  })
-
-  it('installs both prebuild siblings before packaging them', () => {
-    // THE bug this whole file exists for. @lydell/node-pty-* declares
-    // "os"/"cpu", so `npm ci` on the arm64 runner installs the arm64 sibling
-    // and nothing else — and electron-builder then packs that one
-    // node_modules into BOTH bundles. Without this step the x64 dmg ships the
-    // arm64 binding and every Intel Mac gets MODULE_NOT_FOUND on first local
-    // tab, while every check in CI passes: a --dir pack covers the host arch
-    // only, and the release's signature loop looks at whichever .app it finds.
-    const step = steps(release.jobs.build).find((s) => /node-pty-darwin-x64/.test(s.run ?? ''))
-    expect(step, 'no release step force-installs the macOS node-pty prebuilds').toBeTruthy()
-    expect(step?.run).toContain('node-pty-darwin-arm64')
-    expect(step?.if).toContain('macos')
+describe('the qualified macOS release target', () => {
+  it('only claims Apple Silicon until another native target is accepted', () => {
+    const dmg = (cfg.mac.target ?? []).find((t) => t.target === 'dmg')
+    expect(dmg?.arch).toEqual(['arm64'])
+    expect(steps(release.jobs.build).some((s) => /opsswift-package\.py/.test(s.run ?? ''))).toBe(true)
   })
 })
 
@@ -209,29 +193,11 @@ describe('the pack job proves the layout on all three platforms', () => {
   })
 })
 
-describe('the release signature check cannot pass by finding nothing', () => {
-  const step = steps(release.jobs.build).find((s) => /codesign --verify/.test(s.run ?? ''))
-  // Comments in that step name the constructs it exists to avoid, so match on
-  // the shell it actually runs.
-  const run = (step?.run ?? '')
-    .split('\n')
-    .filter((l) => !/^\s*#/.test(l))
-    .join('\n')
-
-  it('verifies every .app under release/, not just the first', () => {
-    // Two dmgs are built from one job, so `find … | head -n1` inspects one
-    // bundle and reports on both.
-    expect(step, 'no step verifies the macOS signature').toBeTruthy()
-    expect(run).not.toMatch(/head -n ?1/)
-  })
-
-  it('fails when the unpacked bindings are not there at all', () => {
-    // A `-d` test on …/@lydell succeeds as soon as the 13.5 KB meta package is
-    // copied. If the sibling asarUnpack pattern is ever dropped, `find` matches
-    // zero files, the loop body never runs, and the release ships a
-    // binding-less app green. Counting is what makes the check a check.
-    expect(run).toMatch(/COUNT|count/)
-    expect(run).toMatch(/::error::/)
-    expect(run).toMatch(/exit 1/)
+describe('the release validates the native binding and signature', () => {
+  it('runs the existing package layout verifier on the actual product bundle', () => {
+    const script = readFileSync('scripts/opsswift-package.py', 'utf8')
+    expect(script).toContain('verify-local-pty-pack.mjs')
+    expect(script).toContain("'--verify','--strict','--deep'")
+    expect(script).toContain('check=True')
   })
 })

@@ -126,7 +126,7 @@ describe('the command preview', () => {
     }
     view.rerender(<CloudTargetFields provider="gcp" draft={draft} onChange={rerender} />)
 
-    await user.click(await screen.findByText('What OpsMaxx will run'))
+    await user.click(await screen.findByText('What OpsSwift will run'))
     const pre = document.querySelector('pre')
     return pre?.textContent ?? ''
   }

@@ -51,7 +51,7 @@ export function useCicdConnectionList(): CicdConnection[] {
 /**
  * The preload bridge, or undefined in a build where it is not wired.
  *
- * Cast rather than read off `OpsMaxxApi`: `CicdBridge` in `src/shared/cicd.ts`
+ * Cast rather than read off `OpsSwiftApi`: `CicdBridge` in `src/shared/cicd.ts`
  * is the declaration all three sides import, and it is what this module codes
  * against. Every call site here is written to survive the namespace being
  * absent — the same rule `lib/bridge.ts` states for the rest of the app.

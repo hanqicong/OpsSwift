@@ -78,7 +78,7 @@ const OSC = (body: string): string => `\\033]${body}\\007`
  * and the line wraps early.
  */
 const ZSH = `
-# OpsMaxx shell integration (OSC 133). Injected per session; not installed.
+# OpsSwift shell integration (OSC 133). Injected per session; not installed.
 #
 # ZDOTDIR points here, which means zsh reads THIS file instead of the user's
 # ~/.zshrc — so the first thing it must do is read theirs, and restore ZDOTDIR
@@ -109,7 +109,7 @@ PS1="$PS1"$'%{${OSC('133;B')}%}'
  * zero-width markers, the counterpart of zsh's `%{ %}`.
  */
 const BASH = `
-# OpsMaxx shell integration (OSC 133). Injected per session; not installed.
+# OpsSwift shell integration (OSC 133). Injected per session; not installed.
 #
 # --init-file makes bash read THIS file instead of ~/.bashrc, so it has to read
 # theirs first or an interactive shell loses its own configuration entirely.
@@ -148,7 +148,7 @@ PS1="$PS1"'\\[\\e]133;B\\a\\]'
  * terminal cannot know where its prompt ends.
  */
 const FISH = `
-# OpsMaxx shell integration (OSC 133 + OSC 7). Injected per session; not installed.
+# OpsSwift shell integration (OSC 133 + OSC 7). Injected per session; not installed.
 function __om_preexec --on-event fish_preexec
   printf '${OSC('133;C')}'
 end
@@ -194,8 +194,8 @@ export type IntegrationShell = 'zsh' | 'bash' | 'fish'
  * `$HOME` is what zsh itself would have used.
  */
 export function zshPassthrough(file: '.zshenv' | '.zprofile' | '.zlogin'): string {
-  return `# OpsMaxx shell integration: hand back to this user's own ${file}.
-# ZDOTDIR points at OpsMaxx's directory, which redirects zsh's ENTIRE startup
+  return `# OpsSwift shell integration: hand back to this user's own ${file}.
+# ZDOTDIR points at OpsSwift's directory, which redirects zsh's ENTIRE startup
 # chain — so without this file, ${file} would simply never be read.
 [ -f "\${OPSMAXX_USER_ZDOTDIR:-$HOME}/${file}" ] && . "\${OPSMAXX_USER_ZDOTDIR:-$HOME}/${file}"
 `

@@ -144,7 +144,7 @@ describe('a pending approval is visible to the agent', () => {
     })
     expect(result.isError).toBe(true)
     const text = (result.content as { type: string; text: string }[])[0].text
-    expect(text).toContain('OpsMaxx window')
+    expect(text).toContain('OpsSwift window')
     // A timeout the user can act on names the setting that stops it recurring.
     expect(text).toContain('Ask to Allow')
     off()

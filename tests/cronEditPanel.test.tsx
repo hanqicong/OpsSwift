@@ -273,7 +273,7 @@ describe('the crontab editor, now on the Operations rail', () => {
       bridge({
         planEdit: vi.fn(async () => ({
           ok: false,
-          reason: 'this crontab has 1 line OpsMaxx could not parse, starting with `wat`.'
+          reason: 'this crontab has 1 line OpsSwift could not parse, starting with `wat`.'
         }))
       })
     )

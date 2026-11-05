@@ -409,7 +409,7 @@ export function BackupDestinations(): React.JSX.Element {
                     </button>
                   </div>
                   {/* Said at the button, not in documentation: a dump is not a
-                      OpsMaxx bundle and nothing encrypts it. Somebody who
+                      OpsSwift bundle and nothing encrypts it. Somebody who
                       assumed otherwise has just put a database in a bucket in
                       the clear. */}
                   <div className="s-desc">{t('settings.backupDest.dump.note')}</div>

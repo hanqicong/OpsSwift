@@ -4,7 +4,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 // succeeded" and "the machine trusts the certificate" are different facts.
 //
 // The bug this file exists for: on a managed Mac (macOS 15.7.3, Mosyle),
-// `security add-trusted-cert -d …` run through OpsMaxx's osascript elevator
+// `security add-trusted-cert -d …` run through OpsSwift's osascript elevator
 // imported the CA into the system keychain, wrote NO trust setting, and exited
 // 0. The identical command under `sudo` in Terminal worked. The panel then
 // looped — "installed but not trusted, install it again" — and pressing the
@@ -87,10 +87,10 @@ import {
 } from '../src/main/services/inspectTrust'
 import type { TrustContext } from '../src/main/services/inspectTrust'
 
-const COMMON_NAME = 'OpsMaxx Traffic Inspector CA'
+const COMMON_NAME = 'OpsSwift Traffic Inspector CA'
 // A path with a space, because that is the common case on macOS — and the
 // reason every one of these commands is quoted.
-const CERT_PATH = '/Users/x/Library/Application Support/OpsMaxx/inspect/ca.crt'
+const CERT_PATH = '/Users/x/Library/Application Support/OpsSwift/inspect/ca.crt'
 const CERT_PEM =
   '-----BEGIN CERTIFICATE-----\nTUlJQmt6Q0NBVGtDRkE9PQ==\n-----END CERTIFICATE-----\n'
 const FINGERPRINT = sha256Hex(CERT_PEM)

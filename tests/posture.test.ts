@@ -32,7 +32,7 @@ import { CERT_FAR, CERT_GENERALIZED, CERT_SOON } from './postureCertificateFixtu
 // Two kinds of input appear below and they are NOT equally trustworthy:
 //
 //   * The COLLECTOR'S OWN OUTPUT (`V key value`, `D Directive value`, and the
-//     status block) is OpsMaxx's format. Writing it by hand in a test is
+//     status block) is OpsSwift's format. Writing it by hand in a test is
 //     writing the format down twice, which is what a parser test is for.
 //
 //   * The TOOLS' output — `ufw status verbose`, `firewall-cmd --list-all`,

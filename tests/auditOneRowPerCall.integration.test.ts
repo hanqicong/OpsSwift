@@ -245,9 +245,9 @@ describe('an ask with no server to name', () => {
   })
 })
 
-// `refused` -- the deny cooldown or a full queue -- is OpsMaxx declining to
+// `refused` -- the deny cooldown or a full queue -- is OpsSwift declining to
 // ask. It used to be written as `denied` and read "You refused this request".
-describe('a request OpsMaxx declined to ask', () => {
+describe('a request OpsSwift declined to ask', () => {
   it('is recorded as not asked, never as the operator\u2019s refusal', async () => {
     const restore = withOpen({ terminal: 'ask' })
     const off = onApprovalEvent((e) => {

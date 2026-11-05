@@ -1,8 +1,8 @@
-import type { OpsMaxxApi } from './index'
+import type { OpsSwiftApi } from './index'
 
 declare global {
   interface Window {
-    opsmaxx: OpsMaxxApi
+    opsmaxx: OpsSwiftApi
   }
 }
 

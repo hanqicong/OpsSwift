@@ -8,7 +8,7 @@ import { createSession, getMcpConfig } from './mcpAuth'
 
 // Bootstraps a session for the `opsmaxx claude|codex|run` CLI launcher
 // without weakening the existing consent model: the code is only ever shown
-// inside OpsMaxx itself (never returned to whichever local process called
+// inside OpsSwift itself (never returned to whichever local process called
 // /pair/start), so completing a pairing proves the human at the keyboard can
 // see both the app window and the terminal — the same property a TV-app or
 // `gh auth login` device code gets from a physically separate screen.
@@ -99,7 +99,7 @@ export function confirmCliPairing(
   emitter.emit('event', { type: 'resolved', request: toRequest(id, p) } satisfies CliPairingEvent)
 
   const workspaces = listCachedWorkspaces()
-  if (workspaces.length === 0) return { ok: false, error: 'No workspace exists in OpsMaxx yet — create one first.' }
+  if (workspaces.length === 0) return { ok: false, error: 'No workspace exists in OpsSwift yet — create one first.' }
   // The session's group is the grant, and there is no group picker at pairing
   // time, so `defaultSessionGroupId` — the setting that exists for exactly this
   // decision — is the only thing allowed to choose it. It used to be

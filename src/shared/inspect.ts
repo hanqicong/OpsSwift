@@ -15,7 +15,7 @@
 
 /** Where the traffic being inspected comes from. */
 export type InspectSourceKind =
-  /** Local terminals OpsMaxx itself starts get the proxy variables
+  /** Local terminals OpsSwift itself starts get the proxy variables
    *  injected. No privilege, no system state, nothing to undo if the app is
    *  killed.
    *
@@ -108,7 +108,7 @@ export interface InspectCaInfo {
   fingerprint: string
   /** Colon-separated uppercase hex, which is how every trust-store UI on
    *  every platform shows a fingerprint. Provided so a person can compare
-   *  what OpsMaxx says with what Keychain Access or certmgr.msc says
+   *  what OpsSwift says with what Keychain Access or certmgr.msc says
    *  without transcribing 64 characters. */
   fingerprintDisplay: string
   notBefore: number
@@ -137,7 +137,7 @@ export interface InspectTrustStore {
   state: 'trusted' | 'untrusted' | 'unknown' | 'unsupported'
   /** What to do about it, in one sentence, when the state is not `trusted`. */
   hint?: string
-  /** True when OpsMaxx can change this store itself. Firefox and the JVM
+  /** True when OpsSwift can change this store itself. Firefox and the JVM
    *  cannot be done for the user without reaching into someone else's data
    *  directory, so they are reported and explained instead. */
   installable: boolean
@@ -151,7 +151,7 @@ export interface InspectStatus {
   lanExposed?: boolean
   /** Set while the machine's proxy settings no longer point at the inspector
    *  although it is running as the system proxy — something else changed them.
-   *  OpsMaxx puts them back by itself wherever that needs no password; on
+   *  OpsSwift puts them back by itself wherever that needs no password; on
    *  macOS it does need one, so this is what the panel says instead of
    *  silently capturing nothing. */
   systemProxyDrifted?: boolean
@@ -235,7 +235,7 @@ export const INSPECT_DEFAULT_PASSTHROUGH: readonly string[] = [
   'gdmf.apple.com',
   '*.windowsupdate.com',
   '*.update.microsoft.com',
-  // OpsMaxx's own updater. Inspecting our own signature check while
+  // OpsSwift's own updater. Inspecting our own signature check while
   // holding a CA that can forge it is the one combination that turns a
   // debugging tool into a supply-chain problem.
   'api.github.com',

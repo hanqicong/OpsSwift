@@ -44,6 +44,8 @@ describe('the ssh:test handler', () => {
   it("tests the form's VPN, not the saved record's", () => {
     // The spread puts the record's annotation first and the form's choice
     // after it. Reversed, an edited server is tested through its old tunnel.
-    expect(handler).toMatch(/\.\.\.preparedSshTarget\(cfg\),\s*vpnProfileId:[^\n]*cfg\.vpnProfileId/)
+    expect(handler).toContain('nativeNetworkTest(cfg)')
+    const native = readFileSync(join(__dirname, '..', 'src/main/services/nativeNetworkTerminal.ts'), 'utf8')
+    expect(native).toMatch(/\.\.\.preparedProtocolTarget\(cfg\),\s*vpnProfileId:[^\n]*cfg\.vpnProfileId/)
   })
 })

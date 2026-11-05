@@ -30,17 +30,17 @@ function spawnInherit(cmd: string, args: string[], extraEnv: Record<string, stri
 }
 
 function printHelp(): void {
-  console.log(`OpsMaxx CLI launcher
+  console.log(`OpsSwift CLI launcher
 
 Usage:
-  opsmaxx claude            Launch Claude Code with OpsMaxx MCP auto-configured
-  opsmaxx codex             Launch Codex with OpsMaxx MCP auto-configured
+  opsswift claude            Launch Claude Code with OpsSwift MCP auto-configured
+  opsswift codex             Launch Codex with OpsSwift MCP auto-configured
   opsmaxx run -- <command>  Launch any command with OPSMAXX_MCP_COMMAND/ARGS set
   opsmaxx vpn <subcommand>  List, start or stop VPN profiles (see: opsmaxx vpn help)
 
-Requires OpsMaxx Desktop/Core already running, with AI & MCP enabled (AI & MCP → Security).
-First run pairs with it: a one-time code appears in OpsMaxx for you to type here. Set
-OPSMAXX_PORT if OpsMaxx's MCP bridge is not on the default port 5177.`)
+Requires OpsSwift Desktop/Core already running, with AI & MCP enabled (AI & MCP → Security).
+First run pairs with it: a one-time code appears in OpsSwift for you to type here. Set
+OPSMAXX_PORT if OpsSwift's MCP bridge is not on the default port 5177.`)
 }
 
 async function main(): Promise<void> {
@@ -93,7 +93,7 @@ async function main(): Promise<void> {
     // Routed through the MCP session rather than straight into the app, so it
     // inherits the vpnControl capability check, the approval prompt and the
     // audit entry instead of quietly bypassing all three.
-    const session = await getOrPairSession('cli-vpn', 'OpsMaxx CLI (vpn)')
+    const session = await getOrPairSession('cli-vpn', 'OpsSwift CLI (vpn)')
     process.exitCode = await runVpnCommand(rest, session)
     return
   }

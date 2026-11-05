@@ -28,7 +28,7 @@ describe('classifyTransportError', () => {
     ['The request was cancelled', 'ABORTED', 'aborted', 'Cancelled', undefined],
     [VAULT_LOCKED_MESSAGE, undefined, 'vault-locked', VAULT_LOCKED_MESSAGE, 'unlock'],
     [VAULT_ENTRY_GONE_MESSAGE, undefined, 'vault-entry-gone', VAULT_ENTRY_GONE_MESSAGE, 'choose-vault'],
-    ['That is 16 open sockets, which is as many as OpsMaxx will hold. Close one first.', undefined, 'socket-cap', '16 WebSockets are open, the most OpsMaxx allows', 'disconnect-idle'],
+    ['That is 16 open sockets, which is as many as OpsSwift will hold. Close one first.', undefined, 'socket-cap', '16 WebSockets are open, the most OpsSwift allows', 'disconnect-idle'],
     ['Something odd', undefined, 'other', 'Something odd', undefined]
   ] as const)('%s → %s', (message, code, cls, text, action) => {
     const got = classifyTransportError(message, code)

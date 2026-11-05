@@ -5,6 +5,9 @@ import { sshHopsFor } from './ssh'
 import { withVaultUnlock } from './withVaultUnlock'
 import { buildDockerShellCommand } from '../../../shared/docker'
 import { t } from './i18n'
+import { remoteTransport } from '../../../shared/remoteProtocol'
+import { sshCompatibilityFromTags, parseSshCompatibility } from '../../../shared/networkDevice'
+import { useApp } from '../store/app'
 
 // Everything a terminal needs to run a session, with no knowledge of whether
 // the bytes come from a socket or a pty. `useTerminalSession` talks only to
@@ -147,6 +150,8 @@ export function sshTransport(
         Promise.resolve(
           api()?.connect({
             sessionId,
+            remoteTransport: remoteTransport(server.tags),
+            sshCompatibility: sshCompatibilityFromTags(server.tags, parseSshCompatibility(useApp.getState().settings.sshCompatibilityDefault)),
             serverId: server.id,
             host: server.host,
             port: server.port,

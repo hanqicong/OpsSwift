@@ -33,7 +33,7 @@ import type { ReportOs } from '../../../shared/debug'
  * constant is read by the update flow in the main process, this one by the
  * renderer, and the renderer cannot import from main.
  */
-export const ISSUES_BASE = 'https://github.com/OpsMaxx/OpsMaxx/issues/new'
+export const ISSUES_BASE = 'https://github.com/hanqicong/OpsSwift/issues/new'
 
 /** The template filename, which is also what `?template=` names. */
 export const ISSUE_TEMPLATE = 'bug_report.yml'

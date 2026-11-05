@@ -254,7 +254,7 @@ describe('limits', () => {
 
     const over = await open()
     expect(over.result.ok).toBe(false)
-    if (!over.result.ok) expect(over.result.error).toMatch(/as many as OpsMaxx will hold/)
+    if (!over.result.ok) expect(over.result.error).toMatch(/as many as OpsSwift will hold/)
 
     wsCloseAll()
     expect(socketCount()).toBe(0)

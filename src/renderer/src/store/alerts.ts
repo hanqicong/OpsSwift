@@ -1358,7 +1358,7 @@ function evaluate(
     ...(mins >= 1 ? { minutes: mins } : {}),
     // The endpoint has to be told too, and for a stronger reason than the
     // desktop does: an endpoint that stops receiving has no way to tell "damped"
-    // from "OpsMaxx died".
+    // from "OpsSwift died".
     ...(tripped ? { damped: true } : {})
   })
 }
@@ -2276,9 +2276,9 @@ export const RUNBOOK_BRIDGE_MISSING_KEY = 'store.alerts.runbookBridgeMissing'
  * The runbooks half of the preload bridge.
  *
  * Reached through a cast, and this is the ONE place in the renderer that does
- * it. `OpsMaxxApi` is `typeof api` in src/preload/index.ts, and that file is
+ * it. `OpsSwiftApi` is `typeof api` in src/preload/index.ts, and that file is
  * not this change's to edit — the hunk that adds the `runbooks` namespace to it
- * was written out as a patch instead; that patch has landed, so `OpsMaxxApi`
+ * was written out as a patch instead; that patch has landed, so `OpsSwiftApi`
  * carries the namespace and the cast is gone. Kept as a function rather than an
  * inline access at each call site because the `Partial` below is the point.
  *

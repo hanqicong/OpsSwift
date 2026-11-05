@@ -47,6 +47,22 @@ const PORT = 18742
 // Reconciled against the 15 `server.registerTool(` calls in
 // src/main/services/mcpServer.ts.
 const ALLOWED_TOOLS = [
+  // Reviewed network extension. No raw shell, credential access or caller-selected artifact paths.
+  // Reviewed remote protocols: saved identities, bounded output, no local shell.
+  'protocol_get_capabilities',
+  'netconf_read',
+  'netconf_rpc',
+  'jsonrpc_get_state',
+  'jsonrpc_call',
+  'windows_get_facts',
+  'windows_run_script',
+  'network_list_profiles',
+  'network_get_capabilities',
+  'network_get_state',
+  'network_backup_config',
+  'network_plan_change',
+  'network_apply_change',
+  'network_verify_change',
   'list_workspaces',
   'list_servers',
   'get_server_details',
@@ -62,7 +78,7 @@ const ALLOWED_TOOLS = [
   'delete_file',
   'make_directory',
   'get_server_metrics',
-  // Item 47. A READ of history OpsMaxx already stores: it opens no
+  // Item 47. A READ of history OpsSwift already stores: it opens no
   // connection, reaches no shell, and answers about a server that is offline.
   // Gated on `serverMetrics`, the same capability as the tool whose numbers
   // these are over time.
@@ -74,7 +90,7 @@ const ALLOWED_TOOLS = [
   'list_databases',
   'query_database',
   // The database half of add/update/remove/test_connection. They edit
-  // OpsMaxx's own connection list, as the server tools do, and reach nothing
+  // OpsSwift's own connection list, as the server tools do, and reach nothing
   // on this machine; test_database connects and hangs up. None can pick a VPN.
   'add_database',
   'update_database',
@@ -82,7 +98,7 @@ const ALLOWED_TOOLS = [
   'test_database',
   'list_tunnels',
   'set_tunnel',
-  // Defining and deleting a tunnel record. Both write to OpsMaxx's own
+  // Defining and deleting a tunnel record. Both write to OpsSwift's own
   // configuration and neither starts anything: create_tunnel saves a tunnel
   // and set_tunnel is still required, with its own approval, to run it.
   'create_tunnel',
@@ -93,7 +109,7 @@ const ALLOWED_TOOLS = [
   // The other half of managing a connection, added after add-only turned out
   // to be a one-way ratchet: an agent that wrote a wrong entry had no way to
   // correct or withdraw it, so every mistake became manual cleanup. Neither
-  // reaches the machine at the far end -- they edit OpsMaxx's own records --
+  // reaches the machine at the far end -- they edit OpsSwift's own records --
   // and remove_server always asks, whatever the access group says.
   'update_server',
   'remove_server',
@@ -490,7 +506,7 @@ describe('nothing an agent can reach imports the local terminal', () => {
 
     expect(
       offenders,
-      `A module reachable from the MCP bridge or the OpsMaxx CLI now imports the local ` +
+      `A module reachable from the MCP bridge or the OpsSwift CLI now imports the local ` +
         `terminal. This is the thing the local terminal feature exists on the condition of not ` +
         `doing.\n\n${offenders.join('\n')}\n\n` +
         `An AI agent that can run a command on this machine can read the vault file, the policy ` +
@@ -543,7 +559,7 @@ describe('the AI permission model has no word for a local shell', () => {
     // vulnerabilities is materially different from CPU and memory.
     'hostFacts',
     // Roadmap item 31. Reviewed and added deliberately, and it is the one entry
-    // here that grants an agent NOTHING: it gates whether OpsMaxx's own
+    // here that grants an agent NOTHING: it gates whether OpsSwift's own
     // hourly posture probe may read a host's firewall rule lines, and no MCP
     // tool can reach them at any setting — see tests/jobsNotExposed.test.ts.
     // It is in the grid because that is where a consent to collect the
@@ -570,7 +586,7 @@ describe('the AI permission model has no word for a local shell', () => {
     // The CI/CD module. Reviewed and added deliberately: `ciRead` returns build
     // output, which is written by whoever opened the merge request and is the
     // most attacker-authored text this bridge returns. `ciTrigger` starts work
-    // on infrastructure OpsMaxx does not administer — always ASK, never cached
+    // on infrastructure OpsSwift does not administer — always ASK, never cached
     // as an elevation, one pipeline per call.
     'ciRead',
     'ciTrigger'

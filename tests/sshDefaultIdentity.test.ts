@@ -12,7 +12,7 @@ import { DEFAULT_IDENTITIES } from '../src/main/services/sshKeys'
  * Private Key selected and the path field showing only its grey placeholder.
  *
  * OpenSSH with no `IdentityFile` does not refuse — it tries the default
- * identities, `~/.ssh/id_ed25519` first. OpsMaxx threw instead, so an empty
+ * identities, `~/.ssh/id_ed25519` first. OpsSwift threw instead, so an empty
  * field meant "authenticate with nothing" and the server refused every
  * method. The field's own placeholder already read `~/.ssh/id_ed25519`: the
  * form described the behaviour the user expected and the code did the
@@ -22,7 +22,7 @@ import { DEFAULT_IDENTITIES } from '../src/main/services/sshKeys'
 describe('the identities tried when none is named', () => {
   /**
    * Order matters. It is the one `ssh host` already follows, so following it
-   * is what makes OpsMaxx pick the same key the user's terminal picks — which
+   * is what makes OpsSwift pick the same key the user's terminal picks — which
    * is the whole point of the fallback.
    */
   it('follows OpenSSH\'s own preference order', () => {

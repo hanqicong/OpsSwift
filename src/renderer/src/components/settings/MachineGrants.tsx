@@ -29,7 +29,7 @@ import {
 /**
  * The bridge method this panel needs.
  *
- * Narrowed here rather than read off `OpsMaxxApi` because the preload line and
+ * Narrowed here rather than read off `OpsSwiftApi` because the preload line and
  * the `secrets:machineGrants` handler land alongside this component; once they
  * have, this is exactly what that method resolves to. `secrets.delete` is
  * already on the bridge and is what revoking calls.
@@ -41,7 +41,7 @@ const grantsBridge = (): GrantsBridge | undefined =>
 
 function granted(t: Translate, at: string | undefined): string {
   if (!at) {
-    // Said, not hidden. Every grant made before OpsMaxx recorded the date has
+    // Said, not hidden. Every grant made before OpsSwift recorded the date has
     // none, and a blank cell reads as "just now" to anyone skimming.
     return t('settings.machineGrants.grantedUndated')
   }

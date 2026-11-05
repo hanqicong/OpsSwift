@@ -1000,7 +1000,7 @@ describe('the vocabulary this module fixed', () => {
 
 describe('the operator can stop a run without the agent', () => {
   // `cancel_run` existed as an MCP tool and a bridge method before any human
-  // could press it, so the only party able to stop a run from inside OpsMaxx
+  // could press it, so the only party able to stop a run from inside OpsSwift
   // was the AI — and STOP ALL AI ACCESS revokes the agent's session, which
   // meant pressing the panic button guaranteed the deploy finished. This path
   // is not gated by the AI policy, because it is not the AI doing it.

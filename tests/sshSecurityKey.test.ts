@@ -6,7 +6,7 @@ import { isSecurityKeyPrivateKey, DEFAULT_IDENTITIES } from '../src/main/service
 // `sk-ssh-ed25519@openssh.com` and `sk-ecdsa-sha2-nistp256@openssh.com` hold a
 // credential handle and an application string. The private half is on the
 // authenticator and signing it is a CTAP2 assertion plus a touch, which ssh2
-// cannot do. DEFAULT_IDENTITIES lists both `sk` filenames, so OpsMaxx OFFERED
+// cannot do. DEFAULT_IDENTITIES lists both `sk` filenames, so OpsSwift OFFERED
 // these keys to anyone holding one and then failed with "All configured
 // authentication methods failed" — the message a wrong username also gives.
 //
@@ -86,7 +86,7 @@ describe('recognising a hardware-backed key', () => {
 
   it('is reachable from the identities we offer without being asked', () => {
     // This is why the function has to exist rather than being the user's
-    // problem: with no IdentityFile set, OpsMaxx picks a key ITSELF, and two
+    // problem: with no IdentityFile set, OpsSwift picks a key ITSELF, and two
     // of the six it picks from are hardware keys.
     expect(DEFAULT_IDENTITIES).toContain('id_ed25519_sk')
     expect(DEFAULT_IDENTITIES).toContain('id_ecdsa_sk')

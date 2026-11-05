@@ -89,7 +89,7 @@ describe('what the list says', () => {
   it('says so when no date was recorded, rather than showing nothing', async () => {
     stubBridge(bridge([ADDY_DEVICE], []))
     render(<MachineGrants />)
-    expect(await screen.findByText(/before OpsMaxx recorded grant dates/)).toBeTruthy()
+    expect(await screen.findByText(/before OpsSwift recorded grant dates/)).toBeTruthy()
   })
 
   it('does not invent a friendly name for an id it cannot resolve', async () => {

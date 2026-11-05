@@ -1,0 +1,17 @@
+diff --git a/node_modules/@ewsjs/ntlm-client/lib/hash.js b/node_modules/@ewsjs/ntlm-client/lib/hash.js
+index 71da325..9557a7a 100644
+--- a/node_modules/@ewsjs/ntlm-client/lib/hash.js
++++ b/node_modules/@ewsjs/ntlm-client/lib/hash.js
+@@ -159,11 +159,7 @@ function createNTLMv2Response(type2message, username, ntlmhash, nonce, targetNam
+ }
+ 
+ function createPseudoRandomValue(length) {
+-	let str = '';
+-	while (str.length < length) {
+-		str += Math.floor(Math.random() * 16).toString(16);
+-	}
+-	return str;
++	return crypto.randomBytes(Math.ceil(length / 2)).toString('hex').slice(0, length);
+ }
+ 
+ module.exports = {

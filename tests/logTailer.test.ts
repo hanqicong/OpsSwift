@@ -133,7 +133,7 @@ describe('stopping', () => {
 describe('a server that will not stop logging', () => {
   it('caps the rate and says how many it dropped', async () => {
     // A misconfigured service emitting tens of thousands of lines a second
-    // becomes an IPC flood, and the user's conclusion is "OpsMaxx froze"
+    // becomes an IPC flood, and the user's conclusion is "OpsSwift froze"
     // rather than "that service is screaming".
     const h = harness()
     await h.tailer.start('t1', unit, h.targets(['a']))

@@ -402,7 +402,8 @@ function ReviewStep({
           {t('onboarding.setup.review.prefsTitle')}
           <span className="setup-section-hint">{t('onboarding.setup.review.prefsHint')}</span>
         </h2>
-        {PREF_GROUPS.map((g) => (
+        <p>{t('opsswift.ltsUpdates')}</p>
+        {PREF_GROUPS.filter((g) => g.id !== 'updates').map((g) => (
           <details
             key={g.id}
             className="setup-group"

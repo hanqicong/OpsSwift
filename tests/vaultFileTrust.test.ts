@@ -46,7 +46,7 @@ beforeEach(() => {
 })
 
 describe('a vault file that arrived from elsewhere', () => {
-  it('is refused, without running scrypt, when it asks for settings OpsMaxx never writes', async () => {
+  it('is refused, without running scrypt, when it asks for settings OpsSwift never writes', async () => {
     await vaultCreate(PASSWORD)
     vaultSave([entry('a')])
     vaultLock()
@@ -55,7 +55,7 @@ describe('a vault file that arrived from elsewhere', () => {
     const started = Date.now()
     const r = await vaultUnlock(PASSWORD)
     expect(r.ok).toBe(false)
-    expect(r.error).toMatch(/settings OpsMaxx never writes/)
+    expect(r.error).toMatch(/settings OpsSwift never writes/)
     expect(Date.now() - started).toBeLessThan(2000)
   })
 
@@ -67,7 +67,7 @@ describe('a vault file that arrived from elsewhere', () => {
     // only checks the gate lets the legacy triple through to scrypt.
     writeFileSync(FILE, JSON.stringify({ ...read(), kdf: { N: 32768, r: 8, p: 1 } }))
     const r = await vaultUnlock(PASSWORD)
-    expect(r.error ?? '').not.toMatch(/settings OpsMaxx never writes/)
+    expect(r.error ?? '').not.toMatch(/settings OpsSwift never writes/)
   })
 
   it('refuses the same settings when merging a set-aside copy', async () => {
@@ -75,7 +75,7 @@ describe('a vault file that arrived from elsewhere', () => {
     const other = JSON.stringify({ ...read(), kdf: { N: 1 << 20, r: 8, p: 3 } })
     const r = await vaultMergeFrom(other, PASSWORD)
     expect(r.ok).toBe(false)
-    expect(!r.ok && r.error).toMatch(/settings OpsMaxx never writes/)
+    expect(!r.ok && r.error).toMatch(/settings OpsSwift never writes/)
   })
 
   it('keeps its own salt when a copy it opens carries a different one', async () => {

@@ -1,5 +1,5 @@
-/* OpsMaxx design tokens
-   The OpsMaxx theme is the default: a colour, type and radius override on
+/* OpsSwift design tokens
+   The OpsSwift theme is the default: a colour, type and radius override on
    [data-theme="opsmaxx"], at the end of this file, with a light variant on
    [data-theme="opsmaxx-light"] after it. Dark and light are the
    classic themes and stay selectable. Dark is the :root baseline every theme
@@ -71,7 +71,7 @@
   --text-faint: #8f97a6;
   --text-inverse: #0d1017;
 
-  /* Brand — OpsMaxx cyan/teal.
+  /* Brand — OpsSwift cyan/teal.
      Two roles, two tokens, and they are not interchangeable:
        --accent      a FILL, and whatever sits on it is --accent-text
        --accent-ink  the accent used AS TEXT, on one of the --bg-* surfaces
@@ -295,7 +295,7 @@
   --z-revoked: 10200;
 }
 
-/* Also the base of the OpsMaxx Light theme, which restates only what differs
+/* Also the base of the OpsSwift Light theme, which restates only what differs
    from it -- so the database, host, method and status hues below, each
    darkened to clear 4.5:1 on a light ground, are shared rather than copied. */
 :root[data-theme='light'],
@@ -384,7 +384,7 @@
   --shadow-lg: 0 20px 50px rgba(30, 41, 59, 0.18);
 }
 
-/* The OpsMaxx theme. Warm near-black, one lime accent, heavier display type
+/* The OpsSwift theme. Warm near-black, one lime accent, heavier display type
    and rounder cards. Only what differs from the :root baseline is restated:
    the status, database, host and HTTP-method hues are inherited from dark,
    and every one of them clears 4.5:1 here too, because these surfaces are
@@ -393,45 +393,45 @@
 :root[data-theme='opsmaxx'] {
   color-scheme: dark;
 
-  --bg-app: #0b0c09;
-  --bg-sidebar: #0e0f0b;
-  --bg-panel: #111210;
-  --bg-card: #151612;
-  --bg-elevated: #1a1b16;
-  --bg-input: #0f100c;
-  --bg-terminal: #0b0c09;
-  --bg-hover: #1d1e18;
-  --bg-active: #24261e;
+  --bg-app: #10141b;
+  --bg-sidebar: #151b24;
+  --bg-panel: #19212c;
+  --bg-card: #1b2532;
+  --bg-elevated: #1c2634;
+  --bg-input: #141b25;
+  --bg-terminal: #10141b;
+  --bg-hover: #293647;
+  --bg-active: #344052;
   --bg-scrim: rgba(5, 6, 4, 0.66);
   --row-hover-veil: rgba(242, 243, 236, 0.03);
-  --brand-grad-end: #8fbf1f;
-  --brand-ink: #0b0c09;
+  --brand-grad-end: #ff8000;
+  --brand-ink: #10141b;
 
-  --border: #272921;
-  --border-strong: #35382c;
-  --border-subtle: #1c1d17;
+  --border: #354254;
+  --border-strong: #48566a;
+  --border-subtle: #2b3544;
 
-  --text: #f2f3ec;
-  --text-muted: #a3a597;
-  --text-faint: #8b8d80;
-  --text-inverse: #0b0c09;
+  --text: #f2f5fa;
+  --text-muted: #b1bdcb;
+  --text-faint: #a4b2c4;
+  --text-inverse: #10141b;
 
   /* Lime is bright enough to serve both roles, as dark's teal does: 15.07:1
      as a fill under --accent-text, 13.31:1 as text on the lightest surface.
      Hover lightens and press darkens, as in dark. */
-  --accent: #c5f23a;
-  --accent-ink: #c5f23a;
-  --accent-hover: #d3fb57;
-  --accent-press: #b2dd26;
-  --accent-soft: rgba(197, 242, 58, 0.12);
-  --accent-border: rgba(197, 242, 58, 0.4);
-  --accent-text: #0b0c09;
+  --accent: #ff9d45;
+  --accent-ink: #ff9d45;
+  --accent-hover: #ffb36c;
+  --accent-press: #f78a21;
+  --accent-soft: rgba(255, 128, 0, 0.14);
+  --accent-border: rgba(255, 157, 69, 0.48);
+  --accent-text: #10141b;
 
   /* The workspace colour every workspace starts with. It is stored by name as
      'cyan' because it was the classic brand teal, so it is the BRAND slot in
      practice: here it takes the brand's lime, or the default workspace's dot
      in the title bar, switcher and status bar is the one teal left. */
-  --ws-cyan: #c5f23a;
+  --ws-cyan: #ff9d45;
 
   --font-ui: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     'PingFang SC', 'Microsoft YaHei UI', 'Microsoft YaHei', 'Noto Sans CJK SC', system-ui, sans-serif;
@@ -448,58 +448,58 @@
   --shadow-lg: 0 18px 50px rgba(0, 0, 0, 0.6);
 }
 
-/* OpsMaxx Light. The same language on a warm off-white ground, built on the
+/* OpsSwift Light. The same language on a warm off-white ground, built on the
    classic light block (see its selector) rather than on dark. Lime is kept as
    the FILL of every primary control -- 13.99:1 under --accent-text -- but it
    is 1.4:1 as text on white, so --accent-ink is a dark olive of the same hue,
    5.41:1 on the lightest surface. Hover and press go darker, as in light. */
 :root[data-theme='opsmaxx-light'] {
-  --bg-app: #f7f7f2;
-  --bg-sidebar: #eeefe6;
-  --bg-panel: #fbfbf8;
+  --bg-app: #f5f7fa;
+  --bg-sidebar: #edf1f6;
+  --bg-panel: #fafbfd;
   --bg-card: #ffffff;
   --bg-elevated: #ffffff;
   --bg-input: #ffffff;
-  --bg-terminal: #fbfbf8;
-  --bg-hover: #e9eadf;
-  --bg-active: #e0e2d2;
+  --bg-terminal: #fafbfd;
+  --bg-hover: #edf1f6;
+  --bg-active: #e1e8f0;
   --bg-scrim: rgba(21, 22, 15, 0.3);
   --row-hover-veil: rgba(21, 22, 15, 0.045);
-  --brand-grad-end: #8fbf1f;
-  --brand-ink: #15160f;
+  --brand-grad-end: #9b4500;
+  --brand-ink: #182333;
 
-  --border: #e2e3d8;
-  --border-strong: #cfd1c2;
-  --border-subtle: #ebece3;
+  --border: #d8e0eb;
+  --border-strong: #b8c5d5;
+  --border-subtle: #e5ebf2;
 
-  --text: #15160f;
-  --text-muted: #595b4f;
-  --text-faint: #66685b;
+  --text: #182333;
+  --text-muted: #526176;
+  --text-faint: #5b697b;
   --text-inverse: #ffffff;
 
-  --accent: #c5f23a;
-  --accent-ink: #4a6a00;
-  --accent-hover: #b6e22a;
-  --accent-press: #a5cf1f;
-  --accent-soft: rgba(197, 242, 58, 0.28);
-  --accent-border: rgba(74, 106, 0, 0.35);
-  --accent-text: #15160f;
+  --accent: #ff8000;
+  --accent-ink: #9b4500;
+  --accent-hover: #e87300;
+  --accent-press: #e87500;
+  --accent-soft: rgba(255, 128, 0, 0.14);
+  --accent-border: rgba(155, 69, 0, 0.38);
+  --accent-text: #182333;
 
-  /* The brand slot, as in OpsMaxx dark: lime is a fill here, not text. */
-  --ws-cyan: #8fbf1f;
+  /* The brand slot, as in OpsSwift dark: lime is a fill here, not text. */
+  --ws-cyan: #9b4500;
 
   /* GitHub's dark ANSI set is the fallback in themeFromCss, and its white
      (#e6edf3) and yellow are unreadable on this ground. Same hues, each
      darkened to clear 5:1 on --bg-terminal; the whites become greys. */
-  --ansi-black: #15160f;
+  --ansi-black: #182333;
   --ansi-red: #b3261e;
   --ansi-green: #2a7a35;
   --ansi-yellow: #8a5a00;
   --ansi-blue: #2b6bab;
   --ansi-magenta: #8a3bbd;
   --ansi-cyan: #0f6f7c;
-  --ansi-white: #595b4f;
-  --ansi-bright-black: #66685b;
+  --ansi-white: #526176;
+  --ansi-bright-black: #617186;
   --ansi-bright-red: #d0231a;
   --ansi-bright-green: #1f6b2a;
   --ansi-bright-yellow: #7a4f00;

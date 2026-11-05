@@ -1,9 +1,9 @@
 /// <reference types="vite/client" />
-import type { OpsMaxxApi } from '../../preload/index'
+import type { OpsSwiftApi } from '../../preload/index'
 
 declare global {
   interface Window {
-    opsmaxx: OpsMaxxApi
+    opsmaxx: OpsSwiftApi
   }
 }
 

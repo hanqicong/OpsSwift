@@ -14,6 +14,8 @@ import type { DiskMount } from './mounts'
 export type SshAuth = 'password' | 'key' | 'agent' | 'certificate'
 
 export interface SshHop {
+  /** Per-connection, human-selected compatibility; never disables host key verification. */
+  sshCompatibility?: import('./networkDevice').SshCompatibility
   host: string
   port: number
   /**
@@ -78,6 +80,8 @@ export interface SshHop {
 }
 
 export interface SshConnectConfig extends SshHop {
+  /** Human terminal/test selection; dedicated MCP tools do not accept this override. */
+  remoteTransport?: import('./remoteProtocol').RemoteTransport
   sessionId: string
   cols: number
   rows: number

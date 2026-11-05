@@ -18,7 +18,7 @@ import type {
  * Start a run — the `cicdTrigger` operate surface.
  *
  * A separate module from `cicd` for the reason the rail names tabs by: the
- * consequence here is that a deploy goes out, on a server OpsMaxx does not
+ * consequence here is that a deploy goes out, on a server OpsSwift does not
  * administer and cannot stop once the provider has accepted it.
  *
  * The list rows ARE the affordance, the way the search field is in

@@ -281,7 +281,7 @@ describe('showing the RDP surface', () => {
  * as a chord.
  *
  * The component releases held input on window blur, visibilitychange and canvas
- * mouseleave. Switching OpsMaxx tabs is none of those: it sets `display: none`,
+ * mouseleave. Switching OpsSwift tabs is none of those: it sets `display: none`,
  * which blurs the host while the OS window keeps focus. `releaseAllInputs` is
  * not on the object the component hands the embedder, so the release is reached
  * through its own window-blur listener.

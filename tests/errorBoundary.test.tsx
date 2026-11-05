@@ -14,7 +14,7 @@ import { ErrorBoundary } from '../src/renderer/src/components/common/ErrorBounda
 const MESSAGE = 'Cannot read rows of db-prod.internal.example'
 
 const DIAGNOSTICS = [
-  'OpsMaxx diagnostics',
+  'OpsSwift diagnostics',
   'version: 0.6.2',
   '',
   '[crash]',

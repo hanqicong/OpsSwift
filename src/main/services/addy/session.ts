@@ -307,7 +307,7 @@ class AddySession {
    * locking is exactly when it should stop. What was missing was everything
    * after it: no banner, and nothing that ever attached again, so closing the
    * lid (suspend locks the vault) turned sync, received files, the clipboard
-   * hotkeys and revocation detection off until OpsMaxx was restarted, while
+   * hotkeys and revocation detection off until OpsSwift was restarted, while
    * the panel's Resume answered "not signed in yet".
    */
   async detachForVaultLock(): Promise<void> {
@@ -334,7 +334,7 @@ class AddySession {
    * `startSync` had ONE caller — the end of `loginAndRecord` — and the only
    * thing that calls that at launch is `resume`. So every way of failing to
    * attach put the device in a state whose single remedy was restarting
-   * OpsMaxx, and nothing on the screen said so. A relay that was down for a
+   * OpsSwift, and nothing on the screen said so. A relay that was down for a
    * minute cost a restart; a laptop that woke on a different network cost a
    * restart.
    *
@@ -811,7 +811,7 @@ class AddySession {
     const { token, spki } = signedIn
     if (repinned.from !== '') {
       recordAudit({
-        agentName: 'OpsMaxx',
+        agentName: 'OpsSwift',
         sessionId: 'addy',
         workspaceId: null,
         workspaceName: null,
@@ -971,7 +971,7 @@ class AddySession {
       this.lastProblem =
         'This machine is enrolled on a relay, but its keys cannot be read from the keychain. ' +
         'On macOS an update can change which signature the keychain trusts; unlocking the ' +
-        'login keychain and restarting OpsMaxx is the usual fix.'
+        'login keychain and restarting OpsSwift is the usual fix.'
       return { resumed: false, problem: this.lastProblem }
     }
 
@@ -2055,7 +2055,7 @@ class AddySession {
   /**
    * This device has been removed from the account. Take it apart.
    *
-   * Everything OpsMaxx stores here goes: the vault, the credentials, the
+   * Everything OpsSwift stores here goes: the vault, the credentials, the
    * known hosts, the server list. The tombstone is written FIRST and survives
    * the wipe, which is what makes the blocking screen appear on the next
    * launch even if the machine is pulled mid-delete.
@@ -2670,7 +2670,7 @@ class AddySession {
         ).sealed
       if (ahead && !sealedByAccount) {
         recordAudit({
-          agentName: 'OpsMaxx',
+          agentName: 'OpsSwift',
           sessionId: 'addy',
           workspaceId: null,
           workspaceName: null,

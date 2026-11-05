@@ -266,7 +266,7 @@ export function makeCicdHttp(
     if (navigates(path) || !withinRoot(root, url)) {
       // Named for what it is rather than blamed on the provider. This is only
       // reachable when a handle was tampered with, so it should read as a
-      // refusal by OpsMaxx, not as the CI server behaving oddly.
+      // refusal by OpsSwift, not as the CI server behaving oddly.
       throw new LocalizedError('main.cicd.handleOutsideApi')
     }
     const result = await request(

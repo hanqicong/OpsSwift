@@ -53,7 +53,7 @@ describe('classifying it', () => {
 
   it('recognises our own', () => {
     expect(
-      classifyConnectionError('OpsMaxx has no trusted host key for db01:22, and a background check is not allowed to ask for one.')
+      classifyConnectionError('OpsSwift has no trusted host key for db01:22, and a background check is not allowed to ask for one.')
     ).toBe('host-key')
   })
 

@@ -411,7 +411,7 @@ export const FIREWALL_RULE_LINE_CAP = 200
 export interface FirewallRuleListing {
   from: FirewallRuleOrigin
   /** The command the lines came out of, for a panel that has to say where a
-   *  line came from rather than presenting it as OpsMaxx's own words. */
+   *  line came from rather than presenting it as OpsSwift's own words. */
   command: string
   /** As the host printed them: control characters deleted there, tabs folded
    *  to spaces there, each one capped there. */
@@ -1984,7 +1984,7 @@ export function buildPostureCommand(opts: PostureCollectOptions = {}): string {
     // CERTIFICATES is the half-probe this item was deferred rather than ship.
     'SP_CERT_ST=absent',
     'SP_CERT_W="-"',
-    'SP_CERT_D="none of the certificate directories OpsMaxx looks in is present on this server"',
+    'SP_CERT_D="none of the certificate directories OpsSwift looks in is present on this server"',
     'SP_CERT_ROOTS=""',
     // The escalation prefix, empty unless a root needed root. /etc/letsencrypt
     // is 0700 root on Debian, which makes this the COMMON case rather than an
@@ -2432,7 +2432,7 @@ export function judgeSshd(
 
   if (opts.ambiguous) {
     return unknown(
-      'the files that were read set this directive more than once, with different values. OpsMaxx will not guess which one sshd resolves to; run the check with passwordless sudo so `sshd -T` can answer, or reconcile the drop-ins.'
+      'the files that were read set this directive more than once, with different values. OpsSwift will not guess which one sshd resolves to; run the check with passwordless sudo so `sshd -T` can answer, or reconcile the drop-ins.'
     )
   }
   if (raw === null) {

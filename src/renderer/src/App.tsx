@@ -222,7 +222,7 @@ export default function App(): React.JSX.Element {
       document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light')
     }
     apply(theme)
-    // To the OS the OpsMaxx themes are plain dark and light: native menus,
+    // To the OS the OpsSwift themes are plain dark and light: native menus,
     // scrollbars and the title bar follow `nativeTheme`, which only knows
     // dark, light and system.
     window.opsmaxx?.theme.set(
@@ -280,7 +280,7 @@ export default function App(): React.JSX.Element {
       {/* Surfaces an AI approval request no matter which tab is active. */}
       <ApprovalWatcher />
       {/* And an SSH agent signature request, for a stronger reason: the thing
-          asking is almost never OpsMaxx. It is `git push` in a terminal, or
+          asking is almost never OpsSwift. It is `git push` in a terminal, or
           ansible, or a script, so the user is looking at something else
           entirely. */}
       <AgentApprovalWatcher />

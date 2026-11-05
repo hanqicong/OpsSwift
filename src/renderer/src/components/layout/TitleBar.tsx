@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Search, Minus, Square, Copy, X, Compass } from 'lucide-react'
+import { Search, Minus, Square, Copy, X } from 'lucide-react'
 import { useApp } from '../../store/app'
 import { WorkspaceSwitcher } from './WorkspaceSwitcher'
 import { useShortcutHint } from '../../hooks/useShortcutHint'
 import { bridgeOn } from '../../lib/bridge'
+import lyitechMark from '../../assets/lyitech-mark.png'
 import { useT } from '../../lib/i18n'
 
 export function TitleBar(): React.JSX.Element {
@@ -30,10 +31,10 @@ export function TitleBar(): React.JSX.Element {
     <div className="titlebar" style={isMac ? { paddingLeft: 78 } : undefined}>
       <div className="brand">
         <div className="brand-mark">
-          <Compass size={14} strokeWidth={2.4} />
+          <img src={lyitechMark} alt={t('opsswift.brandName')} />
         </div>
-        <span className="brand-name">
-          Ops<b>Maxx</b>
+        <span className="brand-name" title={t('opsswift.productTagline')}>
+          {t('opsswift.productName')} <small className="build-tag">{t('opsswift.ltsTag')}</small>
         </span>
       </div>
 

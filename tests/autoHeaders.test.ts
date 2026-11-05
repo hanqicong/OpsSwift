@@ -9,7 +9,7 @@ describe('autoHeadersFor', () => {
   it('a bare GET gets User-Agent and Host, each with a reason', () => {
     const h = autoHeadersFor(req({}), { version: '1.2.3', hasCookies: false })
     expect(names(h)).toEqual(['User-Agent', 'Host'])
-    expect(h[0].value).toBe('OpsMaxx/1.2.3')
+    expect(h[0].value).toBe('OpsSwift/1.2.3')
     expect(h[1]).toMatchObject({ value: 'api.example.test', overridable: false })
     expect(h.every((x) => x.reason.length > 0)).toBe(true)
   })

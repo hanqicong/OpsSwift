@@ -85,7 +85,7 @@ describe("passthrough matching", () => {
     expect(isPassthroughHost(["*.example.com"], "   ")).toBe(false);
   });
 
-  it("excludes revocation, platform update and OpsMaxx’s own updater by default", () => {
+  it("excludes revocation, platform update and OpsSwift’s own updater by default", () => {
     // Not a guess at what pins. Interception on these either fails outright or
     // does damage: a client that cannot check revocation may reject the whole
     // chain, and standing in the middle of an OS update is a way to break a

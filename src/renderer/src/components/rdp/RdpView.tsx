@@ -274,7 +274,7 @@ export function RdpView({
    * Let go of held keys when this tab stops being the visible one.
    *
    * The component releases held input on exactly three events: window blur,
-   * visibilitychange, and mouseleave on the canvas. Switching OpsMaxx tabs is
+   * visibilitychange, and mouseleave on the canvas. Switching OpsSwift tabs is
    * none of them — WorkspacePanel sets `display: none`, which blurs the host
    * without any window-level event at all, while the OS window keeps focus.
    *

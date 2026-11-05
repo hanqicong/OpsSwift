@@ -133,11 +133,11 @@ const CRASH = {
   message: "Cannot read properties of undefined (reading 'rows')",
   stack: [
     "TypeError: Cannot read properties of undefined (reading 'rows')",
-    '    at DatabasePanel (/Users/someone/OpsMaxx/out/renderer/assets/index-9f3a.js:4821:17)',
-    '    at renderWithHooks (file:///Users/someone/OpsMaxx/out/renderer/assets/vendor.js:1021:3)',
-    '    at C:\\Users\\someone\\AppData\\Local\\OpsMaxx\\app.asar\\out\\main\\index.js:77:9'
+    '    at DatabasePanel (/Users/someone/OpsSwift/out/renderer/assets/index-9f3a.js:4821:17)',
+    '    at renderWithHooks (file:///Users/someone/OpsSwift/out/renderer/assets/vendor.js:1021:3)',
+    '    at C:\\Users\\someone\\AppData\\Local\\OpsSwift\\app.asar\\out\\main\\index.js:77:9'
   ].join('\n'),
-  componentStack: '\n    in DatabasePanel (at /Users/someone/OpsMaxx/src/renderer/src/App.tsx:118)'
+  componentStack: '\n    in DatabasePanel (at /Users/someone/OpsSwift/src/renderer/src/App.tsx:118)'
 }
 
 beforeAll(() => {
@@ -152,7 +152,7 @@ beforeAll(() => {
 describe('the diagnostics payload', () => {
   it('is non-empty, plain text, and short enough to read', () => {
     const text = diagnosticsText(PROBES)
-    expect(text.startsWith('OpsMaxx diagnostics\n')).toBe(true)
+    expect(text.startsWith('OpsSwift diagnostics\n')).toBe(true)
     expect(text.length).toBeGreaterThan(200)
     // ~2 KB is the budget. A payload nobody reads is one nobody checks before
     // posting it in public.
@@ -162,7 +162,7 @@ describe('the diagnostics payload', () => {
 
   it('is parseable line by line', () => {
     const lines = diagnosticsText(PROBES, CRASH).split('\n').filter((l) => l !== '')
-    expect(lines[0]).toBe('OpsMaxx diagnostics')
+    expect(lines[0]).toBe('OpsSwift diagnostics')
 
     const fields = new Map<string, string>()
     for (const line of lines.slice(1)) {
@@ -283,7 +283,7 @@ describe('the diagnostics payload', () => {
     const text = diagnosticsText(PROBES, {
       message:
         'ENOENT: no such file, open /Users/someone/Projects/opsmaxx/config.json ' +
-        "and C:\\Users\\someone\\AppData\\Roaming\\OpsMaxx\\opsmaxx-secrets.json",
+        "and C:\\Users\\someone\\AppData\\Roaming\\OpsSwift\\opsmaxx-secrets.json",
       stack: null,
       componentStack: null
     })

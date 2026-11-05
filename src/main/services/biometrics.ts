@@ -29,7 +29,7 @@ const FILE = join(app.getPath('userData'), 'opsmaxx-vault-bio.json')
 // and dies with the process. This is KeePassXC's model, and it is the reason
 // this feature can be defended at all — an attacker who can read your files
 // gets nothing, because there is nothing on disk to read. Touch ID reopens the
-// vault while OpsMaxx is running; the master password is typed once per
+// vault while OpsSwift is running; the master password is typed once per
 // launch.
 //
 // The on-disk variant below survives a restart and is the weaker thing. It is a
@@ -196,7 +196,7 @@ export async function authenticateFor(kind: BiometricKind, reason: string): Prom
   }
 }
 
-export async function biometricUnlock(reason = 'unlock your OpsMaxx vault'): Promise<VaultResult> {
+export async function biometricUnlock(reason = 'unlock your OpsSwift vault'): Promise<VaultResult> {
   const stored = sessionKey ?? read()
   if (!stored) return { ok: false, error: 'Biometric unlock is not set up for this vault.' }
   const support = biometricSupport()

@@ -11,7 +11,7 @@ import type { HttpVia } from './httpClient'
  *   - A socket opened from the renderer leaves from this machine. Opened
  *     through a server's SSH connection it reaches something bound to that
  *     host's loopback — which is the whole reason this client lives inside
- *     OpsMaxx.
+ *     OpsSwift.
  *   - CORS and mixed-content rules do not apply to a handshake that never goes
  *     through the browser stack.
  *   - **The browser cannot set handshake headers.** `new WebSocket(url)` has no

@@ -56,7 +56,7 @@ describe('main resolves credentials and the VPN together', () => {
 describe('the MCP server resolves them together too', () => {
   // The same pairing, in the file this test did not read. execute_command,
   // list_files and every other agent tool built its target with a bare
-  // resolveChainSecrets, so a server behind OpsMaxx's own Tailscale node
+  // resolveChainSecrets, so a server behind OpsSwift's own Tailscale node
   // worked in the app's terminal and failed for an agent with
   // `getaddrinfo ENOTFOUND <machine-name>` — the MagicDNS name only resolves
   // inside the node. Only test_connection had the helper.

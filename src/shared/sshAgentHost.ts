@@ -2,8 +2,8 @@
  * The SSH agent protocol, as this app SERVES it.
  *
  * Not to be confused with `sshAgent.ts` next door, which is the other
- * direction: that one resolves which agent OpsMaxx should TALK TO for a given
- * host. This one is the agent OpsMaxx IS. The two never meet, and the name is
+ * direction: that one resolves which agent OpsSwift should TALK TO for a given
+ * host. This one is the agent OpsSwift IS. The two never meet, and the name is
  * the only thing keeping them apart -- so if you are looking for
  * `IdentityAgent` handling, it is the other file.
  *
@@ -16,10 +16,10 @@
  * dependency. Reading a wire format out of an RFC is also simply the right way
  * to get a wire format.
  *
- * WHAT THIS IS FOR. OpsMaxx already holds SSH private keys, encrypted, in its
+ * WHAT THIS IS FOR. OpsSwift already holds SSH private keys, encrypted, in its
  * own vault. Every other tool on the machine -- git, rsync, ansible, a
  * terminal the user opened themselves -- reaches keys through an agent socket.
- * Without one, a key in the vault is a key only OpsMaxx can use, so people keep
+ * Without one, a key in the vault is a key only OpsSwift can use, so people keep
  * a second copy in `~/.ssh` and the vault protects nothing. With one, the vault
  * becomes the place the key actually lives.
  *

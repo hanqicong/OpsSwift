@@ -199,7 +199,7 @@ export function VpnStatusCard({ profile, status }: VpnStatusCardProps): React.JS
       {/**
        * The authorisation link, as controls.
        *
-       * A tsnet node is OpsMaxx's OWN device on the tailnet — not a view of a
+       * A tsnet node is OpsSwift's OWN device on the tailnet — not a view of a
        * Tailscale client the user may also be running — so it has to be
        * authorised once, in a browser, the first time it starts. That link
        * reached the user only as engine log output: wrapped across two lines

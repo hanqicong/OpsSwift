@@ -153,14 +153,14 @@ describe('connect and disconnect', () => {
   })
 
   it('names the socket cap rather than showing main’s sentence', async () => {
-    openResult = { ok: false, error: 'That is 16 open sockets, which is as many as OpsMaxx will hold. Close one first.' }
+    openResult = { ok: false, error: 'That is 16 open sockets, which is as many as OpsSwift will hold. Close one first.' }
     const id = newWsTab()
     render(<WsRequestPane tabId={id} />)
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /^Connect$/ }))
     })
     expect(useWsSessions.getState().sessions[id].failure?.class).toBe('socket-cap')
-    expect(screen.getAllByText('16 WebSockets are open, the most OpsMaxx allows').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('16 WebSockets are open, the most OpsSwift allows').length).toBeGreaterThan(0)
     expect(screen.getByRole('button', { name: 'Disconnect idle sockets…' })).toBeTruthy()
   })
 
@@ -235,7 +235,7 @@ describe('fix buttons', () => {
     const id = newWsTab()
     render(<WsRequestPane tabId={id} />)
     await act(async () => fireEvent.click(screen.getByRole('button', { name: /^Connect$/ })))
-    fireEvent.click(screen.getByRole('button', { name: 'Restart OpsMaxx…' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Restart OpsSwift…' }))
     expect(fixes).toEqual(['restart'])
   })
 

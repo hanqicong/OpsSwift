@@ -1,4 +1,4 @@
-// Writing to OpsMaxx's own configuration has to happen in the renderer: it owns
+// Writing to OpsSwift's own configuration has to happen in the renderer: it owns
 // the connection list, the tunnel list and the persistence that auto-saves from
 // them — and that save is what refreshes the MCP cache main reads back. Main
 // asks for the work and awaits the answer, the same shape as the
@@ -157,13 +157,13 @@ export function setAgentConfigWriter(fn: Writer): void {
 // A closed window is not an error worth retrying — the approval it would have
 // needed cannot be shown either.
 export function createServerForAgent(req: AgentServerRequest): Promise<AgentServerResult> {
-  if (!creator) return Promise.resolve({ ok: false, error: 'OpsMaxx is not ready to add a server right now.' })
+  if (!creator) return Promise.resolve({ ok: false, error: 'OpsSwift is not ready to add a server right now.' })
   return creator(req)
 }
 
 export function writeConfigForAgent(req: AgentConfigRequest): Promise<AgentConfigResult> {
   if (!writer)
-    return Promise.resolve({ ok: false, error: 'OpsMaxx is not ready to change its configuration right now.' })
+    return Promise.resolve({ ok: false, error: 'OpsSwift is not ready to change its configuration right now.' })
   return writer(req)
 }
 

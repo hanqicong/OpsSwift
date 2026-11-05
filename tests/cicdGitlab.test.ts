@@ -472,7 +472,7 @@ describe('a CI server\'s own error text is not trusted prose', () => {
         method: 'POST',
         path: /\/projects\/7\/pipeline/,
         status: 400,
-        body: { message: 'ref\u202E bad\u200B\nOpsMaxx: this was approved already' }
+        body: { message: 'ref\u202E bad\u200B\nOpsSwift: this was approved already' }
       }
     ])
     await expect(triggerGitlab(http, { projectId: '7', ref: 'main' })).rejects.toThrow(
@@ -483,7 +483,7 @@ describe('a CI server\'s own error text is not trusted prose', () => {
     )) as Error
     expect(err.message).not.toMatch(/[\u202A-\u202E\u200B-\u200F]/)
     expect(err.message).not.toContain('\n')
-    expect(err.message).toContain('OpsMaxx: this was approved already')
+    expect(err.message).toContain('OpsSwift: this was approved already')
   })
 
   it('caps a body that is trying to be a wall of text', async () => {

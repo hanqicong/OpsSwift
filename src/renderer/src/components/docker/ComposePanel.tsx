@@ -358,7 +358,7 @@ export function ComposePanel({
   }
 
   /**
-   * Ask the host what this service was pinned to before OpsMaxx last wrote
+   * Ask the host what this service was pinned to before OpsSwift last wrote
    * the file, and pre-fill the ordinary edit form with it.
    *
    * The plan comes from main, which reads the backup beside the file. Every

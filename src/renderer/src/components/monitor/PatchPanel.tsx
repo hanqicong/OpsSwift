@@ -40,7 +40,7 @@ import { Trans } from '../../lib/Trans'
 // Patch and update management — roadmap item 17, renderer half.
 //
 // The most common recurring task in the job this app is named for, and the
-// first screen in OpsMaxx that does it.
+// first screen in OpsSwift that does it.
 //
 // FOUR THINGS THIS SCREEN REFUSES TO DO, all of them argued in
 // src/shared/patch.ts and src/shared/topology.ts rather than here:

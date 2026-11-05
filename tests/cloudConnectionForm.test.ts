@@ -158,7 +158,7 @@ describe('what the preview promises is what runs', () => {
     }
   })
 
-  it('does not show a gcloud compute ssh line OpsMaxx never runs', async () => {
+  it('does not show a gcloud compute ssh line OpsSwift never runs', async () => {
     // The familiar one-liner is what the original design sketched, and it is
     // not what happens: the CLI brokers a tunnel and a credential, and ssh2
     // connects. Printing it would be a plausible lie in the one place someone

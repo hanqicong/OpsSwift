@@ -41,7 +41,7 @@ function frpTokenChannel(): FrpTokenChannel | undefined {
 }
 
 /**
- * The one-time setup, and the only place OpsMaxx says what frp cannot do
+ * The one-time setup, and the only place OpsSwift says what frp cannot do
  * for you.
  *
  * ngrok hands out a URL because ngrok runs the server it resolves to. frp does
@@ -56,7 +56,7 @@ function frpTokenChannel(): FrpTokenChannel | undefined {
  * mentions domains again.
  *
  * What it deliberately does NOT do is check. There is no resolver call, no
- * "verifying…" spinner, no green tick. OpsMaxx cannot see the operator's
+ * "verifying…" spinner, no green tick. OpsSwift cannot see the operator's
  * zone, and a check that passed because a stale cache answered would be a
  * worse lie than no check at all. The confirmation records that the operator
  * says the record exists, and the wording says exactly that.

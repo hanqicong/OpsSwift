@@ -16,7 +16,7 @@ import { resolveDefaultSessionGroup } from '../src/shared/mcp'
 
 // Exercises exactly what the "Connect Claude Code" / "Connect Claude Desktop"
 // buttons do, end to end: mint a session (writing no assignment),
-// then reach OpsMaxx with the credential each button hands out. Clicking the
+// then reach OpsSwift with the credential each button hands out. Clicking the
 // buttons proves a session was created; only this proves the agent on the other
 // end can actually see a server, which is the part that silently fails.
 const PORT = 18734

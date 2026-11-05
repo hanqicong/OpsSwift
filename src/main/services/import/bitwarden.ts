@@ -116,7 +116,7 @@ export async function previewBitwardenImport(source: BitwardenSource): Promise<I
     if (cipher.organizationId) {
       skipped.push({
         name: safeName(cipher, userKey),
-        reason: 'shared with an organisation; those are wrapped with a key OpsMaxx does not read yet'
+        reason: 'shared with an organisation; those are wrapped with a key OpsSwift does not read yet'
       })
       continue
     }
@@ -198,7 +198,7 @@ async function login(base: string, source: BitwardenSource, hash: string): Promi
     // the file next door did not reproduce it. So this is offset-sensitive
     // rather than something to grep for, and the note lives on the line that
     // caused it rather than in a list somebody would have to match against.
-    deviceName: 'OpsMaxx'
+    deviceName: 'OpsSwift'
   })
   if (source.twoFactorCode) {
     form.set('twoFactorToken', source.twoFactorCode)

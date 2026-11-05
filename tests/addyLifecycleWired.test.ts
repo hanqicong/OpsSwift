@@ -10,7 +10,7 @@ const read = (...p: string[]): string => readFileSync(join(__dirname, '..', ...p
  *
  * THE DEFECT CLASS, AGAIN: `startSync` had exactly one caller — the end of
  * `loginAndRecord`, which only runs at launch — so every way of failing to
- * attach left a device whose single remedy was quitting OpsMaxx, and nothing
+ * attach left a device whose single remedy was quitting OpsSwift, and nothing
  * said so. And the only control the product offered was Leave, which destroys
  * this device's keys, so somebody who wanted to stop for an hour had to take
  * the irreversible option.

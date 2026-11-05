@@ -75,7 +75,7 @@ describe('themeFromCss', () => {
 
   /**
    * A theme can restate a slot, and one that says nothing keeps the default.
-   * OpsMaxx Light does restate them: the dark defaults' white and yellow are
+   * OpsSwift Light does restate them: the dark defaults' white and yellow are
    * unreadable on its ground. Read through the real custom-property path.
    */
   it('takes a slot from --ansi-* when the theme sets it, and the default otherwise', () => {

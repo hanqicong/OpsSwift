@@ -11,7 +11,7 @@ import { getUpdatePrefs, setUpdatePrefs } from './updatePrefs'
 // all electron-updater needs to know where to check — nothing to configure
 // here beyond the event wiring below.
 
-const RELEASES_URL = 'https://github.com/OpsMaxx/OpsMaxx/releases/latest'
+const RELEASES_URL = 'https://github.com/hanqicong/OpsSwift/releases/latest'
 
 // Windows (NSIS), Linux (AppImage) and now macOS can self-replace with
 // electron-updater's default flow. One build cannot.
@@ -31,7 +31,9 @@ const RELEASES_URL = 'https://github.com/OpsMaxx/OpsMaxx/releases/latest'
 //
 // It still checks, and then points at the release page for a manual download —
 // the same fallback a signed app's updater uses when a signature check fails.
-const CAN_AUTO_INSTALL = !isPortable
+// This extension build is updated only through its reviewed patch/rebuild workflow.
+const NETWORK_EXTENSION_BUILD = true
+const CAN_AUTO_INSTALL = !isPortable && !NETWORK_EXTENSION_BUILD
 
 let status: UpdaterStatus = { state: 'idle' }
 const listeners = new Set<(s: UpdaterStatus) => void>()
@@ -53,6 +55,7 @@ export function onUpdaterStatus(cb: (s: UpdaterStatus) => void): () => void {
 export function getCapabilities(): UpdaterCapabilities {
   const currentVersion = app.getVersion()
   return {
+    managedReleaseUrl: RELEASES_URL,
     canAutoInstall: CAN_AUTO_INSTALL,
     isPortable,
     platform: process.platform,
@@ -149,6 +152,7 @@ function updater(): Promise<AppUpdater> {
 }
 
 export async function checkForUpdates(): Promise<void> {
+  if (NETWORK_EXTENSION_BUILD) { setStatus({ state: 'idle' }); return }
   try {
     const autoUpdater = await updater()
     applyPrefs(autoUpdater, getUpdatePrefs())

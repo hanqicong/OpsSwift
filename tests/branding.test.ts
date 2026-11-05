@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { execFileSync } from 'node:child_process'
 import { readFileSync } from 'node:fs'
 
-// The product and the repo were both renamed to OpsMaxx, and the old name is
+// The product and the repo were both renamed to OpsSwift, and the old name is
 // retired everywhere — user-facing text, code, config, and URLs alike. The
 // rename has happened twice now, and both times a stray literal survived it,
 // so this is the ratchet that keeps it gone.

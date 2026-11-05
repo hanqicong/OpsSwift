@@ -17,7 +17,7 @@ import { redactOutput } from './secretRedaction'
 //
 // FIRST, docs/AI-SECURITY.md states plainly that `recordAudit` is called from
 // `mcpServer.ts` and nowhere else, so `opsmaxx-ai-audit.jsonl` is a record
-// of THE MCP BRIDGE rather than of everything OpsMaxx does. That is not a
+// of THE MCP BRIDGE rather than of everything OpsSwift does. That is not a
 // stale sentence — it is what the "no record of what an agent did" row in the
 // threat table rests on, and its whole value is that a reader can trust every
 // row in that file to be an agent's. A job is human-only by construction: it is

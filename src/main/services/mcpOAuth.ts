@@ -1,11 +1,11 @@
 /**
  * OAuth 2.1 authorization server for the MCP bridge.
  *
- * OpsMaxx is both the resource server and the authorization server. There is no
+ * OpsSwift is both the resource server and the authorization server. There is no
  * external IdP: the human is already sitting in front of the app that holds the
  * credentials, so consent belongs in that window rather than behind a browser
  * sign-in to somewhere else. That is the argument CLI pairing already makes,
- * where the 6-digit code is shown ONLY in the OpsMaxx window.
+ * where the 6-digit code is shown ONLY in the OpsSwift window.
  *
  * Every shape here was observed from a real client rather than assumed. Claude
  * Code registers dynamically with `token_endpoint_auth_method: "none"`, so
@@ -192,7 +192,7 @@ export function getClient(clientId: string): OAuthClient | null {
 }
 
 // ---------------------------------------------------------------------------
-// Consent, which happens in the OpsMaxx window
+// Consent, which happens in the OpsSwift window
 // ---------------------------------------------------------------------------
 
 export interface PendingConsent {
@@ -440,7 +440,7 @@ export function refresh(params: {
 
   const session = getSession(record.sessionId)
   if (!session || session.revoked) {
-    return { ok: false, error: 'invalid_grant', description: 'This session has been revoked in OpsMaxx.' }
+    return { ok: false, error: 'invalid_grant', description: 'This session has been revoked in OpsSwift.' }
   }
   const rotated = rotateSessionToken(record.sessionId, ACCESS_TOKEN_MINUTES)
   if (!rotated) return { ok: false, error: 'invalid_grant', description: 'This session is gone.' }

@@ -512,7 +512,7 @@ describe('the firewall rules — roadmap item 31', () => {
     mount({ a: { posture: collected(RULES) } }, [server('a', 'web-1')])
     const detail = await openRules()
     expect(detail.textContent).toContain('3306/tcp ALLOW IN Anywhere')
-    // Marked as the host's words, not OpsMaxx's. The line above is text
+    // Marked as the host's words, not OpsSwift's. The line above is text
     // written by whoever configured that machine.
     expect(detail.textContent).toContain('Reported by the server')
     // And where it came from, named, so a reader can go and check it.

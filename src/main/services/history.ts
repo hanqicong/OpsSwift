@@ -610,7 +610,7 @@ export function steadyStateRows(hosts: number, cadenceMs: number): {
 // node:sqlite is not a native module and cannot fail to dlopen, but the rest of
 // the reasoning holds unchanged: an Electron whose bundled Node predates
 // node:sqlite, a read-only or full userData directory, a file that will not
-// open — none of those may stop OpsMaxx from starting. History is the
+// open — none of those may stop OpsSwift from starting. History is the
 // feature that fails, not the app. The renderer must render a fleet with no
 // history at all, which it does today: nothing reads from here yet.
 // ---------------------------------------------------------------------------
@@ -649,7 +649,7 @@ async function loadSqlite(): Promise<SqliteModule> {
   if (process.env[DISABLE_ENV] === '1') {
     loadError =
       `History is disabled on this machine (${DISABLE_ENV}=1). ` +
-      `Unset it and restart OpsMaxx to record samples. Everything else is unaffected.`
+      `Unset it and restart OpsSwift to record samples. Everything else is unaffected.`
     throw new Error(loadError)
   }
 
@@ -662,7 +662,7 @@ async function loadSqlite(): Promise<SqliteModule> {
     // shape check below: they have different fixes.
     loadError =
       `History is unavailable on this machine: node:sqlite would not load ` +
-      `(${err instanceof Error ? err.message : String(err)}). OpsMaxx is otherwise unaffected.`
+      `(${err instanceof Error ? err.message : String(err)}). OpsSwift is otherwise unaffected.`
     throw new Error(loadError)
   }
 
@@ -675,7 +675,7 @@ async function loadSqlite(): Promise<SqliteModule> {
     loadError =
       `History is unavailable on this machine: node:sqlite loaded but does not export ` +
       `DatabaseSync/backup (got ${typeof mod.DatabaseSync}/${typeof mod.backup}) — the ` +
-      `bundled SQLite module's shape is not what OpsMaxx expects. OpsMaxx is otherwise unaffected.`
+      `bundled SQLite module's shape is not what OpsSwift expects. OpsSwift is otherwise unaffected.`
     throw new Error(loadError)
   }
   sqlite = mod

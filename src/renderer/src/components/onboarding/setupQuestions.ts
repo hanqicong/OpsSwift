@@ -110,7 +110,7 @@ export const SETUP_QUESTIONS: SetupQuestion[] = [
     costKey: 'onboarding.questions.cicd.cost',
     // `cicd` only. `cicdTrigger` is a module this card deliberately cannot
     // reach, for the reason `keyRevoke` cannot: "do you use CI" is a question
-    // about what you have, and starting builds on infrastructure OpsMaxx does
+    // about what you have, and starting builds on infrastructure OpsSwift does
     // not administer is a decision about what you do. One tick should not
     // answer both.
     modules: ['cicd'],

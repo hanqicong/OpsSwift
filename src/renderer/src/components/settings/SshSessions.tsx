@@ -6,6 +6,7 @@ import { clsx } from '../../lib/format'
 import { useT } from '../../lib/i18n'
 import type { MessageKey } from '../../../../shared/i18n'
 import { retentionOverrideNotice } from './connectionRetention'
+import { parseSshCompatibility } from '../../../../shared/networkDevice'
 
 interface PoolEntry {
   key: string
@@ -47,6 +48,17 @@ export function SshSessions(): React.JSX.Element {
 
   return (
     <div>
+      <div className="setting-row">
+        <div className="s-info">
+          <label className="s-title" htmlFor="global-ssh-compatibility">{t('networkExtension.globalCompatibility')}</label>
+          <div className="s-desc">{t('networkExtension.globalCompatibilityHint')}</div>
+        </div>
+        <select id="global-ssh-compatibility" className="input" value={parseSshCompatibility(settings.sshCompatibilityDefault)} onChange={(e) => setSettings({ sshCompatibilityDefault: parseSshCompatibility(e.target.value) })}>
+          <option value="strict">{t('networkExtension.strict')}</option>
+          <option value="huawei-sha1">{t('networkExtension.sha1')}</option>
+          <option value="huawei-legacy">{t('networkExtension.legacy')}</option>
+        </select>
+      </div>
       <div className="setting-row">
         <div className="s-info">
           <div className="s-title">{t('settings.sshSessions.keep.title')}</div>

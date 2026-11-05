@@ -127,7 +127,7 @@ let migrated = false
  * Seal a file that was written before this module sealed anything.
  *
  * On read rather than waiting for the next save, because the next save may
- * never come: a user who opens OpsMaxx to look at a server and closes it again
+ * never come: a user who opens OpsSwift to look at a server and closes it again
  * has changed nothing, and "your estate is encrypted now, as soon as you edit
  * something" is not a property anyone can rely on.
  *

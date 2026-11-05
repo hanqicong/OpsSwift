@@ -39,7 +39,7 @@ export interface ConflictDeps {
  * Collection names are not validated by the sidecar or the protocol -- the
  * label is a length-prefixed string in the AAD, which is how `clipboard:<peer>`
  * already works -- so this needs no protocol change and no version bump. An
- * OpsMaxx 0.59.0 client opens these under the plain name, fails the tag, and
+ * OpsSwift 0.59.0 client opens these under the plain name, fails the tag, and
  * shows the copy as one that cannot be opened: it can discard it, never adopt.
  */
 export function conflictLabel(name: string): string {
@@ -152,7 +152,7 @@ export async function listConflicts(deps: ConflictDeps): Promise<ConflictCopy[]>
         if (env.reason) copy.reason = env.reason
       } catch (err) {
         if (!(err instanceof NotAConflictCopy)) throw err
-        // A LEGACY COPY, kept by OpsMaxx 0.59.0 under the collection's own
+        // A LEGACY COPY, kept by OpsSwift 0.59.0 under the collection's own
         // label -- which makes it indistinguishable from any archived copy of
         // the real object. So it is opened at this device's floor, not 0: the
         // relay could otherwise list last month's vault as a "conflict" and

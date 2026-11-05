@@ -149,7 +149,7 @@ export async function wsOpen(
   if (reserved.size >= MAX_SOCKETS) {
     return {
       ok: false,
-      error: `That is ${MAX_SOCKETS} open sockets, which is as many as OpsMaxx will hold. Close one first.`
+      error: `That is ${MAX_SOCKETS} open sockets, which is as many as OpsSwift will hold. Close one first.`
     }
   }
 

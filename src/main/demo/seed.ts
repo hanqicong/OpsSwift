@@ -187,7 +187,7 @@ async function seedVault(): Promise<void> {
 const AGENTS = ['Claude Code (CLI)', 'Codex (CLI)', 'Gemini CLI']
 
 /** One real paired session per agent, so the audit log and the approval dialog
- *  name sessions OpsMaxx has a record of. */
+ *  name sessions OpsSwift has a record of. */
 function seedSessions(): void {
   for (const agentName of AGENTS) {
     createSession({

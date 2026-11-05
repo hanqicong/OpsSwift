@@ -115,14 +115,14 @@ const OPENVPN_DOWNLOAD = 'https://openvpn.net/community-downloads/'
 /** Where a damaged install is repaired from. Reaching for this is not the
  *  user having failed to install something: the engine shipped inside the app
  *  and is not on disk any more, which in practice means antivirus took it. */
-const OPSMAXX_DOWNLOAD = 'https://opsmaxx.dev'
+const OPSMAXX_DOWNLOAD = 'https://github.com/hanqicong/OpsSwift/releases/latest'
 
 /** What a missing *bundled* engine says on the row, in place of the message
  *  main composed.
  *
  *  For WireGuard and frp that message is "The program that runs this tunnel
  *  could not be found." followed, under Details, by `run
- *  scripts/build-sidecar.sh` — an instruction for whoever builds OpsMaxx, in
+ *  scripts/build-sidecar.sh` — an instruction for whoever builds OpsSwift, in
  *  front of somebody whose antivirus quarantined a file. With a disabled Start
  *  and no button beside it, that row told the user nothing they could act on.
  *  (OpenVPN already had a sentence like this one on macOS and Linux; this is
@@ -158,7 +158,7 @@ const opening = (code: VpnErrorCode): MessageKey => `main.vpn.error.${code}`
  *
  *  Except for `internal`, whose first sentence says nothing at all. OpenVPN
  *  failing because its management socket path was too long produced the toast
- *  "Something went wrong inside OpsMaxx." and an empty log drawer — a
+ *  "Something went wrong inside OpsSwift." and an empty log drawer — a
  *  message with no fact in it, in front of the one detail that explained the
  *  failure. When the sentence is that one, the detail IS the headline.
  *
@@ -209,7 +209,7 @@ function remedyFor(
     // originally pressed.
     case 'vault-locked':
       return { label: tr('ui.unlockVault.label'), run: r.start }
-    // WireGuard and frp always ship inside OpsMaxx, and OpenVPN does too
+    // WireGuard and frp always ship inside OpsSwift, and OpenVPN does too
     // everywhere except Windows — so on every other combination a missing
     // engine is a damaged install, which no button in this window can repair.
     // Offering a download page there would send the reader off to install
@@ -743,7 +743,7 @@ export function useVpnProfiles(): VpnProfiles {
                   at a copy you installed yourself is a valid answer whether or
                   not we ship one. "Install OpenVPN" does not — see
                   `userSuppliesEngine`. WireGuard and frp get neither; both
-                  always ship with OpsMaxx. */}
+                  always ship with OpsSwift. */}
               {p.spec.kind === 'openvpn' && (
                 <>
                   {userSuppliesEngine('openvpn', platform) && (

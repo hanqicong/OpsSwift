@@ -129,13 +129,27 @@ export function UpdatePanel(): React.JSX.Element {
     setPrefs({ channel })
   }
 
+  if (caps?.managedReleaseUrl) return (
+    <div className="settings-section">
+      <h2>{t('opsswift.versionLabel', { version: caps.currentVersion })}</h2>
+      <p className="s-desc">{t('opsswift.ltsUpdates')}</p>
+      <div className="setting-row">
+        <div className="s-info">
+          <div className="s-title">{t('opsswift.releaseManagement')}</div>
+          <div className="s-desc">{t('opsswift.releaseManagementHint')}</div>
+        </div>
+        <button className="btn" onClick={() => window.opsmaxx?.updater.openReleasePage()}>{t('opsswift.openReleases')}</button>
+      </div>
+    </div>
+  )
+
   return (
     <div className="settings-section">
       <h2>{t('settings.updatePanel.heading')}</h2>
       <div className="setting-row">
         <div className="s-info">
           <div className="s-title">
-            OpsMaxx {caps ? `v${caps.currentVersion}` : ''}
+            OpsSwift {caps ? `v${caps.currentVersion}` : ''}
             {caps?.runningChannel === 'beta' && (
               <span className="build-tag">{t('settings.updatePanel.betaTag')}</span>
             )}

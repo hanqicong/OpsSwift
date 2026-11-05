@@ -1,7 +1,7 @@
 {
-  "name": "opsmaxx",
-  "version": "0.60.2",
-  "description": "Free, open-source SSH client, SFTP browser, SSH tunnel manager, multi-engine database GUI and encrypted secrets vault in one cross-platform desktop app. A MobaXterm, PuTTY and Termius alternative for Windows, macOS and Linux.",
+  "name": "opsswift",
+  "version": "1.0.0",
+  "description": "LYiTECH infrastructure operations desktop \u2014 bilingual SSH, Telnet, network RPC, Windows management and MCP. Long-term support fork of OpsMaxx.",
   "keywords": [
     "ssh",
     "ssh-client",
@@ -36,23 +36,23 @@
     "macos",
     "linux"
   ],
-  "homepage": "https://github.com/OpsMaxx/OpsMaxx#readme",
+  "homepage": "https://github.com/hanqicong/OpsSwift#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OpsMaxx/OpsMaxx.git"
+    "url": "git+https://github.com/hanqicong/OpsSwift.git"
   },
   "bugs": {
-    "url": "https://github.com/OpsMaxx/OpsMaxx/issues"
+    "url": "https://github.com/hanqicong/OpsSwift/issues"
   },
   "author": {
-    "name": "ghauri01",
-    "email": "aliwaqarofficial@gmail.com",
-    "url": "https://github.com/ghauri01"
+    "name": "OpsSwift maintainers",
+    "url": "https://github.com/hanqicong"
   },
   "license": "MIT",
   "main": "./out/main/index.js",
   "type": "module",
   "bin": {
+    "opsswift": "./out/cli/index.js",
     "opsmaxx": "./out/cli/index.js"
   },
   "scripts": {
@@ -100,6 +100,7 @@
     "@codemirror/view": "6.43.11",
     "@devolutions/iron-remote-desktop": "0.11.0",
     "@devolutions/iron-remote-desktop-rdp": "0.7.0",
+    "@ewsjs/ntlm-client": "3.0.1",
     "@lezer/highlight": "1.2.3",
     "@lydell/node-pty": "1.2.0-beta.15",
     "@modelcontextprotocol/sdk": "^1.32.1",
@@ -120,6 +121,7 @@
     "mssql": "^12.7.0",
     "mysql2": "^3.23.3",
     "pg": "^8.23.0",
+    "sax": "1.6.1",
     "ssh2": "^1.17.0",
     "ws": "^8.18.0",
     "yaml": "2.9.0",
@@ -136,6 +138,7 @@
     "@types/pg": "^8.21.0",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
+    "@types/sax": "1.2.7",
     "@types/ssh2": "^1.15.5",
     "@types/ws": "^8.5.13",
     "@vitejs/plugin-react": "^5.2.0",
@@ -159,12 +162,18 @@
     "@electron/get": "^5.1.0",
     "@azure/msal-node": "^7.1.0"
   },
-  "productName": "OpsMaxx",
+  "productName": "OpsSwift",
   "engines": {
     "node": ">=20"
   },
   "allowScripts": {
     "ssh2@1.17.0": true,
     "cpu-features@0.0.10": true
-  }
+  },
+  "contributors": [
+    {
+      "name": "OpsMaxx contributors",
+      "url": "https://github.com/OpsMaxx/OpsMaxx"
+    }
+  ]
 }

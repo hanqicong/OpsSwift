@@ -36,3 +36,16 @@ tests/.tmp-cloudexec/
 # The real output goes to resources/bin via scripts/build-addyd.sh.
 sidecar/addyd/addyd
 sidecar/netd/netd
+
+# OpsSwift local artifacts and private migration state
+.runtime/
+.runtime-tests/
+build/OpsSwift.iconset/
+*.dmg
+*.zip
+*.tar.gz
+*.blockmap
+opsmaxx-data.json*
+opsmaxx-secrets.json
+opsmaxx-vault.json
+opsswift-migration*.json

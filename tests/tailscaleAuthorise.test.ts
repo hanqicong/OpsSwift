@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 /**
  * A Tailscale node that has not been authorised yet.
  *
- * A tsnet node is OpsMaxx's own device on the tailnet, separate from any
+ * A tsnet node is OpsSwift's own device on the tailnet, separate from any
  * Tailscale client the machine may also run, so it has to be approved once in
  * a browser. Everything about that was reported broken at the same time: the
  * link reached the user only as engine log output, reprinted every five

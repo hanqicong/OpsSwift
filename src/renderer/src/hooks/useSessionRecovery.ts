@@ -4,7 +4,7 @@ import { classifyConnectionError, faultAdvice } from '../lib/connectionError'
 // Carrying a terminal across a reboot.
 //
 // Typing `reboot` used to end like this: "[session closed]", then one manual
-// Reconnect, then "Connection lost before handshake" over a card saying OpsMaxx
+// Reconnect, then "Connection lost before handshake" over a card saying OpsSwift
 // could not tell what went wrong. Every word of that is true and none of it is
 // useful — the user knows what went wrong, they rebooted the box. The app knew
 // enough to wait thirty seconds and try again, and did not.

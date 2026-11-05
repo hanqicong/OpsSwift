@@ -413,7 +413,7 @@ function UnrenderedIssues({
 
 /** The host platform, or null until the round trip lands.
  *
- *  Several fields read differently depending on what OpsMaxx ships here, and
+ *  Several fields read differently depending on what OpsSwift ships here, and
  *  a wrong answer during the first frame is worse than a vague one, so callers
  *  are expected to treat null as "not yet known" rather than as a platform. */
 function usePlatform(): NodeJS.Platform | null {

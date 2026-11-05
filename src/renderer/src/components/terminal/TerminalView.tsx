@@ -226,7 +226,7 @@ function DeadSession({
   const serverId = transport.serverId
 
   /**
-   * What OpsMaxx actually offered, for an authentication failure.
+   * What OpsSwift actually offered, for an authentication failure.
    *
    * "All configured authentication methods failed" is the SERVER's sentence,
    * and it reads identically whether a key was rejected or no credential was

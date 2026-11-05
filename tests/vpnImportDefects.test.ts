@@ -18,7 +18,7 @@ import type { OpenVpnSpec, VpnImportResultInternal, WireGuardSpec } from '../src
  * The import path as somebody who has actually been handed a `.ovpn` meets it.
  *
  * Every case here is a file that exists in the world in large numbers and that
- * OpsMaxx refused, mis-described or quietly weakened. The sanitizer's own rules
+ * OpsSwift refused, mis-described or quietly weakened. The sanitizer's own rules
  * are pinned next door in tests/ovpnSanitizer.test.ts — nothing here loosens
  * one; containment (E37) in particular is asserted below to be exactly as tight
  * as it was.
@@ -116,7 +116,7 @@ describe('the checks that say who the server has to be', () => {
     const r = parse('ok-identity-checks.ovpn')
     const entry = r.stripped.find((s) => s.directive === 'tls-remote')
     expect(entry).toBeDefined()
-    expect(entry?.reason).not.toBe('Not a setting OpsMaxx carries over.')
+    expect(entry?.reason).not.toBe('Not a setting OpsSwift carries over.')
     expect(entry?.reason).toMatch(/accepts any server certificate/)
   })
 
@@ -206,7 +206,7 @@ describe('where the scan looks, and what it calls what it finds', () => {
   it('explains the two stores it cannot read instead of finding nothing in them', () => {
     // Both hold real profiles and neither can be opened by anything but the app
     // that wrote it, so a scan that simply found nothing in them reads as
-    // OpsMaxx having missed what the user can see in another window. Same shape
+    // OpsSwift having missed what the user can see in another window. Same shape
     // as the Windows DPAPI entry: a reason, and no Import button.
     asPlatform('darwin')
     const notes = noteDirs(['openvpn', 'wireguard'])

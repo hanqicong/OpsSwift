@@ -73,7 +73,7 @@ describe('what one approval covers', () => {
     expect(GATE).toMatch(/const sessionGrant = perCall \? undefined/)
   })
 
-  // `ciTrigger` starts a build on infrastructure OpsMaxx does not administer,
+  // `ciTrigger` starts a build on infrastructure OpsSwift does not administer,
   // cannot inspect, and cannot stop once the provider has accepted it. One
   // approval covering every later build on that server for the rest of the
   // session is an unbounded remote execution loop -- and the agent deciding to

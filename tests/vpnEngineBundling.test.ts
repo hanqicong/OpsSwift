@@ -9,7 +9,7 @@ import { isEngineBundledOn, userSuppliesEngine } from '../src/shared/vpnEngines'
 // process and the renderer in agreement. `binaries.ts` asks it whether to look
 // for a bundled binary; three pieces of UI copy ask it whether to offer a
 // download link. Those used to be separate `platform === 'win32'` checks, and
-// the failure mode when they drifted was not a crash — it was OpsMaxx
+// the failure mode when they drifted was not a crash — it was OpsSwift
 // telling a macOS user to go and install an OpenVPN that was already on their
 // disk, hash-verified, a directory away.
 

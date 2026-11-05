@@ -369,7 +369,7 @@ describe('issuing a reboot and waiting for the server', () => {
     const seen = states.map((s) => s.state).filter(Boolean)
     expect(seen).toContain('rebooting')
     // The two words this must never be. `unreachable` points at a fault and
-    // `abandoned` says OpsMaxx dropped it; the disconnect was asked for.
+    // `abandoned` says OpsSwift dropped it; the disconnect was asked for.
     expect(seen).not.toContain('unreachable')
     expect(seen).not.toContain('orphaned')
 
@@ -591,7 +591,7 @@ describe('issuing a reboot and waiting for the server', () => {
   })
 
   it('verifies a reboot it is reclaiming, using the boot id from the row', async () => {
-    // The boot id is printed once, on the way down, and a OpsMaxx that was
+    // The boot id is printed once, on the way down, and a OpsSwift that was
     // restarted across the reboot never saw it go past. It is on the handle for
     // exactly this: without it every reclaimed reboot would come back
     // `unverifiable`, which is honest and which nothing could ever satisfy.
@@ -605,7 +605,7 @@ describe('issuing a reboot and waiting for the server', () => {
     const dir = host.dir
     host.rebootAccepted()
 
-    // A second OpsMaxx picks the marker up from the row alone.
+    // A second OpsSwift picks the marker up from the row alone.
     const second = harness(host)
     const { req: req2 } = request({
       resume: {

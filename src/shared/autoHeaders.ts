@@ -42,7 +42,7 @@ function authHeader(auth: Auth): AutoHeader | null {
 }
 
 /**
- * What OpsMaxx adds, in the order the Headers tab lists it. Values that would
+ * What OpsSwift adds, in the order the Headers tab lists it. Values that would
  * be secrets are shown masked; this list is for display, never for sending.
  *
  * `inheritedAuth` is the collection's auth, for a request set to Inherit.
@@ -54,7 +54,7 @@ export function autoHeadersFor(
   const out: AutoHeader[] = [
     {
       name: 'User-Agent',
-      value: `OpsMaxx/${ctx.version}`,
+      value: `OpsSwift/${ctx.version}`,
       reason: st('shared.autoHeaders.userAgent'),
       overridable: true
     }

@@ -393,7 +393,7 @@ describe('running the pinned job', () => {
       version: '9.9.9',
       kind: 'disk',
       summary:
-        'OpsMaxx rule "vacuum the journal" started the job "clear the journal" on 2 server(s) after a disk alert raised.'
+        'OpsSwift rule "vacuum the journal" started the job "clear the journal" on 2 server(s) after a disk alert raised.'
     })
   })
 

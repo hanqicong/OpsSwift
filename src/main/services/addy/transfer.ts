@@ -301,7 +301,7 @@ export async function collectFiles(deps: TransferDeps): Promise<ArrivedFile[]> {
     } catch {
       // A notice that does not open will not open next time either: sealed to
       // another device, signed by one not on the roster, already delivered,
-      // or from an OpsMaxx too old to sign it.
+      // or from an OpsSwift too old to sign it.
       if (isLegacyMail(m.sealed)) legacy++
       unusable.push(m.id)
       continue

@@ -85,7 +85,7 @@ async function authorizeAndApprove(clientId: string, challenge: string): Promise
   expect(page.headers.get('content-type')).toContain('text/html')
   await page.text()
 
-  // Stands in for the human in the OpsMaxx window.
+  // Stands in for the human in the OpsSwift window.
   const pending = listPendingConsents()
   expect(pending).toHaveLength(1)
   expect(pending[0].clientName).toBe('Claude Code (opsmaxx)')

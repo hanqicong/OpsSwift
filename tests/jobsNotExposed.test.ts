@@ -78,6 +78,22 @@ const read = (p: string): string => readFileSync(join(ROOT, p), 'utf8')
 // reviews of the same list, and a shared constant would let one edit satisfy
 // both.
 const ALLOWED_TOOLS = [
+  // Reviewed, bounded network workflows; no scheduler or detached job is exposed.
+  // Reviewed remote protocols: saved identities, bounded output, no local shell.
+  'protocol_get_capabilities',
+  'netconf_read',
+  'netconf_rpc',
+  'jsonrpc_get_state',
+  'jsonrpc_call',
+  'windows_get_facts',
+  'windows_run_script',
+  'network_list_profiles',
+  'network_get_capabilities',
+  'network_get_state',
+  'network_backup_config',
+  'network_plan_change',
+  'network_apply_change',
+  'network_verify_change',
   'list_workspaces',
   'list_servers',
   'get_server_details',
@@ -92,7 +108,7 @@ const ALLOWED_TOOLS = [
   'delete_file',
   'make_directory',
   'get_server_metrics',
-  // Item 47. A READ of history OpsMaxx already stores: it opens no
+  // Item 47. A READ of history OpsSwift already stores: it opens no
   // connection, reaches no shell, and answers about a server that is offline.
   // Gated on `serverMetrics`, the same capability as the tool whose numbers
   // these are over time.
@@ -100,7 +116,7 @@ const ALLOWED_TOOLS = [
   'get_host_facts',
   'list_databases',
   'query_database',
-  // Saved database connections, edited like saved servers. OpsMaxx records
+  // Saved database connections, edited like saved servers. OpsSwift records
   // only: none of them starts, schedules or queues anything.
   'add_database',
   'update_database',
@@ -108,7 +124,7 @@ const ALLOWED_TOOLS = [
   'test_database',
   'list_tunnels',
   'set_tunnel',
-  // Defining and deleting a tunnel record. Both write to OpsMaxx's own
+  // Defining and deleting a tunnel record. Both write to OpsSwift's own
   // configuration and neither starts anything: create_tunnel saves a tunnel
   // and set_tunnel is still required, with its own approval, to run it.
   'create_tunnel',
@@ -119,7 +135,7 @@ const ALLOWED_TOOLS = [
   // The other half of managing a connection, added after add-only turned out
   // to be a one-way ratchet: an agent that wrote a wrong entry had no way to
   // correct or withdraw it, so every mistake became manual cleanup. Neither
-  // reaches the machine at the far end -- they edit OpsMaxx's own records --
+  // reaches the machine at the far end -- they edit OpsSwift's own records --
   // and remove_server always asks, whatever the access group says.
   'update_server',
   'remove_server',
@@ -205,12 +221,12 @@ const ALLOWED_TOOLS = [
   'fleet_drift',
   // CI/CD. Eight tools, and the one thing this file cares about is durability:
   // a triggered run OUTLIVES the request that started it, on infrastructure
-  // OpsMaxx cannot reach. That is the job-surface objection exactly — and it is
+  // OpsSwift cannot reach. That is the job-surface objection exactly — and it is
   // answered differently rather than dodged, because the alternative was an
   // agent that could read a failing build and never do anything about it.
   //
   // What makes it admissible is that none of the three write tools starts
-  // anything OpsMaxx schedules, repeats or fans out: one pipeline per call, a
+  // anything OpsSwift schedules, repeats or fans out: one pipeline per call, a
   // fresh approval for every single call (ciTrigger is excluded from
   // sessionElevations, and evaluateCiTrigger makes `allow` unreachable), and no
   // tool that creates a connection to point somewhere new. The durability gap
@@ -683,7 +699,7 @@ describe('nothing an agent can reach imports the job engine', () => {
 
     expect(
       offenders,
-      `A module reachable from the MCP bridge or the OpsMaxx CLI now imports the job engine.\n\n` +
+      `A module reachable from the MCP bridge or the OpsSwift CLI now imports the job engine.\n\n` +
         `${offenders.join('\n')}\n\n` +
         `DURABILITY DEFEATS REVOCATION. denyAllPending() — the stop-all-AI-access switch — works ` +
         `by resolving requests that are PENDING. A job already running on fifteen servers has ` +
@@ -727,7 +743,7 @@ describe('the AI permission model has no word for a job', () => {
     'serverMetrics',
     'hostFacts',
     // Roadmap item 31, reviewed here as well: it grants an agent nothing at
-    // all. What it gates is whether OpsMaxx's own hourly posture read may
+    // all. What it gates is whether OpsSwift's own hourly posture read may
     // collect a host's firewall rule LINES — the addresses and ports it
     // accepts traffic on — for a person to look at. The bridge cannot reach
     // them at any setting; section 4 below holds that by name.
@@ -752,7 +768,7 @@ describe('the AI permission model has no word for a job', () => {
     // The CI/CD module. Reviewed and added deliberately: `ciRead` returns build
     // output, which is written by whoever opened the merge request and is the
     // most attacker-authored text this bridge returns. `ciTrigger` starts work
-    // on infrastructure OpsMaxx does not administer — always ASK, never cached
+    // on infrastructure OpsSwift does not administer — always ASK, never cached
     // as an elevation, one pipeline per call.
     'ciRead',
     'ciTrigger'
@@ -915,7 +931,7 @@ describe('what must NOT be able to reach this', () => {
       // GATED IS NOT AN ANSWER HERE, and this is the case where that has to be
       // said out loud, because unlike everything else on this list the rule
       // list HAS a capability of its own — `firewallRules`, item 31's line in
-      // the consent grid. That capability governs whether OpsMaxx's own
+      // the consent grid. That capability governs whether OpsSwift's own
       // hourly probe may COLLECT the lines for a person to read. It is not an
       // agent grant and no tool consults it, deliberately: an agent that can
       // read one host's ruleset can read forty, and an agent that can read
@@ -1073,7 +1089,7 @@ describe('what must NOT be able to reach this', () => {
       //
       // Everything above is a power over a REMOTE system, exercised through a
       // credential that could in principle be rotated afterwards. This is a
-      // child process of OpsMaxx itself, on the machine the vault is on,
+      // child process of OpsSwift itself, on the machine the vault is on,
       // with a restart policy — and the restart policy is what makes the kill
       // switch's guarantee not merely weaker but absent. `denyAllPending()`
       // resolves what is PENDING; a supervised process has nothing pending, is

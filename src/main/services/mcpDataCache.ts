@@ -6,6 +6,8 @@
 // renderer calls data:save. Nothing here writes to the file — that stays
 // store.ts's job.
 import { loadData } from './store'
+import { sshCompatibilityFromTags } from '../../shared/networkDevice'
+import { defaultSshCompatibility, refreshSshPolicy } from './sshPolicy'
 import type { SshAuth, SshHop } from '../../shared/ssh'
 import type { DbKind } from '../../shared/db'
 import type { TunnelKind } from '../../shared/tunnel'
@@ -22,6 +24,7 @@ export interface CachedWorkspace {
 }
 
 export interface CachedServer {
+  tags?: string[]
   id: string
   workspaceId: string
   name: string
@@ -147,6 +150,7 @@ export interface CachedCicdConnection {
 }
 
 interface DataShape {
+  settings?: unknown
   workspaces?: unknown
   servers?: unknown
   databases?: unknown
@@ -214,6 +218,7 @@ function parseServers(raw: unknown): CachedServer[] {
         auth: isSshAuth(s.auth) ? s.auth : 'key',
         ...(typeof s.rev === 'number' ? { rev: s.rev } : {}),
         os: asString(s.os, 'Linux'),
+        tags: Array.isArray(s.tags) ? s.tags.filter((t): t is string => typeof t === 'string') : [],
         route: parseRoute(s.route),
         vpnProfileId: typeof s.vpnProfileId === 'string' ? s.vpnProfileId : null,
         ...(rdp ? { rdp } : {}),
@@ -360,6 +365,7 @@ export function serverToSshConfig(
     port: server.port,
     username: server.username,
     auth: server.auth,
+    sshCompatibility: sshCompatibilityFromTags(server.tags, defaultSshCompatibility()),
     serverId: server.id,
     // Carried so a bridge caller invalidates on an edit the same way the app
     // does. Its caches are in the `mcp:` namespace and so never collide with
@@ -382,6 +388,7 @@ let cicdConnections: CachedCicdConnection[] = []
 
 export function refreshMcpDataCache(data?: unknown): void {
   const raw = (data ?? loadData()) as DataShape | null
+  refreshSshPolicy(isRecord(raw?.settings) ? raw.settings.sshCompatibilityDefault : undefined)
   workspaces = parseWorkspaces(raw?.workspaces)
   servers = parseServers(raw?.servers)
   databases = parseDatabases(raw?.databases)

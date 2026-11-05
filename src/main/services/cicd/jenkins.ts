@@ -95,7 +95,7 @@ function header(res: CicdResponse, name: string): string | undefined {
  * not take -- it answers 302 to the realm's login entry point, because that is
  * what it would do for a browser. The bare status is useless to the reader: an
  * instance whose anonymous reads return 200 and whose token-authenticated reads
- * return 302 looks like an OpsMaxx fault and is not one.
+ * return 302 looks like an OpsSwift fault and is not one.
  *
  * Matched on the Location, not on the status alone, because a redirect to a
  * canonical URL is a different and harmless thing.
@@ -114,7 +114,7 @@ function expectOk(res: CicdResponse, what: string): CicdResponse {
       )
     }
     // Still worth distinguishing from a 4xx: a redirect means Jenkins is there
-    // and answering, and OpsMaxx does not follow one because the target does not
+    // and answering, and OpsSwift does not follow one because the target does not
     // inherit the credential.
     throw new Error(
       `${what}: Jenkins redirected (${res.status})${to ? ` to ${to}` : ''}, and a redirect target does not inherit the credential, so it was not followed.`
@@ -501,7 +501,7 @@ const shortClass = (kind: string): string => kind.replace(/^.*[.$]/, '')
  * would in Jenkins. What is NOT claimed is that the box is the right control,
  * because for two of these it cannot be: a file parameter needs a multipart
  * body that `buildWithParameters` is not being given here, and a credentials
- * parameter is a pointer into Jenkins' own credential store that OpsMaxx has no
+ * parameter is a pointer into Jenkins' own credential store that OpsSwift has no
  * business picking on the user's behalf. The note goes on the field, where the
  * person about to type into it will read it.
  *
@@ -510,17 +510,17 @@ const shortClass = (kind: string): string => kind.replace(/^.*[.$]/, '')
  */
 const UNSUPPORTED_PARAM: Record<string, string> = {
   FileParameterDefinition:
-    'Jenkins expects a file upload here. OpsMaxx sends form fields, not a multipart body, so whatever is typed arrives as text and the build will not see a file. Start this one in Jenkins.',
+    'Jenkins expects a file upload here. OpsSwift sends form fields, not a multipart body, so whatever is typed arrives as text and the build will not see a file. Start this one in Jenkins.',
   RunParameterDefinition:
-    'Jenkins offers a picker over another job\u2019s builds here. OpsMaxx does not read that list, so this has to be the build reference itself.',
+    'Jenkins offers a picker over another job\u2019s builds here. OpsSwift does not read that list, so this has to be the build reference itself.',
   CredentialsParameterDefinition:
-    'This names an entry in Jenkins\u2019 own credential store. OpsMaxx does not read that store and will not choose one \u2014 type the credential id exactly as Jenkins knows it, or start this build in Jenkins.',
+    'This names an entry in Jenkins\u2019 own credential store. OpsSwift does not read that store and will not choose one \u2014 type the credential id exactly as Jenkins knows it, or start this build in Jenkins.',
   ChoiceParameter:
-    'This is an Active Choices parameter: Jenkins computes its options with a Groovy script at render time. OpsMaxx does not run that script, so there is no list to offer and the value has to be typed.',
+    'This is an Active Choices parameter: Jenkins computes its options with a Groovy script at render time. OpsSwift does not run that script, so there is no list to offer and the value has to be typed.',
   CascadeChoiceParameter:
-    'This is an Active Choices parameter whose options depend on another field. OpsMaxx does not run the script that computes them, so the value has to be typed.',
+    'This is an Active Choices parameter whose options depend on another field. OpsSwift does not run the script that computes them, so the value has to be typed.',
   DynamicReferenceParameter:
-    'This is an Active Choices reference parameter, rendered by a Groovy script OpsMaxx does not run.'
+    'This is an Active Choices reference parameter, rendered by a Groovy script OpsSwift does not run.'
 }
 
 /**

@@ -47,7 +47,7 @@ describe('CookiesPopover', () => {
     expect(within(viaServer).getByText('localhost')).toBeTruthy()
     expect(document.body.textContent).not.toContain('SECRET-VALUE')
     expect(document.body.textContent).not.toContain('elsewhere')
-    expect(document.body.textContent).toContain('Cookies are kept until OpsMaxx quits.')
+    expect(document.body.textContent).toContain('Cookies are kept until OpsSwift quits.')
   })
 
   it('deletes one cookie, clears a domain, and clears the jar', () => {

@@ -420,7 +420,7 @@ describe('cancelling', () => {
   })
 })
 
-describe('a job that was running when OpsMaxx stopped', () => {
+describe('a job that was running when OpsSwift stopped', () => {
   it('is adopted from rows alone by a runner that never saw it', async () => {
     const store = await openStore()
     const first = harness(store)
@@ -456,7 +456,7 @@ describe('a job that was running when OpsMaxx stopped', () => {
     // running host's story.
     //
     // `cancelled` — whose label is "not run" — and NOT `abandoned`. Nothing
-    // ever touched this host, and `abandoned`'s own definition is "OpsMaxx
+    // ever touched this host, and `abandoned`'s own definition is "OpsSwift
     // stopped while this host was RUNNING". It is also the answer a
     // re-classification gives, and a stored outcome that disagrees with
     // classifyJobResult over the same row is a summary that changes depending

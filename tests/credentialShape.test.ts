@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { credentialNote, type CredentialShape } from '../src/shared/credentialShape'
 
 /**
- * What OpsMaxx offered, said out loud on an authentication failure.
+ * What OpsSwift offered, said out loud on an authentication failure.
  *
  * Reported as "the servers have stopped connecting, I think the private key
  * mechanism is not working anymore", against a card reading "All configured

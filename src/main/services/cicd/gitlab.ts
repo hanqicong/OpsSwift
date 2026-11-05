@@ -91,7 +91,7 @@ const retryAfterMs = (res: CicdResponse): number | undefined => {
 // in a failed-trigger note, and in MCP tool results. `remoteText` flattens
 // newlines and strips C0/C1, bidi overrides and zero-width characters, so a
 // crafted `message` cannot reverse the sentence it lands in or forge a line
-// break into something that reads as OpsMaxx's own words.
+// break into something that reads as OpsSwift's own words.
 /** GitLab puts its human-readable reason in `message` or `error`. */
 const reasonOf = (res: CicdResponse): string => {
   try {

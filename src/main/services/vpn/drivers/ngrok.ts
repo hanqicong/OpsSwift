@@ -181,7 +181,7 @@ export const ngrokDriver: VpnDriver<NgrokSpec> = {
         reason:
           e instanceof VpnError
             ? e.message
-            : 'The bundled network sidecar could not be found. Reinstalling OpsMaxx restores it.'
+            : 'The bundled network sidecar could not be found. Reinstalling OpsSwift restores it.'
       }
     }
     return engine

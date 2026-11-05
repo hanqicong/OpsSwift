@@ -29,7 +29,7 @@ export function registerClaudeMcp(execPath: string, selfScript: string, token: s
     { stdio: ['ignore', 'ignore', 'inherit'], shell: process.platform === 'win32' }
   )
   if (res.error || res.status !== 0) {
-    throw new Error('Could not register OpsMaxx with Claude Code. Is the `claude` CLI installed and on PATH?')
+    throw new Error('Could not register OpsSwift with Claude Code. Is the `claude` CLI installed and on PATH?')
   }
 }
 
@@ -52,7 +52,7 @@ export function registerCodexMcp(execPath: string, selfScript: string, token: st
   ].join('\n')
 
   // 0600 and atomic, as the app's writer is: the block carries a bearer token,
-  // and this file lives outside any directory OpsMaxx owns, so the umask was
+  // and this file lives outside any directory OpsSwift owns, so the umask was
   // all that stood between the token and the rest of the machine.
   atomicWriteFileSync(file, spliceCodexBlock(existing, block), 0o600, `${file}.opsmaxx-tmp`)
 }

@@ -1,13 +1,13 @@
 /**
  * Finding the provider CLI the user already installed.
  *
- * OpsMaxx never installs one, never bundles one and never offers to. It finds
+ * OpsSwift never installs one, never bundles one and never offers to. It finds
  * what is there, says where it found it and which version it is, and refuses to
  * run anything it cannot vouch for.
  *
  * ── Why this is not vpn/binaries.ts ─────────────────────────────────────────
  *
- * That module resolves engines OpsMaxx SHIPS, so it can demand a fixed install
+ * That module resolves engines OpsSwift SHIPS, so it can demand a fixed install
  * location and a SHA-256 that matches a manifest. Neither applies here. These
  * are third-party tools the user installed however their organisation installs
  * things, and the documented locations include the home directory:
@@ -46,7 +46,7 @@ export interface ProviderDetectionResult {
   installed: boolean
   executablePath?: string
   version?: string
-  /** False when it is installed but OpsMaxx will not use it. */
+  /** False when it is installed but OpsSwift will not use it. */
   supported: boolean
   /** Why not, when `installed` or `supported` is false. */
   error?: string

@@ -3,7 +3,7 @@
  * of yours.
  *
  * DESIGNED IN FULL, IMPLEMENTED IN PART, and the split is deliberate. v1
- * restores OpsMaxx's own state and runs one user-written hook. The broader
+ * restores OpsSwift's own state and runs one user-written hook. The broader
  * thing people mean by provisioning -- package managers, runtimes, dotfiles --
  * is per-OS driver work that is Ansible plus nix-darwin plus chezmoi in one
  * row, and it gets its own sizing pass rather than a guess now.
@@ -24,9 +24,9 @@ export interface ProvisionManifest {
   /** Free text, shown before anything runs. The author is telling the operator
    *  what this machine is for. */
   description?: string
-  /** Restore OpsMaxx's own state from a backup. The only section v1 applies
+  /** Restore OpsSwift's own state from a backup. The only section v1 applies
    *  besides the hook. */
-  opsmaxx?: OpsMaxxSection
+  opsmaxx?: OpsSwiftSection
   /** One script, run after the restore. See `PostRestoreHook` for why this is
    *  the most dangerous field in the file. */
   postRestore?: PostRestoreHook
@@ -43,7 +43,7 @@ export interface ProvisionManifest {
   dotfiles?: DotfilesSection
 }
 
-export interface OpsMaxxSection {
+export interface OpsSwiftSection {
   /** Where the backup bundle is. A path on this machine, or an addy
    *  generation name. Never a URL: fetching a bundle from an address in a
    *  manifest is a way to make somebody restore a bundle they did not choose. */
@@ -156,7 +156,7 @@ export function planProvision(manifest: unknown): ProvisionPlan {
     // a field this build thinks it understands, and guessing on a machine
     // somebody is setting up is the worst place to guess.
     plan.problems.push(
-      `That manifest is version ${m.version} and this build understands ${PROVISION_MANIFEST_VERSION}. Upgrade OpsMaxx.`
+      `That manifest is version ${m.version} and this build understands ${PROVISION_MANIFEST_VERSION}. Upgrade OpsSwift.`
     )
     return plan
   }
@@ -170,7 +170,7 @@ export function planProvision(manifest: unknown): ProvisionPlan {
     } else if (bundle.kind === 'file') {
       plan.steps.push({
         kind: 'restore',
-        summary: `Restore this machine's OpsMaxx data from ${bundle.path}${m.opsmaxx.merge ? ', keeping what is already here' : ', replacing what is already here'}`
+        summary: `Restore this machine's OpsSwift data from ${bundle.path}${m.opsmaxx.merge ? ', keeping what is already here' : ', replacing what is already here'}`
       })
     } else if (bundle.kind === 'addy') {
       plan.steps.push({

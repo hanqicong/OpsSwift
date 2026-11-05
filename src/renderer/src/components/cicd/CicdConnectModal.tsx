@@ -88,7 +88,7 @@ const PROVIDERS: ProviderDef[] = [
       { name: 'workflow', whyKey: 'cicd.connect.github.scopeWorkflow' }
     ],
     tokenUrl: (base) =>
-      `${trimSlash(base) || 'https://github.com'}/settings/tokens/new?scopes=repo,workflow&description=OpsMaxx`,
+      `${trimSlash(base) || 'https://github.com'}/settings/tokens/new?scopes=repo,workflow&description=OpsSwift`,
     tokenLinkLabelKey: 'cicd.connect.github.tokenLink',
     linkNoteKey: 'cicd.connect.github.linkNote',
     verifyNoteKey: 'cicd.connect.github.verifyNote',
@@ -107,7 +107,7 @@ const PROVIDERS: ProviderDef[] = [
       { name: 'api', whyKey: 'cicd.connect.gitlab.scopeApi' }
     ],
     tokenUrl: (base) =>
-      `${trimSlash(base) || 'https://gitlab.com'}/-/user_settings/personal_access_tokens?name=OpsMaxx&scopes=read_api`,
+      `${trimSlash(base) || 'https://gitlab.com'}/-/user_settings/personal_access_tokens?name=OpsSwift&scopes=read_api`,
     tokenLinkLabelKey: 'cicd.connect.gitlab.tokenLink',
     linkNoteKey: 'cicd.connect.gitlab.linkNote',
     verifyNoteKey: 'cicd.connect.gitlab.verifyNote',

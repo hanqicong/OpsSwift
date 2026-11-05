@@ -10,15 +10,15 @@ import { isDemo } from './portable'
 // drops it: the only use is behind `import.meta.env.DEV` below, and nothing
 // else references the module.
 import { installDemo } from './demo'
+import { exportNetworkBackup } from './services/networkBackupExport'
 import { parseAddyLink, ADDY_LINK_SCHEME, type AddyLink } from '../shared/addyLink'
 import { app, shell, BrowserWindow, clipboard, globalShortcut, ipcMain, nativeTheme, dialog, session, Menu, Notification, powerMonitor, webContents } from 'electron'
-import { join, resolve} from 'node:path'
+import { join } from 'node:path'
 import { hostname } from 'node:os'
 import { readFileSync, existsSync, writeFileSync } from 'node:fs'
 import { readFile, writeFile } from 'node:fs/promises'
 import { randomBytes, randomUUID } from 'node:crypto'
 import {
-  sshConnect,
   sshWrite,
   sshResize,
   sshClose,
@@ -33,7 +33,6 @@ import {
   sshExec,
   sshExecStream,
   sshOpenFresh,
-  sshTest,
   liveServerConnection,
   acquire,
   release
@@ -310,6 +309,7 @@ import type { InspectStartOptions } from '../shared/inspect'
 import { storeFrpToken } from './services/vpn/frpSetup'
 import { toVpnResult } from './services/vpn/errors'
 import { preparedSshTarget, withVpnTransportDb } from './services/vpn/transport'
+import { nativeNetworkConnect, nativeNetworkTest, nativeTelnetOwns, nativeTelnetWrite, nativeTelnetResize, nativeTelnetClose, closeNativeNetworkTerminals } from './services/nativeNetworkTerminal'
 import { brokerFor } from './services/cloud/providers'
 import {
   describeCloudFault,
@@ -588,8 +588,9 @@ const isDev = !app.isPackaged
 // Windows shows the AppUserModelID as the heading on every notification, and
 // Electron's default is "electron.app.<name>". Setting it to the installer's
 // appId makes Windows resolve it to the Start-menu shortcut, so notifications
-// are headed "OpsMaxx". Must be set before any notification is shown.
-if (process.platform === 'win32') app.setAppUserModelId('com.opsmaxx.app')
+// are headed "OpsSwift". Must be set before any notification is shown.
+if (process.platform === 'win32') app.setAppUserModelId('com.lyitech.opsswift')
+ipcMain.handle('ssh:network-backup-export', () => exportNetworkBackup())
 
 let mainWindow: BrowserWindow | null = null
 
@@ -688,7 +689,7 @@ function createWindow(): void {
     minWidth: 1024,
     minHeight: 640,
     show: false,
-    // --bg-app of the default (OpsMaxx) theme, so the frame before first paint matches it.
+    // --bg-app of the default (OpsSwift) theme, so the frame before first paint matches it.
     backgroundColor: '#0b0c09',
     icon: appIcon(),
     titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'hidden',
@@ -1243,9 +1244,9 @@ ipcMain.handle('cloud:instances', (_e, provider: CloudProvider, account: string,
 )
 
 ipcMain.handle('ssh:connect', (e, cfg: SshConnectConfig & { serverId?: string }) =>
-  sshConnect(e.sender, preparedSshTarget(cfg))
+  nativeNetworkConnect(e.sender, cfg)
 )
-// Dials and hangs up. Goes through the same preparedSshTarget
+// Dials and hangs up. Goes through the same preparedProtocolTarget
 // pipeline as a real connect, because a test that skipped either would pass on
 // a profile whose credential or transport is the thing that is wrong.
 //
@@ -1260,15 +1261,7 @@ ipcMain.handle('ssh:connect', (e, cfg: SshConnectConfig & { serverId?: string })
 // the record's VPN on top, editing a server to change or drop its VPN tested
 // the new address through the old tunnel until the user saved. Absent means
 // "no VPN" here, because the form sends undefined for none.
-ipcMain.handle('ssh:test', (_e, cfg: SshConnectConfig & { serverId?: string; vpnProfileId?: string }) =>
-  sshTest(
-    {
-      ...preparedSshTarget(cfg),
-      vpnProfileId: typeof cfg.vpnProfileId === 'string' && cfg.vpnProfileId ? cfg.vpnProfileId : undefined
-    },
-    true
-  )
-)
+ipcMain.handle('ssh:test', (_e, cfg: SshConnectConfig & { serverId?: string; vpnProfileId?: string }) => nativeNetworkTest(cfg))
 /**
  * What credential a server has, with none of its value.
  *
@@ -1340,9 +1333,9 @@ ipcMain.handle('ssh:pasteImage', async (_e, id: unknown, png: unknown) => {
     return { ok: false as const, error: err instanceof Error ? err.message : String(err) }
   }
 })
-ipcMain.on('ssh:write', (_e, id: string, data: string) => sshWrite(id, data))
-ipcMain.on('ssh:resize', (_e, id: string, cols: number, rows: number) => sshResize(id, cols, rows))
-ipcMain.on('ssh:close', (_e, id: string) => sshClose(id))
+ipcMain.on('ssh:write', (e, id: string, data: string) => nativeTelnetOwns(id) ? nativeTelnetWrite(e.sender, id, data) : sshWrite(id, data))
+ipcMain.on('ssh:resize', (e, id: string, cols: number, rows: number) => nativeTelnetOwns(id) ? nativeTelnetResize(e.sender, id, cols, rows) : sshResize(id, cols, rows))
+ipcMain.on('ssh:close', (e, id: string) => nativeTelnetOwns(id) ? nativeTelnetClose(e.sender, id) : sshClose(id))
 
 // ---- Folder shares: folders on this computer, mounted on a server (reverse sshfs) ----
 //
@@ -1886,7 +1879,7 @@ function startHistory(): void {
     }
     // The far end of however long this machine was not running. Written as soon
     // as the store opens, which is the earliest moment it can be: whatever gap
-    // precedes it is a gap OpsMaxx caused by being shut, and the capacity panel
+    // precedes it is a gap OpsSwift caused by being shut, and the capacity panel
     // says so instead of implying a server went quiet. See SAMPLING_RESUMED for
     // why this is recorded on the way up rather than on quit.
     store.recordEvent(SAMPLING_RESUMED, null, { reason: 'start' })
@@ -1903,7 +1896,7 @@ function startHistory(): void {
     try {
       const adopted = jobRunner.adopt()
       if (adopted.length > 0) {
-        console.log(`[jobs] closed ${adopted.length} job(s) abandoned when OpsMaxx last stopped`)
+        console.log(`[jobs] closed ${adopted.length} job(s) abandoned when OpsSwift last stopped`)
       }
       // Then the ones that are STILL RUNNING. adopt() deliberately leaves any
       // job with a detached marker open, because there is a command in its own
@@ -2948,7 +2941,7 @@ ipcMain.handle('access:run', async (_e, req: AccessRunRequest): Promise<AccessRu
 // Every clause of that is still true and the conclusion no longer follows,
 // because the premise it rested on was that the person who approved a run is
 // present for the whole of it. B2 made a job outlive the process. A job resumed
-// at the next launch is being acted on by a OpsMaxx that never showed
+// at the next launch is being acted on by a OpsSwift that never showed
 // anybody a dialog, and "the renderer computed a plan" was never a fact written
 // down anywhere — `BroadcastPlan` lived in a `useMemo` and was discarded.
 //
@@ -3019,16 +3012,16 @@ ipcMain.handle('broadcast:cancel', (_e, runId: string) => broadcast.cancel(runId
 // ---- Jobs ----
 //
 /**
- * This OpsMaxx's id, stable across restarts on this machine.
+ * This OpsSwift's id, stable across restarts on this machine.
  *
  * STABLE is the requirement, not unique-per-launch. It is what a marker
  * directory records, and it is how a reclaim tells "this is mine, finish
- * watching it and reap it" from "another OpsMaxx started this, read it and
+ * watching it and reap it" from "another OpsSwift started this, read it and
  * leave the directory alone". An id minted per launch would make every job
  * foreign to the instance that started it the moment the app restarted, and
  * markers would accumulate on every host until the sweep took them.
  *
- * A file rather than a machine fingerprint: two OpsMaxxs on one machine with
+ * A file rather than a machine fingerprint: two OpsSwifts on one machine with
  * separate userData directories — a portable build next to an installed one —
  * are genuinely two instances and should say so.
  */
@@ -3798,7 +3791,7 @@ ipcMain.handle('compose:read-file', (_e, cfg: unknown, path: string, opts?: { su
   composeReader.readFile(cfg, path, opts ?? {})
 )
 // A READ, and deliberately a separate channel from the write. It answers "what
-// was this service pinned to before OpsMaxx last edited this file" by reading
+// was this service pinned to before OpsSwift last edited this file" by reading
 // the backup the write path has always left beside it, and returns a PLAN.
 // Applying that plan goes back out through `compose:write-image-tag` like any
 // other tag change, so a revert cannot become a second write path with its own
@@ -4103,7 +4096,7 @@ ipcMain.handle('webhook:set-url', (_e, url: string) => {
     const u = new URL(String(url).trim())
     const loopback = ['localhost', '127.0.0.1', '::1'].includes(u.hostname)
     if (loopback && Number(u.port) === port) {
-      return { ok: false, error: `That is OpsMaxx's own MCP port (${port}). Pick another endpoint.` }
+      return { ok: false, error: `That is OpsSwift's own MCP port (${port}). Pick another endpoint.` }
     }
   } catch {
     // Not a URL — webhookSetUrl reports that properly.
@@ -4568,7 +4561,7 @@ function capacityReportFor(hostId: unknown, windowDays: unknown): CapacityReport
           diskBytesPolicy(usable)
         )
 
-  // Gaps OpsMaxx itself caused, so the panel can say "we were not running"
+  // Gaps OpsSwift itself caused, so the panel can say "we were not running"
   // rather than implying the server went quiet. Read for the window only.
   const resumedAt = historyStore
     .readEvents({ kind: SAMPLING_RESUMED, from, limit: 500 })
@@ -4889,7 +4882,7 @@ ipcMain.handle('sshconfig:read', () => {
 })
 
 // An approval blocks an AI agent until the user answers it, and the dialog it
-// renders lives inside the window. If OpsMaxx is not in front, nothing tells
+// renders lives inside the window. If OpsSwift is not in front, nothing tells
 // the user anything is waiting — the agent simply appears to hang for the
 // whole timeout, which is exactly how it was reported.
 /** True when this actually put the question in front of somebody — which is
@@ -5108,7 +5101,7 @@ ipcMain.handle('addy:resync', () => addySession.resyncEverything())
 // the machine it names.
 ipcMain.handle('addy:leave', () => addySession.leaveAccount())
 // Try again without quitting. Every way of failing to attach used to have
-// exactly one remedy — restart OpsMaxx — and nothing said so.
+// exactly one remedy — restart OpsSwift — and nothing said so.
 ipcMain.handle('addy:reconnect', () => addySession.reconnect())
 // Pausing and leaving are different decisions; the product only had the
 // loud one, so somebody who wanted to stop for an hour had to destroy
@@ -5253,7 +5246,7 @@ let clipboardShortcutsWanted = false
 
 function notifyClipboard(title: string, body: string): void {
   // A notification rather than a window: the user pressed a key in another
-  // application and is not looking at OpsMaxx.
+  // application and is not looking at OpsSwift.
   if (Notification.isSupported()) new Notification({ title, body, silent: true }).show()
 }
 
@@ -5810,7 +5803,7 @@ const resumeChecksAfterUnlock = (r: { ok: boolean }): { ok: boolean } => {
     // the unlock not having worked.
     backupResumeAfterUnlock()
     // And sync, which the lock took down on purpose and nothing brought back:
-    // closing the lid turned it off until OpsMaxx was restarted.
+    // closing the lid turned it off until OpsSwift was restarted.
     addySession.resumeAfterVaultLock()
   }
   return r
@@ -6228,7 +6221,7 @@ ipcMain.on('aiMcp:create-server-reply', (_e, id: string, result: AgentServerResu
 setAgentServerCreator((req: AgentServerRequest) => {
   const target = mainWindow
   if (!target || target.isDestroyed()) {
-    return Promise.resolve({ ok: false, error: 'The OpsMaxx window is closed.' })
+    return Promise.resolve({ ok: false, error: 'The OpsSwift window is closed.' })
   }
   const id = `mkserver-${createSeq++}`
   return new Promise<AgentServerResult>((resolve) => {
@@ -6260,7 +6253,7 @@ ipcMain.on('aiMcp:config-write-reply', (_e, id: string, result: AgentConfigResul
 setAgentConfigWriter((req: AgentConfigRequest) => {
   const target = mainWindow
   if (!target || target.isDestroyed()) {
-    return Promise.resolve({ ok: false, error: 'The OpsMaxx window is closed.' })
+    return Promise.resolve({ ok: false, error: 'The OpsSwift window is closed.' })
   }
   const id = `cfgwrite-${configWriteSeq++}`
   return new Promise<AgentConfigResult>((resolve) => {
@@ -6268,7 +6261,7 @@ setAgentConfigWriter((req: AgentConfigRequest) => {
     target.webContents.send('aiMcp:config-write', { id, request: req })
     setTimeout(() => {
       if (pendingConfigWrites.delete(id))
-        resolve({ ok: false, error: 'Timed out changing the OpsMaxx configuration.' })
+        resolve({ ok: false, error: 'Timed out changing the OpsSwift configuration.' })
     }, 30000)
   })
 })
@@ -6341,6 +6334,7 @@ app.on('before-quit', (e) => {
 })
 
 function quitTeardown(): void {
+  closeNativeNetworkTerminals()
   // Before sshDisposeAll, not after: both of these hold pooled connections and
   // should hand their references back while the pool is still there to take
   // them. The comments were also the wrong way round — each now sits above what
@@ -6443,7 +6437,15 @@ function quitTeardown(): void {
 function installMenu(): void {
   const isMac = process.platform === 'darwin'
   const menu = Menu.buildFromTemplate([
-    ...(isMac ? [{ role: 'appMenu' as const }] : []),
+    ...(isMac ? [{ label: 'OpsSwift', submenu: [
+      { role: 'about' as const, label: mt('opsswift.about') },
+      { type: 'separator' as const },
+      { role: 'hide' as const, label: mt('opsswift.hide') },
+      { role: 'hideOthers' as const, label: mt('opsswift.hideOthers') },
+      { role: 'unhide' as const, label: mt('opsswift.showAll') },
+      { type: 'separator' as const },
+      { role: 'quit' as const, label: mt('opsswift.quit') }
+    ] }] : []),
     {
       label: mt('menu.edit'),
       submenu: [
@@ -6565,18 +6567,8 @@ app.on('open-url', (event, url) => {
 })
 
 app.whenReady().then(() => {
-  // Registered every launch rather than once at install: a user who installs
-  // two builds, or moves the app, leaves the registration pointing at a path
-  // that is no longer this one.
-  if (process.defaultApp) {
-    // In development the executable is Electron itself, so the registration
-    // has to name the script too or the OS launches a bare Electron.
-    if (process.argv.length >= 2) {
-      app.setAsDefaultProtocolClient(ADDY_LINK_SCHEME, process.execPath, [resolve(process.argv[1])])
-    }
-  } else {
-    app.setAsDefaultProtocolClient(ADDY_LINK_SCHEME)
-  }
+  app.setAboutPanelOptions({ applicationName: 'OpsSwift', applicationVersion: app.getVersion(), copyright: '© 2026 OpsSwift maintainers · Based on OpsMaxx (MIT)' })
+  // Independent extension build never registers itself for the official app's URL scheme.
   installCsp()
   // Only the instance that won the single-instance lock gets here, which is the
   // whole reason the store is opened from inside whenReady rather than at

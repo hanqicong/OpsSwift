@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
+import { NETWORK_PROFILES, networkProfileFromTags, sshCompatibilityFromTags, parseSshCompatibility } from '../../../../shared/networkDevice'
+import { REMOTE_TRANSPORTS, remoteTransport, TRANSPORT_PORTS, type RemoteTransport } from '../../../../shared/remoteProtocol'
 import {
   KeyRound,
   Lock,
@@ -164,7 +166,7 @@ function missingField(
    *
    * OpenSSH with no `IdentityFile` does not refuse — it tries the default
    * identities, `~/.ssh/id_ed25519` first. Demanding one here would make
-   * OpsMaxx stricter than the tool it is standing in for, over a field whose
+   * OpsSwift stricter than the tool it is standing in for, over a field whose
    * own grey placeholder already reads `~/.ssh/id_ed25519`.
    *
    * The connection resolves the default at dial time and names the file it
@@ -201,6 +203,7 @@ function credentialPlaceholder(
 export function AddServerModal(): React.JSX.Element {
   const t = useT()
   const setModal = useApp((s) => s.setModal)
+  const sshDefault = useApp((s) => parseSshCompatibility(s.settings.sshCompatibilityDefault))
   const setActivity = useApp((s) => s.setActivity)
   const addServer = useApp((s) => s.addServer)
   const updateServer = useApp((s) => s.updateServer)
@@ -452,7 +455,9 @@ export function AddServerModal(): React.JSX.Element {
     rdpOnly: speaks === 'rdp',
     cloud: cloudProvider ? { provider: cloudProvider, target: cloudTarget } : null
   }, t)
-  const valid = missing === null && sharesIssue === null
+  const tagsOverflow = new Set(tagsText.split(',').map((x) => x.trim().toLowerCase()).filter(Boolean)).size > MAX_TAGS
+  const protocolValid = (() => { try { remoteTransport(parseTags(tagsText)); return true } catch { return false } })()
+  const valid = missing === null && sharesIssue === null && !tagsOverflow && protocolValid
 
   /**
    * The key's PEM body, when we could read it, for the file currently in
@@ -546,6 +551,8 @@ export function AddServerModal(): React.JSX.Element {
       }
       const r = await fn({
         sessionId: `test-${Date.now()}`,
+        sshCompatibility: sshCompatibilityFromTags(parseTags(tagsText), sshDefault),
+        remoteTransport: remoteTransport(parseTags(tagsText)),
         serverId: editId ?? undefined,
         host: host.trim(),
         port: Number(port) || 22,
@@ -595,7 +602,7 @@ export function AddServerModal(): React.JSX.Element {
       // WHEN WE CANNOT EXPLAIN IT, THE SERVER'S OWN WORDS BEAT OUR ADMISSION.
       //
       // `unknown` exists to admit the classifier did not recognise the text —
-      // and this dialog then dropped that text, leaving "OpsMaxx could not tell
+      // and this dialog then dropped that text, leaving "OpsSwift could not tell
       // what went wrong from what the server said" with the thing the server
       // said thrown away. connectionError.ts already says the raw text is the
       // honest thing to show for exactly this case; the terminal's failure card
@@ -695,7 +702,7 @@ export function AddServerModal(): React.JSX.Element {
      * A cloud server stores nothing.
      *
      * There is no credential to keep: the provider mints a short-lived key or
-     * certificate for each connection and OpsMaxx never sees a token. Falling
+     * certificate for each connection and OpsSwift never sees a token. Falling
      * through to the branches below would write whatever happened to be left in
      * the SSH fields, producing a stored secret that nothing ever reads.
      */
@@ -752,7 +759,7 @@ export function AddServerModal(): React.JSX.Element {
        * The key's MATERIAL into the vault, not a path to it.
        *
        * `shared/vault.ts` names this as the worst of the lot: a `keyPath` is
-       * "the one credential OpsMaxx never actually held — not in the OS
+       * "the one credential OpsSwift never actually held — not in the OS
        * keychain, not in the encrypted vault, just a filename pointing at
        * plaintext on disk", and the one thing an encrypted backup could not
        * carry to another machine. An `sshkey` entry holds the PEM and the
@@ -900,7 +907,7 @@ export function AddServerModal(): React.JSX.Element {
          * would read as the machine being unreachable rather than as the test
          * being the wrong test.
          */
-        speaks === 'rdp' ? null : (
+        speaks === 'rdp' || parseTags(tagsText).some((s) => s.startsWith('transport:') && !['transport:ssh', 'transport:windows-ssh', 'transport:telnet'].includes(s)) ? null : (
           <button
             className="btn secondary size-28"
             disabled={!valid || testing}
@@ -939,7 +946,54 @@ export function AddServerModal(): React.JSX.Element {
           onChange={(e) => setTagsText(e.target.value)}
         />
         <span className="field-hint">{t('connections.addServer.tagsHint', { max: MAX_TAGS })}</span>
+        {tagsOverflow && <span role="alert" className="field-hint">{t('networkExtension.tagsOverflow', { max: MAX_TAGS })}</span>}
       </div>
+
+      {connectionType === 'ssh' && <>
+        <div className="field">
+          <label className="field-label" htmlFor="remote-transport">{t('networkExtension.transportLabel')}</label>
+          <select id="remote-transport" className="input" value={(() => { try { return remoteTransport(parseTags(tagsText)) } catch { return '' } })()} onChange={(e) => {
+            const selected = e.target.value as RemoteTransport
+            setTagsText([...parseTags(tagsText).filter((s) => !s.startsWith('transport:') && !['rpc:write', 'remote:execute', 'network:configure'].includes(s)), ...(selected === 'ssh' ? [] : [`transport:${selected}`])].join(', '))
+            setPort(String(TRANSPORT_PORTS[selected])); setTestResult(null)
+            if (!['ssh', 'netconf', 'windows-ssh'].includes(selected)) setAuth('password')
+          }}>
+            <option value="" disabled>{t('networkExtension.invalidTransport')}</option>
+            {REMOTE_TRANSPORTS.map((id) => <option key={id} value={id}>{t(`networkExtension.transport_${id}`)}</option>)}
+          </select>
+          <span className="field-hint">{t('networkExtension.transportHint')}</span>
+          {parseTags(tagsText).includes('transport:telnet') && <span role="note" className="field-hint danger">{t('networkExtension.telnetWarning')}</span>}
+        </div>
+        {parseTags(tagsText).some((s) => ['transport:netconf', 'transport:jsonrpc'].includes(s)) && <div className="field"><label><input type="checkbox" checked={parseTags(tagsText).includes('rpc:write')} onChange={(e) => setTagsText([...parseTags(tagsText).filter((s) => s !== 'rpc:write'), ...(e.target.checked ? ['rpc:write'] : [])].join(', '))} /> {t('networkExtension.rpcWrite')}</label><span className="field-hint">{t('networkExtension.remoteWriteHint')}</span></div>}
+        {parseTags(tagsText).some((s) => ['transport:winrm-ntlm', 'transport:winrm-basic', 'transport:windows-ssh'].includes(s)) && <div className="field"><label><input type="checkbox" checked={parseTags(tagsText).includes('remote:execute')} onChange={(e) => setTagsText([...parseTags(tagsText).filter((s) => s !== 'remote:execute'), ...(e.target.checked ? ['remote:execute'] : [])].join(', '))} /> {t('networkExtension.windowsExecute')}</label><span className="field-hint">{t('networkExtension.remoteWriteHint')}</span></div>}
+        <div className="field">
+          <label className="field-label" htmlFor="network-profile">{t('networkExtension.profileLabel')}</label>
+          <select id="network-profile" className="input" value={networkProfileFromTags(parseTags(tagsText))?.id ?? ''} onChange={(e) => setTagsText([...parseTags(tagsText).filter((x) => !x.startsWith('network:')), ...(e.target.value ? [`network:${e.target.value}`] : [])].join(', '))}>
+            <option value="">{t('networkExtension.ordinaryServer')}</option>
+            {NETWORK_PROFILES.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}
+          </select>
+          <span className="field-hint">{t('networkExtension.profileHint')}</span>
+          <button type="button" className="btn" onClick={async () => {
+            const result = await window.opsmaxx.ssh.exportNetworkBackup()
+            if (result.ok) toast(t('networkExtension.exportOk'), 'ok')
+            else if (!result.cancelled) toast(t('networkExtension.exportFailed'), 'error')
+          }}>{t('networkExtension.exportBackup')}</button>
+        </div>
+        {!!networkProfileFromTags(parseTags(tagsText))?.style && <div className="field">
+          <label><input type="checkbox" checked={parseTags(tagsText).includes('network:configure')} onChange={(e) => setTagsText([...parseTags(tagsText).filter((x) => x !== 'network:configure'), ...(e.target.checked ? ['network:configure'] : [])].join(', '))} /> {t('networkExtension.configureLabel')}</label>
+          <span className="field-hint">{t('networkExtension.configureHint')}</span>
+        </div>}
+        <div className="field">
+          <label className="field-label" htmlFor="ssh-compatibility">{t('networkExtension.compatibilityLabel')}</label>
+          <select id="ssh-compatibility" className="input" value={parseTags(tagsText).some((x) => x.startsWith('ssh-compat:')) ? sshCompatibilityFromTags(parseTags(tagsText)) : 'inherit'} onChange={(e) => setTagsText([...parseTags(tagsText).filter((x) => !x.startsWith('ssh-compat:')), ...(e.target.value === 'inherit' ? [] : [`ssh-compat:${e.target.value}`])].join(', '))}>
+            <option value="inherit">{t('networkExtension.inherit', { policy: t(sshDefault === 'huawei-legacy' ? 'networkExtension.legacy' : sshDefault === 'huawei-sha1' ? 'networkExtension.sha1' : 'networkExtension.strict') })}</option>
+            <option value="strict">{t('networkExtension.strict')}</option>
+            <option value="huawei-sha1">{t('networkExtension.sha1')}</option>
+            <option value="huawei-legacy">{t('networkExtension.legacy')}</option>
+          </select>
+          <span className="field-hint">{t('networkExtension.compatibilityHint')}</span>
+        </div>
+      </>}
 
       {/**
        * How this server is reached, which is a question about the machine

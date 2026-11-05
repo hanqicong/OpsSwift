@@ -119,7 +119,7 @@ export function InspectView(): React.JSX.Element {
 
       {/* Something else moved the machine's proxy settings while we were
           running — a Group Policy refresh, a VPN client, another proxy tool,
-          or the user in Settings. OpsMaxx puts them back by itself wherever
+          or the user in Settings. OpsSwift puts them back by itself wherever
           that needs no password, so seeing this means it could not: macOS,
           where `networksetup` requires administrator rights and a status poll
           must not raise an authentication dialog on its own. Said out loud
@@ -166,7 +166,7 @@ export function InspectView(): React.JSX.Element {
           longer an answer — pressing it again is the loop this replaced. The
           exact command is shown instead, because on the machine that produced
           this failure it is the thing that works: a terminal keeps the login
-          session that the elevated process OpsMaxx starts does not have. */}
+          session that the elevated process OpsSwift starts does not have. */}
       {manualTrustCommand && (
         <div className="banner warn col" style={{ gap: 6, alignItems: 'stretch' }}>
           <div className="row" style={{ gap: 'var(--sp-2)' }}>
@@ -231,7 +231,7 @@ export function InspectView(): React.JSX.Element {
       ))}
 
       {/* An expired authority makes every request fail with a certificate
-          error that says nothing about OpsMaxx. Said before it happens,
+          error that says nothing about OpsSwift. Said before it happens,
           and unmissably once it has. */}
       {status?.ca && status.ca.expiresInSec <= 0 && (
         <div className="banner danger">
@@ -329,7 +329,7 @@ export function listeningMessage(source: InspectSourceKind): string {
 }
 
 /**
- * The environment lines for a shell OpsMaxx did not open.
+ * The environment lines for a shell OpsSwift did not open.
  *
  * This is the whole answer for a remote session: `sshd` will not carry these
  * variables for us, so the honest thing is to hand the user the exact lines
@@ -338,7 +338,7 @@ export function listeningMessage(source: InspectSourceKind): string {
  *
  * The syntax has to match the shell it is going to be pasted into, and on
  * Windows that is not a POSIX shell. `export HTTP_PROXY=…` in PowerShell — the
- * shell OpsMaxx itself offers as the default on Windows — is not a syntax
+ * shell OpsSwift itself offers as the default on Windows — is not a syntax
  * error that tells you what to fix; `export` is simply an unrecognised command
  * name, so the person gets "not recognized as the name of a cmdlet" ten times
  * and a shell that is still not pointed at anything.

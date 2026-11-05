@@ -60,7 +60,7 @@ import type { TrustChangeResult, TrustContext } from './inspectTrust'
 //
 //  3. **Stopping puts the machine back.** The system proxy is restored on
 //     stop, on quit, and on the next launch after a crash. A user left with no
-//     internet because OpsMaxx died at the wrong moment is the worst thing
+//     internet because OpsSwift died at the wrong moment is the worst thing
 //     this feature can do, and it is entirely preventable.
 
 const CA_KEY_SECRET_ID = 'inspect.ca.key'
@@ -246,7 +246,7 @@ async function mintCa(): Promise<InspectCaInfo> {
     fingerprint?: unknown
     notAfter?: unknown
     notBefore?: unknown
-  }>('inspect.ca.generate', { commonName: 'OpsMaxx Traffic Inspector', validDays: 365 })
+  }>('inspect.ca.generate', { commonName: 'OpsSwift Traffic Inspector', validDays: 365 })
 
   if (typeof res?.certPem !== 'string' || typeof res?.keyPem !== 'string') {
     throw new LocalizedError('main.inspect.noCa')
@@ -295,7 +295,7 @@ async function describeCa(certPem: string, keyPersisted: boolean): Promise<Inspe
     // otherwise pass that check and then start failing every request with a
     // certificate error nothing on screen explained.
     expiresInSec: Math.floor((new Date(cert.validTo).getTime() - Date.now()) / 1000),
-    commonName: cert.subject.split('\n').find((l) => l.startsWith('CN='))?.slice(3) ?? 'OpsMaxx Traffic Inspector',
+    commonName: cert.subject.split('\n').find((l) => l.startsWith('CN='))?.slice(3) ?? 'OpsSwift Traffic Inspector',
     certPath,
     keyPersisted
   }
@@ -909,7 +909,7 @@ export function inspectEnv(): InspectEnv {
     https_proxy: url,
     // Without this, every request to the machine's own services would be
     // bounced through the proxy — which usually works and occasionally
-    // deadlocks, when the service being called is OpsMaxx itself.
+    // deadlocks, when the service being called is OpsSwift itself.
     NO_PROXY: 'localhost,127.0.0.1,::1',
     no_proxy: 'localhost,127.0.0.1,::1',
     NODE_EXTRA_CA_CERTS: certPath,

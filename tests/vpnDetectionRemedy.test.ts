@@ -8,11 +8,11 @@ import { useVpnProfiles } from '../src/renderer/src/components/vpn/useVpnProfile
 import type { VpnEngineInfo, VpnKind, VpnProfile } from '../src/renderer/src/types'
 
 /**
- * The row for a profile whose engine came with OpsMaxx and is not there.
+ * The row for a profile whose engine came with OpsSwift and is not there.
  *
  * Antivirus quarantining the WireGuard sidecar produced the worst row in the
  * app: a disabled Start, a sentence naming `scripts/build-sidecar.sh` — an
- * instruction for whoever builds OpsMaxx — and not one button. Nothing on
+ * instruction for whoever builds OpsSwift — and not one button. Nothing on
  * screen told the user what had happened or gave them anything to press.
  *
  * What is pinned here is that the row says something a non-developer can act
@@ -69,7 +69,7 @@ beforeEach(() => {
 describe('a bundled engine that is not on disk', () => {
   it('says what happened without naming a build script', async () => {
     show(profile('wireguard'), 'darwin')
-    expect(await screen.findByText(/ships inside OpsMaxx/)).toBeTruthy()
+    expect(await screen.findByText(/ships inside OpsSwift/)).toBeTruthy()
     // The developer-facing text still exists — it is the best diagnostic there
     // is — but behind the Details disclosure rather than as the headline.
     expect(screen.getByText(/build-sidecar\.sh/).closest('details')).not.toBeNull()
@@ -77,14 +77,14 @@ describe('a bundled engine that is not on disk', () => {
 
   it('offers the repair rather than leaving the row with no control at all', async () => {
     show(profile('wireguard'), 'darwin')
-    expect(await screen.findByRole('button', { name: 'Reinstall OpsMaxx' })).toBeTruthy()
+    expect(await screen.findByRole('button', { name: 'Reinstall OpsSwift' })).toBeTruthy()
   })
 
-  it('does the same for OpenVPN where OpsMaxx ships it', async () => {
+  it('does the same for OpenVPN where OpsSwift ships it', async () => {
     show(profile('openvpn'), 'darwin')
     // Both, and they do not contradict each other: the copy we shipped is
     // gone, and pointing at one the user installed themselves is still valid.
-    expect(await screen.findByRole('button', { name: 'Reinstall OpsMaxx' })).toBeTruthy()
+    expect(await screen.findByRole('button', { name: 'Reinstall OpsSwift' })).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Set the path' })).toBeTruthy()
     expect(screen.queryByRole('button', { name: 'Install OpenVPN' })).toBeNull()
   })
@@ -94,7 +94,7 @@ describe('a bundled engine that is not on disk', () => {
     expect(await screen.findByRole('button', { name: 'Install OpenVPN' })).toBeTruthy()
     // Windows ships no OpenVPN of ours, so there is nothing for a reinstall to
     // put back and saying otherwise would send the reader to the wrong place.
-    expect(screen.queryByRole('button', { name: 'Reinstall OpsMaxx' })).toBeNull()
-    await waitFor(() => expect(screen.queryByText(/ships inside OpsMaxx/)).toBeNull())
+    expect(screen.queryByRole('button', { name: 'Reinstall OpsSwift' })).toBeNull()
+    await waitFor(() => expect(screen.queryByText(/ships inside OpsSwift/)).toBeNull())
   })
 })

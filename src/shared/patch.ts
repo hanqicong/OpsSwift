@@ -24,7 +24,7 @@ import { englishT, st, type MessageKey, type Translate } from './i18n'
 // Patch and update management — roadmap item 17.
 //
 // The most common recurring task in the job this app is named for, and the
-// first thing in OpsMaxx that does it. Everything it stands on already
+// first thing in OpsSwift that does it. Everything it stands on already
 // exists: item C collects the counts (shared/hostFacts.ts), B1/B2 make a job
 // durable and detached, B3 makes its approval a record, and B4's staging lives
 // here rather than being paid for twice.
@@ -51,7 +51,7 @@ import { englishT, st, type MessageKey, type Translate } from './i18n'
 //    and waits forever; a kernel upgrade wants a reboot the app cannot decide
 //    to take; a mirror serves a half-published repository. Each of those needs
 //    a person, and an unattended run's only options are to hang or to guess.
-//  * It cannot know what the host does. OpsMaxx has never seen your load
+//  * It cannot know what the host does. OpsSwift has never seen your load
 //    balancer, your replication topology or your maintenance window. See
 //    shared/topology.ts for the full version of that argument; the short form
 //    is that the two facts it genuinely holds are not enough to schedule
@@ -370,7 +370,7 @@ export function verifyReboot(
       kind: 'unverifiable',
       ok: false,
       reason:
-        'The server is answering again, but it does not expose a boot id, so OpsMaxx cannot ' +
+        'The server is answering again, but it does not expose a boot id, so OpsSwift cannot ' +
         'prove it actually restarted rather than merely dropping the connection' +
         (up === null ? '.' : ` — its uptime is ${up}s, which is the only evidence available.`)
     }
@@ -414,7 +414,7 @@ export function verifyReboot(
 /** What a host's row says when its reboot step is still waiting for it. */
 export const JOB_REBOOTING_NOTE =
   'The reboot has been issued and the server has stopped answering, which is what was expected. ' +
-  'OpsMaxx is polling until it comes back and will then check that it really restarted and ' +
+  'OpsSwift is polling until it comes back and will then check that it really restarted and ' +
   'that nothing failed on the way up. This is not "unreachable": nothing is wrong yet.'
 
 // ---------------------------------------------------------------------------

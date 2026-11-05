@@ -15,7 +15,7 @@ import { join } from 'node:path'
  *    consults the bundled engine. A Windows user was told
  *    `/opt/homebrew/bin/openvpn` "does not exist"; a Mac user was told
  *    `C:\Program Files\...` "is a relative path". Both bypassed an engine
- *    OpsMaxx ships that would have worked.
+ *    OpsSwift ships that would have worked.
  *  * `OpenVpnSpec.sourcePath` — the `.ovpn` file a profile was discovered
  *    from, which exists to make a re-scan idempotent. A path on somebody
  *    else's disk names nothing here.

@@ -107,7 +107,7 @@ export async function cloudExec(
         // Instance lists on a large account are genuinely big.
         maxBuffer: 32 * 1024 * 1024,
         // Inherit the user's environment: that is where their cloud session
-        // lives. We add nothing and remove nothing - OpsMaxx is consuming an
+        // lives. We add nothing and remove nothing - OpsSwift is consuming an
         // already-authenticated environment, not constructing one.
         env: process.env
       },

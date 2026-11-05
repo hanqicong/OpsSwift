@@ -20,7 +20,7 @@ import { inspectEnv, inspectInjectsSessions, onInspectStarted, onInspectStopped 
 // A machine where the native binding will not load (an unsupported libc, a
 // hardened-runtime failure we did not predict) must still get an app that
 // starts and does everything else — the local terminal is the feature that
-// fails, not OpsMaxx.
+// fails, not OpsSwift.
 //
 // The laziness is also what keeps this module unit-testable: everything above
 // localConnect is pure and importable with the native package absent entirely.
@@ -259,7 +259,7 @@ export function childEnv(...layers: Record<string, string>[]): Record<string, st
  *    not installed PowerShell 7) ships `curl` and `wget` as built-in ALIASES
  *    for `Invoke-WebRequest`. That cmdlet is .NET Framework: it resolves its
  *    proxy from the machine's WinINET settings and ignores `HTTP_PROXY`
- *    entirely. So somebody typing `curl https://…` into the terminal OpsMaxx
+ *    entirely. So somebody typing `curl https://…` into the terminal OpsSwift
  *    opened is not running curl, and no environment variable can make that
  *    request visible. `curl.exe` is the real curl — shipped in Windows since
  *    10 1803 — and it does honour these variables. The aliases were removed in
@@ -278,7 +278,7 @@ export function inspectNotice(kind: LocalShellKind): string {
         'the distribution is not this machine — nothing you run here is captured.'
     )
   }
-  const routed = 'This terminal is routed through OpsMaxx traffic capture.'
+  const routed = 'This terminal is routed through OpsSwift traffic capture.'
   if (kind === 'powershell') {
     return notice(
       `${routed} Windows PowerShell's curl and wget are aliases for Invoke-WebRequest, which ` +
@@ -293,7 +293,7 @@ export function inspectNotice(kind: LocalShellKind): string {
  *  input: it appears like any other program's output and cannot corrupt a
  *  half-typed command. */
 function notice(text: string): string {
-  return `\r\n\x1b[2m[OpsMaxx] ${text}\x1b[0m\r\n`
+  return `\r\n\x1b[2m[OpsSwift] ${text}\x1b[0m\r\n`
 }
 
 interface Session {

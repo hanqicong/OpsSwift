@@ -49,7 +49,7 @@ export interface HistoryEntry {
   bodyOmitted?: 'unparseable' | 'too-large' | 'not-stored'
   environment?: string
   collection?: string
-  /** The OpsMaxx workspace the request was sent from. Absent on entries written before it was recorded. */
+  /** The OpsSwift workspace the request was sent from. Absent on entries written before it was recorded. */
   workspaceId?: Id
   route: Route
   routeLabel: string

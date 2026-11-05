@@ -20,7 +20,7 @@ import { useT } from '../../lib/i18n'
  *
  * The countdown half disappears when the configured approval timeout could not
  * be read, and the chip still shows the count. "Something is waiting" is true
- * whether or not OpsMaxx knows for how long; inventing a deadline to keep
+ * whether or not OpsSwift knows for how long; inventing a deadline to keep
  * the chip's shape consistent would be inventing the one number here an
  * operator would actually plan around.
  */
@@ -64,7 +64,7 @@ function ApprovalChip(): React.JSX.Element | null {
  * Whether this machine has a network at all, from `navigator.onLine`.
  *
  * Read from the OS, never by reaching out to an endpoint: a probe would be
- * OpsMaxx phoning somewhere on a timer, and the only thing it could add is
+ * OpsSwift phoning somewhere on a timer, and the only thing it could add is
  * "the internet is reachable", which says nothing about a server on the LAN.
  * So "Online" means an interface is up, and the tooltip says exactly that.
  * "Offline" is the reading worth having — every SSH session is about to fail,

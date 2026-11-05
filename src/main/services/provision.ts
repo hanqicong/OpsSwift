@@ -128,7 +128,7 @@ async function runHook(
     const { stdout, stderr } = await run(interpreter, [file], {
       timeout: HOOK_TIMEOUT_MS,
       maxBuffer: 4 * 1024 * 1024,
-      // NOT the app's environment. It carries whatever OpsMaxx was launched
+      // NOT the app's environment. It carries whatever OpsSwift was launched
       // with, which on a desktop includes the session's own secrets on some
       // platforms -- and a provisioning hook has no business inheriting them.
       env: { PATH: process.env.PATH ?? '', HOME: process.env.HOME ?? '' }

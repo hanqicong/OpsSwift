@@ -46,7 +46,7 @@ describe('the AI & MCP switch', () => {
     bridge({ running: false, results: [] })
     render(<AiSecurity />)
 
-    await screen.findByText(/Not listening: OpsMaxx could not open 127.0.0.1:5177/)
+    await screen.findByText(/Not listening: OpsSwift could not open 127.0.0.1:5177/)
     expect(toggle().getAttribute('aria-checked')).toBe('false')
     expect(toggle().classList.contains('on')).toBe(false)
   })

@@ -16,14 +16,14 @@ describe('the toast says something', () => {
     // the one detail that explained the failure.
     expect(
       headline(
-        'Something went wrong inside OpsMaxx. The management socket path is 123 bytes, which is too long: /Users/x/Library/Application Support/OpsMaxx/vpn-run/vpn-abc/mgmt/m.sock'
+        'Something went wrong inside OpsSwift. The management socket path is 123 bytes, which is too long: /Users/x/Library/Application Support/OpsSwift/vpn-run/vpn-abc/mgmt/m.sock'
       )
-    ).toBe('The management socket path is 123 bytes, which is too long: /Users/x/Library/Application Support/OpsMaxx/vpn-run/vpn-abc/mgmt/m.sock')
+    ).toBe('The management socket path is 123 bytes, which is too long: /Users/x/Library/Application Support/OpsSwift/vpn-run/vpn-abc/mgmt/m.sock')
   })
 
   it('falls back to the generic sentence when there is genuinely nothing else', () => {
-    expect(headline('Something went wrong inside OpsMaxx.')).toBe(
-      'Something went wrong inside OpsMaxx.'
+    expect(headline('Something went wrong inside OpsSwift.')).toBe(
+      'Something went wrong inside OpsSwift.'
     )
   })
 
@@ -43,7 +43,7 @@ describe('the toast says something', () => {
       expect(headline(describeVpnError('internal', 'The socket path is too long.'), 'internal')).toBe(
         'The socket path is too long.'
       )
-      expect(headline('Something went wrong inside OpsMaxx.', 'internal')).toBe(
+      expect(headline('Something went wrong inside OpsSwift.', 'internal')).toBe(
         t('main.vpn.error.internal', { detail: '' })
       )
     } finally {

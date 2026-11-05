@@ -24,7 +24,7 @@ export interface ResolvedSession {
 
 // Reuses a cached, not-yet-expired token when there is one; otherwise walks
 // the human through the pairing-code flow against the already-running
-// OpsMaxx Desktop/Core, then caches the token it comes back with.
+// OpsSwift Desktop/Core, then caches the token it comes back with.
 export async function getOrPairSession(agentKey: string, agentName: string): Promise<ResolvedSession> {
   const cached = getCachedSession(agentKey)
   if (cached) return { token: cached.token, port: cached.port }
@@ -36,7 +36,7 @@ export async function getOrPairSession(agentKey: string, agentName: string): Pro
     start = await postJson(port, '/pair/start', { agentName })
   } catch {
     throw new Error(
-      `Could not reach OpsMaxx on 127.0.0.1:${port}. Open OpsMaxx and turn on "Enable AI & MCP access" ` +
+      `Could not reach OpsSwift on 127.0.0.1:${port}. Open OpsSwift and turn on "Enable AI & MCP access" ` +
         `under AI & MCP → Security, or set OPSMAXX_PORT if it uses a different port.`
     )
   }
@@ -44,13 +44,13 @@ export async function getOrPairSession(agentKey: string, agentName: string): Pro
   const pairingId = start.pairingId as string
   const expiresInSeconds = start.expiresInSeconds as number
 
-  console.log('Open OpsMaxx — a one-time pairing code will appear there.')
+  console.log('Open OpsSwift — a one-time pairing code will appear there.')
   const rl = createInterface({ input: process.stdin, output: process.stdout })
   try {
     const deadline = Date.now() + expiresInSeconds * 1000
     for (;;) {
       if (Date.now() > deadline) throw new Error('Pairing code expired. Run the command again.')
-      const code = (await rl.question('Enter the 6-digit code shown in OpsMaxx: ')).trim()
+      const code = (await rl.question('Enter the 6-digit code shown in OpsSwift: ')).trim()
       const confirm = await postJson(port, '/pair/confirm', { pairingId, code })
       if (confirm.ok) {
         const token = confirm.token as string

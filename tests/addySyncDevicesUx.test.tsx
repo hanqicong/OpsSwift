@@ -250,7 +250,7 @@ describe('finishing a join', () => {
       }
     })
     render(<AddySetup />)
-    fireEvent.click(await screen.findByRole('button', { name: /already use OpsMaxx/ }))
+    fireEvent.click(await screen.findByRole('button', { name: /already use OpsSwift/ }))
     fireEvent.change(screen.getByPlaceholderText('https://relay.example'), {
       target: { value: 'https://relay.example' }
     })

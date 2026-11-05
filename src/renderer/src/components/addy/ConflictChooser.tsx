@@ -263,7 +263,7 @@ export function ConflictChooser(): React.JSX.Element | null {
                 {from !== null ? t('addy.conflict.setAsideFrom', { from }) : t('addy.conflict.setAside')}
               </span>
               {/* Marked when it is only the relay's word: a copy kept by an
-                  older OpsMaxx carries no sealed record of who made it, and
+                  older OpsSwift carries no sealed record of who made it, and
                   the relay can say anything. For the vault this line is the
                   whole basis of the choice, so it must not look checked. */}
               <span className="conflict-when">

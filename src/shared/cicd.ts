@@ -522,7 +522,7 @@ export interface CicdConfigSource {
  * cannot express: `FileParameterDefinition` (an upload, which needs a multipart
  * body the trigger path does not build), `RunParameterDefinition` (a picker over
  * another job's builds), `CredentialsParameterDefinition` (a pointer into
- * Jenkins' own credential store, which OpsMaxx must not be in the business of
+ * Jenkins' own credential store, which OpsSwift must not be in the business of
  * choosing), and the plugin types -- Active Choices, Git Parameter, Extended
  * Choice. Each of those arrives here as `string`, with whatever default Jenkins
  * reported, and is submitted verbatim as a form field. That is what Jenkins'

@@ -101,7 +101,7 @@ function kdfOf(file: VaultFile): KdfParams {
  * about fifty minutes per unlock attempt, each holding a libuv thread, so a
  * few attempts stall every file and crypto call in main on every device.
  * Nothing legitimate ever writes other values, so anything else is refused as
- * a file OpsMaxx did not make.
+ * a file OpsSwift did not make.
  */
 function kdfAllowed(params: KdfParams): boolean {
   return (
@@ -111,7 +111,7 @@ function kdfAllowed(params: KdfParams): boolean {
 }
 
 const KDF_REFUSED =
-  'This vault file asks for key-derivation settings OpsMaxx never writes, so it was not made by OpsMaxx. Restore the vault from a backup.'
+  'This vault file asks for key-derivation settings OpsSwift never writes, so it was not made by OpsSwift. Restore the vault from a backup.'
 
 function isCurrentKdf(params: KdfParams): boolean {
   return params.N === KDF.N && params.r === KDF.r && params.p === KDF.p

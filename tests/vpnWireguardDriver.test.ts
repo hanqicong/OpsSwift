@@ -886,7 +886,7 @@ describe('system mode', () => {
 
   it('refuses a full-tunnel profile before it elevates, and says why', async () => {
     // A full tunnel routes the encrypted packets that carry it back into
-    // itself unless the peer endpoint is pinned outside, which OpsMaxx does
+    // itself unless the peer endpoint is pinned outside, which OpsSwift does
     // not do yet. Bringing it up would take the machine off the network.
     const calls: string[] = []
     const { ctx } = makeCtx()

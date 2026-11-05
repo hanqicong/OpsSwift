@@ -23,11 +23,11 @@ import { join } from 'node:path'
 //     not the shipped one.
 //   * `npm run test:capability` runs this same file inside Electron's bundled
 //     Node via ELECTRON_RUN_AS_NODE — Node 24.18.1, SQLite 3.53.1, the runtime
-//     OpsMaxx actually ships. CI runs both. That second run is the one that
+//     OpsSwift actually ships. CI runs both. That second run is the one that
 //     guards the decision; the first is a fast smoke check.
 //
 // The assertions below are deliberately about the CAPABILITY and not about
-// OpsMaxx's own code, so an Electron bump that removes an export, or refuses
+// OpsSwift's own code, so an Electron bump that removes an export, or refuses
 // WAL, or ships a SQLite too old for the features the schema uses, fails with a
 // sentence naming the thing that moved — rather than as an opaque runtime error
 // on a user's machine at the first sweep.
@@ -116,7 +116,7 @@ describe.skipIf(!HAS_SQLITE)('node:sqlite capability', () => {
 
 describe('where this file is actually run', () => {
   it('names the runtime it is asserting about', () => {
-    // This file's claim is about the runtime OpsMaxx SHIPS — Electron's
+    // This file's claim is about the runtime OpsSwift SHIPS — Electron's
     // bundled Node — and under plain vitest it is not running in it. Printed
     // rather than asserted, because both runs are legitimate; what is not
     // legitimate is reading a green tick here and believing an Electron bump

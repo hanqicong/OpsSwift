@@ -86,10 +86,11 @@ export function UpdateIndicator(): React.JSX.Element | null {
   return (
     <button
       className={clsx('item update-indicator', c && `pending ${c.tone}`)}
-      title={describe(status, capabilities.currentVersion, beta, t)}
+      title={capabilities.managedReleaseUrl ? t('opsswift.ltsUpdates') : describe(status, capabilities.currentVersion, beta, t)}
       onClick={() => openSettings('general')}
     >
       <span>v{capabilities.currentVersion}</span>
+      {capabilities.managedReleaseUrl && <span className="build-tag">{t('opsswift.ltsTag')}</span>}
       {beta && <span className="build-tag">{t('layout.update.betaTag')}</span>}
       {c && (
         <>

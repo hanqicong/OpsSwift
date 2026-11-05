@@ -8,7 +8,7 @@ import { mayOpenExternally } from '../src/shared/externalUrl'
 describe('what may reach the operating system', () => {
   it('allows the web and the contact address, which is everything the app opens', () => {
     for (const url of [
-      'https://github.com/OpsMaxx/OpsMaxx/issues/new?template=bug_report.yml',
+      'https://github.com/hanqicong/OpsSwift/issues/new?template=bug_report.yml',
       'http://localhost:8080/',
       'mailto:someone@example.com'
     ])

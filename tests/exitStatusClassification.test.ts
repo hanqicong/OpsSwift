@@ -4,7 +4,7 @@ import { adviseOnError } from '../src/renderer/src/lib/connectionError'
 
 // Typing a command that does not exist and then typing `exit` produced:
 //
-//   "OpsMaxx could not tell what went wrong from what the server said."
+//   "OpsSwift could not tell what went wrong from what the server said."
 //
 // next to a button offering to edit the connection — for a session in which
 // nothing had gone wrong at all.
@@ -41,7 +41,7 @@ describe('a shell that exited', () => {
     }
   })
 
-  it('does not say OpsMaxx failed to understand it', () => {
+  it('does not say OpsSwift failed to understand it', () => {
     const advice = adviseOnError(dead('shell exited with 127'))
     expect(advice.cause).not.toMatch(/could not tell/i)
     expect(advice.cause).toMatch(/exited/i)

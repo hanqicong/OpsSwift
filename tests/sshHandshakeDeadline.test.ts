@@ -7,7 +7,7 @@ import { resolve } from 'node:path'
  *
  * Reported as "the servers have stopped connecting, I think the private key
  * mechanism is not working anymore". The connection was to a jump host whose
- * `ssh` output shows what OpsMaxx could not:
+ * `ssh` output shows what OpsSwift could not:
  *
  *     (ali_waqar@172.30.11.62) Verification code:
  *

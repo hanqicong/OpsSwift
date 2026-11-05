@@ -3,7 +3,7 @@ import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/
 import { ErrorCode, isJSONRPCRequest, type JSONRPCMessage } from '@modelcontextprotocol/sdk/types.js'
 
 // Pure protocol relay: an MCP client (Claude Code, Codex, ...) talks stdio to
-// this process; every message is forwarded, unmodified, to OpsMaxx's own
+// this process; every message is forwarded, unmodified, to OpsSwift's own
 // MCP server over the already-existing authenticated HTTP endpoint, and every
 // reply is forwarded back. No tool/session/policy logic lives here — that all
 // stays exactly where it already is, in mcpServer.ts and the services it
@@ -18,7 +18,7 @@ import { ErrorCode, isJSONRPCRequest, type JSONRPCMessage } from '@modelcontextp
 // wrong on the HTTP side and it is the reason people had to restart their MCP
 // client after quitting the app: stdio has no reconnect — the transport IS this
 // process's stdin and stdout — so once the bridge exits, the client's server is
-// gone until the client itself respawns it. Quitting OpsMaxx for thirty seconds
+// gone until the client itself respawns it. Quitting OpsSwift for thirty seconds
 // cost you a Claude restart.
 //
 // The HTTP endpoint is stateless (`sessionIdGenerator: undefined`, see
@@ -109,7 +109,7 @@ export async function runBridge(token: string, port: number): Promise<void> {
       error: {
         code: ErrorCode.ConnectionClosed,
         message:
-          'OpsMaxx is not reachable — check the desktop app is running. The bridge stays up and reconnects on its own, so retrying usually just works.'
+          'OpsSwift is not reachable — check the desktop app is running. The bridge stays up and reconnects on its own, so retrying usually just works.'
       }
     })
   }

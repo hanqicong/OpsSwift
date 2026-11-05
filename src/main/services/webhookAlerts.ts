@@ -284,7 +284,7 @@ export async function webhookTest(): Promise<WebhookTestResult> {
     event: 'raised',
     kind: 'cpu',
     server: 'Test server',
-    summary: 'Test alert from OpsMaxx. Nothing is wrong.',
+    summary: 'Test alert from OpsSwift. Nothing is wrong.',
     at: new Date().toISOString(),
     value: 91,
     threshold: 80

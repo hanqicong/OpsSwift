@@ -123,7 +123,7 @@ describe('versions', () => {
     // thinks it understands, and a machine somebody is setting up is the worst
     // place to guess.
     const plan = planProvision({ ...valid, version: PROVISION_MANIFEST_VERSION + 1 })
-    expect(plan.problems.join(' ')).toContain('Upgrade OpsMaxx')
+    expect(plan.problems.join(' ')).toContain('Upgrade OpsSwift')
     expect(plan.steps).toEqual([])
   })
 
@@ -214,7 +214,7 @@ describe('applying', () => {
         passphrase: '',
         hookApproved: true
       })
-      // The app's environment carries whatever OpsMaxx was launched with,
+      // The app's environment carries whatever OpsSwift was launched with,
       // which on a desktop includes session secrets on some platforms. A
       // provisioning hook has no business inheriting them.
       expect(result.hookOutput).toContain('probe=[]')

@@ -348,7 +348,7 @@ export class ComposeReader {
    * No sudo failover. See the header: a write is not a read.
    */
   /**
-   * Plan putting one service back to the tag it had before OpsMaxx's last
+   * Plan putting one service back to the tag it had before OpsSwift's last
    * edit to this file.
    *
    * BOTH FILES ARE RE-READ HERE, at the moment the revert is planned, for the
@@ -400,7 +400,7 @@ export class ComposeReader {
           ok: false,
           refusal: 'backup-denied',
           reason:
-            'a OpsMaxx backup is beside this compose file and this account may not read it. There may well be a tag to go back to — this is not a report that there is none.'
+            'a OpsSwift backup is beside this compose file and this account may not read it. There may well be a tag to go back to — this is not a report that there is none.'
         }
       }
       backupText = read.state === 'present' ? read.text : null

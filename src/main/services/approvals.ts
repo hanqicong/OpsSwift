@@ -242,7 +242,7 @@ export interface CreateApprovalInput {
 }
 
 /**
- * `refused` is OpsMaxx declining to ask, not a human declining the action.
+ * `refused` is OpsSwift declining to ask, not a human declining the action.
  *
  * The audit log records it as `not-asked` -- the action did not happen, and no
  * human decided that it should not -- and gate() tells the agent the same:

@@ -368,7 +368,7 @@ const baseHeaders = (): Record<string, string> => ({
 // in a failed-trigger note, and in MCP tool results. `remoteText` flattens
 // newlines and strips C0/C1, bidi overrides and zero-width characters, so a
 // crafted `message` cannot reverse the sentence it lands in or forge a line
-// break into something that reads as OpsMaxx's own words.
+// break into something that reads as OpsSwift's own words.
 function fail(what: string, res: CicdResponse): Error {
   const raw = str(obj(parseJson(res.body)).message) ?? res.body
   const message = remoteText(raw, 200)

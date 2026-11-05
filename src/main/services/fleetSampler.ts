@@ -112,7 +112,7 @@ type PostureSampler = (
  * normalisation rule cannot substitute a name nobody told it about — and
  * without it every templated file in the estate is unique and the whole
  * comparison is noise. `hostname` is what the metrics probe reported this
- * sweep; `serverName` is what the server is called in OpsMaxx.
+ * sweep; `serverName` is what the server is called in OpsSwift.
  */
 type DriftSampler = (
   key: string,

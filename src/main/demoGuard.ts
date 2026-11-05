@@ -14,7 +14,7 @@ import { resolve } from 'node:path'
  *     `import.meta.env.DEV`, so a production build does not contain it at all.
  *
  * AND IT MUST NEVER BE THE REAL PROFILE. A dev run's userData is the same
- * folder an installed release uses -- productName is OpsMaxx either way -- and
+ * folder an installed release uses -- productName is OpsSwift either way -- and
  * seeding writes the data file, the policy, the vault and the audit chain. A
  * demo dir that resolves to the default userData would overwrite somebody's
  * servers and vault with fixtures, so that is refused rather than honoured.

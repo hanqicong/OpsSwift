@@ -30,7 +30,7 @@ const platformDir = `${process.platform}-${process.arch}`
 const exe = process.platform === 'win32' ? '.exe' : ''
 const NETD = join(ROOT, 'resources', 'bin', platformDir, `opsmaxx-netd${exe}`)
 const FRPC = join(ROOT, 'resources', 'bin', platformDir, `frpc${exe}`)
-// No `${exe}`: OpsMaxx bundles openvpn on macOS and Linux only, so there is
+// No `${exe}`: OpsSwift bundles openvpn on macOS and Linux only, so there is
 // never an openvpn.exe here to name.
 const OPENVPN = join(ROOT, 'resources', 'bin', platformDir, 'openvpn')
 
@@ -406,7 +406,7 @@ describeE2e('bundled openvpn', () => {
   it('is built', () => {
     if (process.platform === 'win32') {
       // Windows drives a system install; see docs/VPN.md.
-      console.warn('skipping: OpsMaxx does not bundle openvpn on Windows')
+      console.warn('skipping: OpsSwift does not bundle openvpn on Windows')
       return
     }
     expect(has(OPENVPN), `${OPENVPN} is missing. Run: npm run build:engines`).toBe(true)

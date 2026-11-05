@@ -121,7 +121,7 @@ describe('a provider with no queue', () => {
     // provider nothing asked it would be a claim nothing had checked.
     const b = bridge({
       queue: vi.fn(async () => {
-        throw new Error('github has no build queue OpsMaxx can read, so there is nothing to show here.')
+        throw new Error('github has no build queue OpsSwift can read, so there is nothing to show here.')
       })
     })
     render(<QueuePanel connections={[CONN]} bridge={b} />)

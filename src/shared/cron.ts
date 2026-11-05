@@ -1383,7 +1383,7 @@ export function planCronEdit(doc: CronDocument, edit: CronEdit): CronEditPlan {
   if (doc.unparsed.length > 0) {
     const first = doc.unparsed[0].line
     return refuse(
-      `this crontab has ${doc.unparsed.length} line${doc.unparsed.length === 1 ? '' : 's'} OpsMaxx could not parse, starting with \`${first.length > 60 ? `${first.slice(0, 57)}…` : first}\`. Writing a whole file back around a line we did not understand is how a schedule quietly stops running, so nothing here can be edited until that line is dealt with by hand.`
+      `this crontab has ${doc.unparsed.length} line${doc.unparsed.length === 1 ? '' : 's'} OpsSwift could not parse, starting with \`${first.length > 60 ? `${first.slice(0, 57)}…` : first}\`. Writing a whole file back around a line we did not understand is how a schedule quietly stops running, so nothing here can be edited until that line is dealt with by hand.`
     )
   }
 
@@ -1429,7 +1429,7 @@ export function planCronEdit(doc: CronDocument, edit: CronEdit): CronEditPlan {
     // to that. It round-trips untouched; it just cannot be the line we edit.
     if (target.text.includes('\r')) {
       return refuse(
-        `line ${edit.lineIndex + 1} contains a carriage return inside the line itself. OpsMaxx will not rewrite it, because there is no way to put that character back where it was.`
+        `line ${edit.lineIndex + 1} contains a carriage return inside the line itself. OpsSwift will not rewrite it, because there is no way to put that character back where it was.`
       )
     }
     if (edit.op === 'remove') {
@@ -1460,7 +1460,7 @@ export function planCronEdit(doc: CronDocument, edit: CronEdit): CronEditPlan {
   const reparsed = parseCrontabDocument(after, doc.origin, doc.kind, doc.hasUserField)
   if (reparsed.unparsed.length > 0) {
     return refuse(
-      `the file this change would produce has a line OpsMaxx cannot parse back (\`${reparsed.unparsed[0].line}\`), so it was not written.`
+      `the file this change would produce has a line OpsSwift cannot parse back (\`${reparsed.unparsed[0].line}\`), so it was not written.`
     )
   }
   const expected = edit.op === 'remove' ? doc.entries.length - 1 : edit.op === 'add' ? doc.entries.length + 1 : doc.entries.length
@@ -1516,7 +1516,7 @@ function buildJobLine(
   // to edit anyway; this is the check that keeps the two facts consistent
   // rather than relying on them being consistent.
   if (hasUserField) {
-    return { ok: false, reason: 'OpsMaxx does not add jobs to files that carry a user column.' }
+    return { ok: false, reason: 'OpsSwift does not add jobs to files that carry a user column.' }
   }
   return { ok: true, text: `${s} ${rest}` }
 }

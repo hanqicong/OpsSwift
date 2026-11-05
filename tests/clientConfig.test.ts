@@ -47,7 +47,7 @@ describe('bridge invocation', () => {
   it('points at the unpacked copy of the CLI when running from an asar archive', async () => {
     const electron = await import('electron')
     const original = electron.app.getAppPath
-    ;(electron.app as any).getAppPath = (): string => join('/Apps', 'OpsMaxx.app', 'Contents', 'Resources', 'app.asar')
+    ;(electron.app as any).getAppPath = (): string => join('/Apps', 'OpsSwift.app', 'Contents', 'Resources', 'app.asar')
     try {
       // A child process cannot be spawned from inside an asar archive, which is
       // why electron-builder.yml keeps out/cli unpacked.
@@ -334,7 +334,7 @@ describe('the CLI and the app writing the same Codex config', () => {
     const codex = join(dir, '.codex', 'config.toml')
     registerCodexMcp('/bin/opsmaxx', '/cli.js', 'x', 5177)
     const old = readFileSync(codex, 'utf8').replace(
-      'written by OpsMaxx, safe to remove',
+      'written by OpsSwift, safe to remove',
       'edited by `opsmaxx codex`, safe to remove'
     )
     writeFileSync(codex, old)

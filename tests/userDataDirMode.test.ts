@@ -55,13 +55,13 @@ const modeOf = (d: string): number => statSync(d).mode & 0o777
 
 describe('securing the data directory', () => {
   it('creates it when it is not there', () => {
-    const dir = join(scratch(), 'OpsMaxx-data')
+    const dir = join(scratch(), 'OpsSwift-data')
     ensureUserDataDir(dir)
     expect(statSync(dir).isDirectory()).toBe(true)
   })
 
   it.skipIf(process.platform === 'win32')('creates it 0700', () => {
-    const dir = join(scratch(), 'OpsMaxx-data')
+    const dir = join(scratch(), 'OpsSwift-data')
     ensureUserDataDir(dir)
     // Not mkdir's `mode` alone: the umask masks that, which is why the explicit
     // chmod is there and why this asserts the final number.
@@ -69,7 +69,7 @@ describe('securing the data directory', () => {
   })
 
   it.skipIf(process.platform === 'win32')('tightens one that already existed at 0755', () => {
-    const dir = join(scratch(), 'OpsMaxx-data')
+    const dir = join(scratch(), 'OpsSwift-data')
     mkdirSync(dir)
     chmodSync(dir, 0o755)
     ensureUserDataDir(dir)
@@ -99,7 +99,7 @@ describe('securing the data directory', () => {
       const real = join(base, 'elsewhere')
       mkdirSync(real)
       chmodSync(real, 0o755)
-      const link = join(base, 'OpsMaxx-data')
+      const link = join(base, 'OpsSwift-data')
       symlinkSync(real, link)
 
       expect(() => ensureUserDataDir(link)).not.toThrow()
@@ -119,7 +119,7 @@ describe('securing the data directory', () => {
       // refusing, which is the behaviour being ruled out.
       // The not-throwing half is covered on every platform by the mkdir failure
       // below, which is why this one may skip Windows with its absent modes.
-      const path = join(scratch(), 'OpsMaxx-data')
+      const path = join(scratch(), 'OpsSwift-data')
       writeFileSync(path, 'not a directory')
       const before = modeOf(path)
       expect(() => ensureUserDataDir(path)).not.toThrow()
@@ -146,6 +146,7 @@ describe('resolving the default directory', () => {
     vi.resetModules()
     vi.doMock('electron', () => ({
       app: {
+        setName: (): void => undefined,
         getPath: (): string => {
           throw new Error('userData is not resolvable')
         },
@@ -179,7 +180,7 @@ describe('when it cannot be secured', () => {
   // scope, so a throw here is a window that never opens — strictly worse than
   // a loose directory mode.
   it.skipIf(process.platform === 'win32')('survives an fchmod that fails', () => {
-    const dir = join(scratch(), 'OpsMaxx-data')
+    const dir = join(scratch(), 'OpsSwift-data')
     state.chmodThrows = true
     state.chmodCalls = 0
     try {
@@ -199,7 +200,7 @@ describe('when it cannot be secured', () => {
   it('survives a mkdir that fails', () => {
     // A file where the directory should be: stands in for the read-only
     // install directory and the unwritable stick, which a test cannot make.
-    const path = join(scratch(), 'OpsMaxx-data')
+    const path = join(scratch(), 'OpsSwift-data')
     writeFileSync(path, 'not a directory')
     expect(() => ensureUserDataDir(path)).not.toThrow()
   })

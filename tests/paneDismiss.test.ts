@@ -66,7 +66,7 @@ describe('closing the last pane', () => {
 
 describe('what a closed shell is told it did', () => {
   it('treats a clean exit as an exit, not as an unexplained failure', () => {
-    // Typing `exit` produced "OpsMaxx could not tell what went wrong from what
+    // Typing `exit` produced "OpsSwift could not tell what went wrong from what
     // the server said." over a session that had done exactly what it was told.
     expect(classifyConnectionError('Session closed · shell exited')).toBe('exited')
     const advice = adviseOnError('Session closed · shell exited')

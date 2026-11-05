@@ -188,7 +188,7 @@ export interface CommandClassification {
 // start-of-string tests are still OR'd in: nothing that was sudo or refused
 // before this is anything less now.
 //
-// Only the MCP bridge calls this, through evaluateCommand. OpsMaxx's own
+// Only the MCP bridge calls this, through evaluateCommand. OpsSwift's own
 // `sudo -n` privileged reads never pass through it.
 
 /** Names that run the rest of the line as another user. */
@@ -1484,7 +1484,7 @@ export function evaluateCommand(group: AccessGroup | null, command: string): Dec
   if ((risky || !sudoOutright) && base.decision === 'allow' && computedCommand) {
     base = {
       decision: 'ask',
-      reason: 'Requires approval: the command it runs is computed when it runs, so OpsMaxx cannot tell what it is.'
+      reason: 'Requires approval: the command it runs is computed when it runs, so OpsSwift cannot tell what it is.'
     }
   }
 
@@ -1867,7 +1867,7 @@ export function evaluateServerWrite(group: AccessGroup | null, act: 'change' | '
 // not help: "Start VPN office" is indistinguishable, to the person clicking it,
 // from consent to publish a port. So it is not expressed as a permission an
 // administrator could raise to 'allow' — it is refused here, in code, and the
-// user opens an frp profile themselves in OpsMaxx or it does not open.
+// user opens an frp profile themselves in OpsSwift or it does not open.
 const AI_REFUSED_VPN_KINDS: ReadonlySet<VpnKind> = new Set<VpnKind>(['frp'])
 
 export function isVpnKindRefusedForAi(kind: VpnKind): boolean {
@@ -1903,7 +1903,7 @@ export function evaluateVpnControl(
 // Starting a build is the same shape of act as starting a VPN, one step
 // further out. A VPN changes which network the user's own sessions travel
 // over; a run starts work on a third party's infrastructure, running a
-// definition OpsMaxx has never read, and OpsMaxx cannot stop it once the
+// definition OpsSwift has never read, and OpsSwift cannot stop it once the
 // provider has accepted it -- STOP ALL AI ACCESS does not reach a build
 // already running.
 //
@@ -1919,7 +1919,7 @@ export function evaluateCiTrigger(group: AccessGroup | null): Decision {
     ? {
         decision: 'ask',
         reason:
-          'Starting a build runs whatever that pipeline says, on infrastructure OpsMaxx cannot ' +
+          'Starting a build runs whatever that pipeline says, on infrastructure OpsSwift cannot ' +
           `inspect and cannot stop once it has begun, so it requires approval (Confirm risky actions is on for ${group.name}).`
       }
     : cap

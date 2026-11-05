@@ -368,7 +368,7 @@ describe('what the endpoint is told', () => {
   it('says the automation ran rather than repeating the alert', () => {
     const notice = ruleNotice(rule({ action: jobAction() }), row(), 'job-started')
     expect(notice.summary).toBe(
-      'OpsMaxx rule "vacuum the journal" started the job "clear the journal" on 2 server(s) after a disk alert raised.'
+      'OpsSwift rule "vacuum the journal" started the job "clear the journal" on 2 server(s) after a disk alert raised.'
     )
     expect(notice.kind).toBe('disk')
     expect(notice.server).toBe('alpha')

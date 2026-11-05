@@ -8,7 +8,7 @@ import { DefaultSigningPolicy, REFUSE_ALL } from '../src/main/services/sshAgent/
 import type { VaultEntry } from '../src/shared/vault'
 
 /**
- * The agent OpsMaxx serves.
+ * The agent OpsSwift serves.
  *
  * A key in the vault that no other tool can reach is a key people keep a
  * second copy of in ~/.ssh, and then the vault protects nothing. These tests

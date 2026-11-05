@@ -382,7 +382,7 @@ async function sendOnce(
             finish({
               ok: false,
               error:
-                'This endpoint answers with a server-sent event stream, which OpsMaxx cannot display yet — the response is read in full before it is shown, and a stream has no end to wait for.',
+                'This endpoint answers with a server-sent event stream, which OpsSwift cannot display yet — the response is read in full before it is shown, and a stream has no end to wait for.',
               code: 'ESTREAMUNSUPPORTED'
             })
             return
@@ -495,7 +495,7 @@ export async function httpRequest(
   // requests, where the point is to send exactly what the user typed.
   // `CROSS_ORIGIN_SAFE_HEADERS` already carries `user-agent` across a redirect.
   if (!Object.keys(headers).some((name) => name.toLowerCase() === 'user-agent')) {
-    headers['User-Agent'] = `OpsMaxx/${app.getVersion()}`
+    headers['User-Agent'] = `OpsSwift/${app.getVersion()}`
   }
 
   // Set when a cross-origin hop lost the route or the TLS relaxations, so a
@@ -603,7 +603,7 @@ export async function httpRequest(
         ok: false,
         error:
           `${remoteText(hop.url, 120)} answered ${res.status} with ${remoteText(next, 120)}, on another origin, ` +
-          'and asked for the request body to be sent there. OpsMaxx does not send a body across origins on a redirect; ' +
+          'and asked for the request body to be sent there. OpsSwift does not send a body across origins on a redirect; ' +
           'send the request to that URL yourself if that is what you mean.',
         code: 'ECROSSORIGINBODY'
       }

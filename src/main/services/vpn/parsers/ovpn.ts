@@ -98,7 +98,7 @@ export const OVPN_REJECT_RULES: readonly OvpnRejectRule[] = [
   {
     id: 'script-security',
     directives: ['script-security'],
-    reason: 'script-security is what enables every one of the script directives. OpsMaxx always sets it to 1, which permits the ifconfig openvpn runs for its own interface and nothing else.'
+    reason: 'script-security is what enables every one of the script directives. OpsSwift always sets it to 1, which permits the ifconfig openvpn runs for its own interface and nothing else.'
   },
 
   // --- arbitrary read, write or process control ---
@@ -110,7 +110,7 @@ export const OVPN_REJECT_RULES: readonly OvpnRejectRule[] = [
   { id: 'chroot', directives: ['chroot'], reason: 'chroot changes the process root directory.' },
   { id: 'cd', directives: ['cd'], reason: 'cd changes the working directory, which re-points every relative path.' },
   { id: 'tmp-dir', directives: ['tmp-dir'], reason: 'tmp-dir chooses where OpenVPN writes temporary files.' },
-  { id: 'daemon', directives: ['daemon'], reason: 'daemon detaches the process from OpsMaxx’s supervision.' },
+  { id: 'daemon', directives: ['daemon'], reason: 'daemon detaches the process from OpsSwift’s supervision.' },
   { id: 'askpass', directives: ['askpass'], reason: 'askpass reads a passphrase from a file on disk.' },
   { id: 'writepid', directives: ['writepid'], reason: 'writepid writes to a path of the config author’s choosing.' },
   {
@@ -127,14 +127,14 @@ export const OVPN_REJECT_RULES: readonly OvpnRejectRule[] = [
     id: 'management',
     prefix: 'management',
     reason:
-      'The management interface is how OpsMaxx drives OpenVPN. A config that sets its own would hand control of the process to whoever wrote the file.'
+      'The management interface is how OpsSwift drives OpenVPN. A config that sets its own would hand control of the process to whoever wrote the file.'
   },
 
   // --- routing ---
   {
     id: 'ifconfig-noexec',
     directives: ['ifconfig-noexec'],
-    reason: 'ifconfig-noexec suppresses the interface setup OpsMaxx relies on.'
+    reason: 'ifconfig-noexec suppresses the interface setup OpsSwift relies on.'
   },
   { id: 'route-method-exe', reason: 'route-method exe adds routes by running an external program.' },
 
@@ -149,7 +149,7 @@ export const OVPN_REJECT_RULES: readonly OvpnRejectRule[] = [
   {
     id: 'auth-user-pass-file',
     reason:
-      'auth-user-pass with a file name reads credentials from disk and sends them to the server. OpsMaxx supplies credentials over the management channel instead.'
+      'auth-user-pass with a file name reads credentials from disk and sends them to the server. OpsSwift supplies credentials over the management channel instead.'
   },
   {
     id: 'http-proxy-authfile',
@@ -251,7 +251,7 @@ const PROXY_AUTH_METHODS = new Set(['basic', 'ntlm', 'ntlm2', 'none'])
 /** The only blocks allowed inline, and the only directives allowed to name a
  *  file. Everything here ends up inside the re-emitted config as a block. */
 // `crl-verify` is here for item 48: it was falling through the switch's default
-// branch into "not a setting OpsMaxx carries over", which silently turned a
+// branch into "not a setting OpsSwift carries over", which silently turned a
 // profile that CHECKS REVOCATION into one that does not. That is the one
 // direction a dropped directive must never go -- every other drop makes the
 // profile refuse to do something, and this one made it accept a certificate the
@@ -264,12 +264,12 @@ const INLINE_TAG_SET: ReadonlySet<string> = new Set<string>(INLINE_TAGS)
 // Dropped with a report rather than rejected: nothing an attacker reaches
 // through, but carrying them over would be wrong.
 const DROP_REASONS: Record<string, string> = {
-  'comp-lzo': 'Compression inside a VPN is a plaintext-recovery vector (VORACLE), so OpsMaxx never enables it.',
-  compress: 'Compression inside a VPN is a plaintext-recovery vector (VORACLE), so OpsMaxx never enables it.',
-  'comp-noadapt': 'Compression inside a VPN is a plaintext-recovery vector (VORACLE), so OpsMaxx never enables it.',
-  mute: 'OpsMaxx keeps the whole engine output in the log drawer rather than muting part of it.',
-  'mute-replay-warnings': 'OpsMaxx keeps the whole engine output in the log drawer rather than muting part of it.',
-  nice: 'Process priority is OpsMaxx’s to decide.',
+  'comp-lzo': 'Compression inside a VPN is a plaintext-recovery vector (VORACLE), so OpsSwift never enables it.',
+  compress: 'Compression inside a VPN is a plaintext-recovery vector (VORACLE), so OpsSwift never enables it.',
+  'comp-noadapt': 'Compression inside a VPN is a plaintext-recovery vector (VORACLE), so OpsSwift never enables it.',
+  mute: 'OpsSwift keeps the whole engine output in the log drawer rather than muting part of it.',
+  'mute-replay-warnings': 'OpsSwift keeps the whole engine output in the log drawer rather than muting part of it.',
+  nice: 'Process priority is OpsSwift’s to decide.',
   'fast-io': 'A tuning flag with no effect on how this profile connects.'
 }
 
@@ -722,7 +722,7 @@ function directive(ctx: Ctx, tokens: string[], lineNo: number, raw: string): voi
   switch (name) {
     case 'dev': {
       if (!/^u?tun\d*$/.test((args[0] ?? '').toLowerCase())) {
-        unsupported(lineNo, raw, 'OpsMaxx only runs routed (tun) OpenVPN profiles.')
+        unsupported(lineNo, raw, 'OpsSwift only runs routed (tun) OpenVPN profiles.')
       }
       // The device name is ours to pick; carrying `tun7` over would only invite
       // a collision with another profile (E53).
@@ -731,7 +731,7 @@ function directive(ctx: Ctx, tokens: string[], lineNo: number, raw: string): voi
 
     case 'dev-type': {
       if ((args[0] ?? '').toLowerCase() !== 'tun') {
-        unsupported(lineNo, raw, 'OpsMaxx only runs routed (tun) OpenVPN profiles.')
+        unsupported(lineNo, raw, 'OpsSwift only runs routed (tun) OpenVPN profiles.')
       }
       return emit(ctx, 'dev-type', 'tun')
     }
@@ -777,7 +777,7 @@ function directive(ctx: Ctx, tokens: string[], lineNo: number, raw: string): voi
     // ------------------------------------------ who the server has to be
     //
     // The three below used to fall through the switch into "Not a setting
-    // OpsMaxx carries over". They are SERVER IDENTITY checks, which is the one
+    // OpsSwift carries over". They are SERVER IDENTITY checks, which is the one
     // direction a dropped directive must never go — every other drop makes the
     // profile refuse to do something, and dropping one of these makes it ACCEPT
     // a server the profile was written to reject. Handled explicitly, the way
@@ -898,7 +898,7 @@ function directive(ctx: Ctx, tokens: string[], lineNo: number, raw: string): voi
 
     case 'auth-retry': {
       if (args.length !== 1 || args[0].toLowerCase() !== 'nointeract') {
-        return drop(ctx, name, 'OpsMaxx always runs OpenVPN non-interactively, so only "nointeract" is carried over.')
+        return drop(ctx, name, 'OpsSwift always runs OpenVPN non-interactively, so only "nointeract" is carried over.')
       }
       return emit(ctx, name, 'nointeract')
     }
@@ -932,7 +932,7 @@ function directive(ctx: Ctx, tokens: string[], lineNo: number, raw: string): voi
       return drop(
         ctx,
         name,
-        'Sending all of your traffic through the VPN stays off until you turn it on for this profile. OpsMaxx does not hijack the default route because a downloaded file asked it to.'
+        'Sending all of your traffic through the VPN stays off until you turn it on for this profile. OpsSwift does not hijack the default route because a downloaded file asked it to.'
       )
     }
 
@@ -997,7 +997,7 @@ function directive(ctx: Ctx, tokens: string[], lineNo: number, raw: string): voi
 
     case 'route-method': {
       if ((args[0] ?? '').toLowerCase() === 'exe') reject(ctx, ruleById('route-method-exe'), lineNo, raw, name)
-      return drop(ctx, name, 'OpsMaxx decides how routes are applied.')
+      return drop(ctx, name, 'OpsSwift decides how routes are applied.')
     }
 
     case 'verb': {
@@ -1052,7 +1052,7 @@ function directive(ctx: Ctx, tokens: string[], lineNo: number, raw: string): voi
     }
 
     default:
-      return drop(ctx, name, 'Not a setting OpsMaxx carries over.')
+      return drop(ctx, name, 'Not a setting OpsSwift carries over.')
   }
 }
 
@@ -1109,7 +1109,7 @@ function finish(ctx: Ctx, opts: OvpnParseOptions): VpnImportResultInternal {
   // production build dies with "Unterminated string literal" in a file that
   // typechecks perfectly. Rephrase rather than reformat if you touch this.
   const body: string[] = [
-    '# Generated by OpsMaxx from an imported OpenVPN profile.',
+    '# Generated by OpsSwift from an imported OpenVPN profile.',
     '# Directives that can run a program are never carried over.',
     '# The import report lists everything that was dropped or rejected.'
   ]

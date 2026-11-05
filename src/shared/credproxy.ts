@@ -144,13 +144,13 @@ export const REFUSAL_REASONS: Record<Exclude<CredProxyOutcome, 'forwarded'>, str
     'it has no rule for — not without the credential, not at all.',
   'rule-disabled': 'A rule covers that destination but it is switched off.',
   'token-expired':
-    'That token has passed its end date. Nothing was sent. Create a new token in OpsMaxx’s ' +
+    'That token has passed its end date. Nothing was sent. Create a new token in OpsSwift’s ' +
     'API credential proxy panel — the old one is not extended, deliberately.',
   'token-revoked':
     'That token was revoked. Nothing was sent, and it will not start working again. If this is ' +
     'a script that should still run, give it a token of its own.',
   unauthenticated:
-    'Missing or wrong client token. Copy the token from OpsMaxx’s API credential proxy ' +
+    'Missing or wrong client token. Copy the token from OpsSwift’s API credential proxy ' +
     `settings and send it as ${CRED_PROXY_TOKEN_HEADER}.`,
   'not-loopback': 'This proxy accepts connections from this machine only.',
   'vault-locked':

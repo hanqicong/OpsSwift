@@ -243,8 +243,8 @@ describe('apply ordering', () => {
   // happens to be doing.
   const NRPT_QUERY = `powershell.exe ${[...PS_ARGS, buildQueryScript(runTag('run-1'))].join(' ')}`
   const nrptPlan = {
-    interfaceName: 'OpsMaxx wg',
-    dns: { servers: ['10.8.0.1'], searchDomains: [], interfaceName: 'OpsMaxx wg' }
+    interfaceName: 'OpsSwift wg',
+    dns: { servers: ['10.8.0.1'], searchDomains: [], interfaceName: 'OpsSwift wg' }
   }
 
   it('rolls back when the read-back shows the old servers still in force', async () => {

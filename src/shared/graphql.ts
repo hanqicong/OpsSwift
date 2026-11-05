@@ -128,7 +128,7 @@ export function readGraphQlResponse(
  * `[Thing!]!`, which is as nested as a real field type gets, and a fully
  * recursive introspection on a large schema is megabytes of response.
  */
-export const INTROSPECTION_QUERY = `query OpsMaxxIntrospection {
+export const INTROSPECTION_QUERY = `query OpsSwiftIntrospection {
   __schema {
     queryType { name }
     mutationType { name }
@@ -209,7 +209,7 @@ export function introspectionQuery({ lean = false, depth = 4 }: { lean?: boolean
   const description = lean ? '' : ' description'
   const deprecated = lean ? 'false' : 'true'
   const deprecation = lean ? '' : ' isDeprecated deprecationReason'
-  return `query OpsMaxxIntrospection {
+  return `query OpsSwiftIntrospection {
   __schema {
     queryType { name }
     mutationType { name }

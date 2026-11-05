@@ -593,7 +593,7 @@ function TrendChart({ trend, report }: { trend: Trend; report: CapacityReport })
       {gaps.map((s, i) => (
         <div key={i} className={s.gapKnown === 'not-running' ? 'faint' : 'state-unknown'}>
           {/* Two different facts, and only one of them is about the server.
-              A gap OpsMaxx caused by not running is not a warning about the
+              A gap OpsSwift caused by not running is not a warning about the
               host, so it does not get the warning colour or the triangle. */}
           {s.gapKnown === 'not-running' ? (
             t('monitor.capacity.chart.gapNotRunning', { span: span(s.gapBefore) })

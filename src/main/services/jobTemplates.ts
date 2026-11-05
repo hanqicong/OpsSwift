@@ -82,7 +82,7 @@ export function listJobTemplates(deps: JobTemplateDeps = {}): JobTemplateList {
   }
   const file = parsed as Partial<TemplatesFile> | null
   if (file?.v !== TEMPLATES_VERSION) {
-    return empty('The saved templates file was written by a different version of OpsMaxx.')
+    return empty('The saved templates file was written by a different version of OpsSwift.')
   }
   if (!Array.isArray(file.templates)) return empty('The saved templates file holds no list.')
   // Every row narrowed again: the file survives hand edits and downgrades, and a

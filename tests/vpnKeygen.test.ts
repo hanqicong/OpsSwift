@@ -7,7 +7,7 @@ import { isWireGuardKey } from '../src/shared/vpn'
 import { wireguardDriver, wireguardTuning } from '../src/main/services/vpn/drivers/wireguard'
 
 // `wg.keygen` is the one thing the WireGuard driver does that has nothing to do
-// with running a profile, and the one place OpsMaxx mints key material
+// with running a profile, and the one place OpsSwift mints key material
 // rather than being handed it. Two properties matter enough to test:
 //
 //   1. The keys are real. A keypair that is well formed but whose halves do not

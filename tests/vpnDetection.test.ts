@@ -260,7 +260,7 @@ describe('a hand-typed path to OpenVPN Connect', () => {
   })
 })
 
-describe('when no openvpn is anywhere OpsMaxx looks', () => {
+describe('when no openvpn is anywhere OpsSwift looks', () => {
   it('names the login-PATH limitation and the way out of it', async () => {
     // The bug report this sentence exists to pre-empt: a Finder-launched
     // Electron app inherits launchd's PATH, not the login shell's, so an

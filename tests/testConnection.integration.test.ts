@@ -140,14 +140,14 @@ describe('test_connection', () => {
   }
 
   it('reports an untrusted host key as its own outcome, not a generic failure', async () => {
-    // The one failure nothing on this bridge can fix: OpsMaxx will not record
+    // The one failure nothing on this bridge can fix: OpsSwift will not record
     // trust for a host key because an agent asked it to.
     testResult = { ok: false, error: 'Host denied (verification failed)' }
     const c = await clientFor('grp-read-only')
     try {
       const out = await call(c, { serverName: 'Scanner01' })
       expect(out).toContain('host key')
-      expect(out).toContain('open this server in OpsMaxx')
+      expect(out).toContain('open this server in OpsSwift')
     } finally {
       await c.close()
     }

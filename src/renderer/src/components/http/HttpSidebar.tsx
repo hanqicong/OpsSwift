@@ -20,7 +20,7 @@ export function requestImport(collectionId?: Id): void {
 }
 
 /**
- * The HTTP client's half of the OpsMaxx sidebar: the header, the
+ * The HTTP client's half of the OpsSwift sidebar: the header, the
  * Collections / History switch, a filter, and the list below it.
  */
 export function HttpSidebar(): React.JSX.Element {

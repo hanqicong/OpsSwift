@@ -56,7 +56,7 @@ function bridge(): { network: ReturnType<typeof vi.fn>; listeningPorts: ReturnTy
   }))
   const listeningPorts = vi.fn(async () => ({
     ports: [
-      { port: 5177, proto: 'tcp', address: '127.0.0.1', process: 'OpsMaxx' },
+      { port: 5177, proto: 'tcp', address: '127.0.0.1', process: 'OpsSwift' },
       { port: 9000, proto: 'tcp', address: '127.0.0.1', process: 'php-fpm' }
     ],
     partialOwners: false
@@ -89,7 +89,7 @@ describe('what the local Monitor tab shows', () => {
     bridge()
     render(<MonitorView server={localHost} visible={true} />)
     expect(await screen.findByText('Listening ports')).toBeTruthy()
-    expect(await screen.findByText('OpsMaxx')).toBeTruthy()
+    expect(await screen.findByText('OpsSwift')).toBeTruthy()
   })
 
   it('shows the network read too', async () => {
@@ -134,7 +134,7 @@ describe('what the local Monitor tab shows', () => {
     // reads do not come from the metrics poll and do not fail with it.
     const network = vi.fn(async () => ({ error: 'no route' }))
     const listeningPorts = vi.fn(async () => ({
-      ports: [{ port: 5177, proto: 'tcp', address: '127.0.0.1', process: 'OpsMaxx' }],
+      ports: [{ port: 5177, proto: 'tcp', address: '127.0.0.1', process: 'OpsSwift' }],
       partialOwners: false
     }))
     stubBridge({
@@ -146,7 +146,7 @@ describe('what the local Monitor tab shows', () => {
     expect(await screen.findByText('Metrics unavailable')).toBeTruthy()
     // And the answer that DID arrive is still there.
     expect(await screen.findByText('Listening ports')).toBeTruthy()
-    expect(await screen.findByText('OpsMaxx')).toBeTruthy()
+    expect(await screen.findByText('OpsSwift')).toBeTruthy()
   })
 
   it('still says over SSH for a server', async () => {

@@ -443,7 +443,7 @@ export function CloudTargetFields({
 }
 
 /**
- * Exactly what OpsMaxx will ask the provider CLI to do.
+ * Exactly what OpsSwift will ask the provider CLI to do.
  *
  * Built by calling the same builders the connection itself calls, so the
  * preview cannot drift from what runs - a preview assembled from a template
@@ -451,7 +451,7 @@ export function CloudTargetFields({
  * disagree the first time either changed.
  *
  * It shows the REAL invocations rather than the familiar `gcloud compute ssh`
- * one-liner. OpsMaxx does not run that: it asks the provider to broker a
+ * one-liner. OpsSwift does not run that: it asks the provider to broker a
  * tunnel and a short-lived credential and then connects itself, and printing a
  * command it never executes would be a plausible-looking lie in the one place
  * a user goes to find out what is actually happening.
@@ -708,7 +708,7 @@ function Picker({
 }
 
 /**
- * What OpsMaxx found on this machine, and whether it is signed in.
+ * What OpsSwift found on this machine, and whether it is signed in.
  *
  * The path and version are shown because this is the one screen that can say
  * exactly which binary is about to be executed on the user's behalf, and a

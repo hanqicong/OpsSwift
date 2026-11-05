@@ -230,7 +230,7 @@ export const AI_CAPABILITIES: { id: AiCapability; label: string; detail: string 
   // server the operator had just approved were folded into that first yes. A
   // sentence that understates what a yes buys is the same bug as a label that
   // understates what a grant buys. Databases joined it for the same reason
-  // the server tools share it: it is the permission to edit OpsMaxx's own
+  // the server tools share it: it is the permission to edit OpsSwift's own
   // connection list, and a second switch for the same act would be one an
   // administrator could leave open while believing they had shut it.
   capability('manageServers'),
@@ -249,7 +249,7 @@ export const AI_CAPABILITIES: { id: AiCapability; label: string; detail: string 
   // The first two capabilities in this grid that are not about a server the
   // user administers at all. A CI connection is a base URL and a token for
   // somebody else's build infrastructure, so neither of these is bounded by
-  // anything OpsMaxx can see, and both are seeded DENY on every built-in group.
+  // anything OpsSwift can see, and both are seeded DENY on every built-in group.
   capability('ciRead'),
   capability('ciTrigger')
 ]
@@ -623,7 +623,7 @@ export type AuditApproval =
   /** The agent's connection closed before anyone answered. Nothing ran. */
   | 'disconnected'
   /**
-   * OpsMaxx declined to put the question to anyone: the session already had
+   * OpsSwift declined to put the question to anyone: the session already had
    * too many approval requests open, or the same action was denied moments
    * ago. The action did not happen, and nobody decided that it should not.
    */
@@ -738,9 +738,10 @@ export interface PolicyState {
   filePolicyGeneration?: number
 }
 
+// Independent extension bridge: do not collide with the official app's 5177 listener.
 export const DEFAULT_MCP_PORT = 5177
 
-// A short-lived code shown only inside OpsMaxx (never returned to the CLI
+// A short-lived code shown only inside OpsSwift (never returned to the CLI
 // that requested it) so the `opsmaxx claude|codex|run` launcher can bootstrap
 // a session without a human pasting a token/URL by hand.
 export interface CliPairingRequest {

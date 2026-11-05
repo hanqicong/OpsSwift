@@ -250,7 +250,7 @@ function serversSource(): CollectionSource {
  * `OpenVpnSpec.binaryPath` is an absolute path on the machine whose form it
  * was typed into, and the OpenVPN driver treats its mere presence as the
  * user's confirmed choice — so `resolveEngineBinary` short-circuits on it and
- * never looks at the engine OpsMaxx ships. Across a mixed fleet that is a
+ * never looks at the engine OpsSwift ships. Across a mixed fleet that is a
  * refusal quoting somebody else's disk: a Windows user told
  * `/opt/homebrew/bin/openvpn` "does not exist", with no mention of installing
  * OpenVPN; a Mac user told `C:\Program Files\...` "is a relative path, which

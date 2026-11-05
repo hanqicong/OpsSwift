@@ -281,7 +281,7 @@ export function CicdRunWorkbench({
                     {/* The operator's stop button.
                         `cancel_run` existed as an MCP tool and as a bridge
                         method before this did, which meant the only party who
-                        could stop a run from inside OpsMaxx was the agent —
+                        could stop a run from inside OpsSwift was the agent —
                         and the kill switch revokes the agent's session, so
                         pressing it guaranteed the run finished. A human needs
                         the same verb, and it is not gated by the AI policy

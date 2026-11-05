@@ -4920,7 +4920,7 @@ export function worstVerdict(answers: DbAnswer<unknown>[]): DbVerdictLevel {
  *    reads and a table that grows forever.
  *  * `unknown` is excluded even though it is not `ok`, with one exception:
  *    a question that went from answerable to `denied` is itself an event —
- *    someone changed a grant — but OpsMaxx cannot see the transition from a
+ *    someone changed a grant — but OpsSwift cannot see the transition from a
  *    single read, so that belongs to whoever compares two reads, not here.
  */
 export function notableDbEvents(report: DbOpsReport): { kind: string; payload: Record<string, unknown> }[] {

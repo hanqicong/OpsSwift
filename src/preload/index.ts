@@ -344,7 +344,7 @@ const api = {
    * The SSH agent this app serves.
    *
    * Note the direction: this is the agent OTHER TOOLS talk to, not the one
-   * OpsMaxx talks to for a given host. The second is `ssh.*` and is unrelated.
+   * OpsSwift talks to for a given host. The second is `ssh.*` and is unrelated.
    */
   sshAgent: {
     status: (): Promise<AgentStatus> => ipcRenderer.invoke('sshAgent:status'),
@@ -764,6 +764,7 @@ const api = {
     }
   },
   ssh: {
+    exportNetworkBackup: (): Promise<{ ok: boolean; cancelled?: boolean; error?: string }> => ipcRenderer.invoke('ssh:network-backup-export'),
     connect: (cfg: SshConnectConfig & { serverId?: string }): Promise<void> =>
       ipcRenderer.invoke('ssh:connect', cfg),
     write: (id: string, data: string): void => ipcRenderer.send('ssh:write', id, data),
@@ -2062,7 +2063,7 @@ const api = {
     ): Promise<{ ok: boolean; declined?: boolean; message?: string }> =>
       ipcRenderer.invoke('inspect:removeTrust', store),
     /** The environment a shell needs to be intercepted, for the "copy for my
-     *  own terminal" button. Sessions OpsMaxx starts get it applied. */
+     *  own terminal" button. Sessions OpsSwift starts get it applied. */
     env: (): Promise<Record<string, string>> => ipcRenderer.invoke('inspect:env'),
     onFlow: (cb: (f: InspectFlow) => void): (() => void) => {
       const h = (_e: IpcRendererEvent, f: InspectFlow): void => cb(f)
@@ -2358,4 +2359,4 @@ const api = {
 
 contextBridge.exposeInMainWorld('opsmaxx', api)
 
-export type OpsMaxxApi = typeof api
+export type OpsSwiftApi = typeof api

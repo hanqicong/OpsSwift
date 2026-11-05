@@ -149,7 +149,7 @@ describe('the destination list', () => {
     await userEvent.click(await screen.findByRole('button', { name: /Restore from here/ }))
 
     await screen.findByText('ENOENT: no such file or directory')
-    expect(screen.queryByText('No OpsMaxx backups at this destination yet.')).toBe(null)
+    expect(screen.queryByText('No OpsSwift backups at this destination yet.')).toBe(null)
   })
 
   it('inspects a remote backup before offering to restore it', async () => {

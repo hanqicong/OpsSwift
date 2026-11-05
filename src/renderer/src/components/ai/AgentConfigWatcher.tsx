@@ -178,7 +178,7 @@ export function AgentConfigWatcher(): null {
           // Same shape AddServerModal writes: credentials go to OS secure
           // storage keyed by server id, never into the connection list itself.
           // A cloud server has no credential to store: the provider mints a
-          // short-lived one per connection and OpsMaxx keeps none of it.
+          // short-lived one per connection and OpsSwift keeps none of it.
           // Certificate auth is the key plus the certificate beside it, in the
           // same blob AddServerModal writes; no certificatePath means OpenSSH's
           // `-cert.pub` convention, applied when the connection is dialled.

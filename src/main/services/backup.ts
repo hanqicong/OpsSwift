@@ -241,7 +241,7 @@ async function decryptBundle(bytes: Buffer, password: string): Promise<BackupPay
     envelope = JSON.parse(bytes.toString('utf8')) as Envelope
   } catch {
     // A truncated upload, a text-mode transfer that mangled the file, or an
-    // object that was never ours. All three are "not a OpsMaxx backup", and
+    // object that was never ours. All three are "not a OpsSwift backup", and
     // saying so beats a JSON parser's offset.
     throw new LocalizedError('main.backup.notABackup')
   }
@@ -282,7 +282,7 @@ export async function backupInspect(password: string, path?: string): Promise<Ba
     return {
       ok: false,
       path: file,
-      error: message.includes('OpsMaxx backup') ? shown(err) : mt('main.backup.decryptFailed')
+      error: message.includes('OpsSwift backup') ? shown(err) : mt('main.backup.decryptFailed')
     }
   }
 }
@@ -306,7 +306,7 @@ export async function backupImport(
     const message = err instanceof Error ? err.message : String(err)
     return {
       ok: false,
-      error: message.includes('OpsMaxx backup') ? shown(err) : mt('main.backup.decryptFailed')
+      error: message.includes('OpsSwift backup') ? shown(err) : mt('main.backup.decryptFailed')
     }
   }
 
@@ -376,7 +376,7 @@ export function relaunchApp(): void {
 // re-point this machine at somebody else's bucket.
 export const TARGETS_FILE = 'opsmaxx-backup-targets.json'
 
-// Every file OpsMaxx writes to userData that says anything about this user or
+// Every file OpsSwift writes to userData that says anything about this user or
 // their estate — connections, credentials, vault, workspace locks, trusted SSH
 // and RDP host keys, the AI/MCP bridge's own config, sessions, access-group
 // policy, the four append-only logs of what was run and who said yes, the
@@ -530,7 +530,7 @@ export const ALL_DATA_FILES = [
   TARGETS_FILE
 ]
 
-// Every DIRECTORY OpsMaxx creates under userData that holds anything about this
+// Every DIRECTORY OpsSwift creates under userData that holds anything about this
 // user or their estate. Same standard as the file list, same check — the joins
 // against `app.getPath('userData')` across src/main/ — and tests/backup.test.ts
 // pins it the same way.
@@ -831,7 +831,7 @@ export async function verifyBundle(bytes: Buffer, password: string): Promise<Bac
     return {
       ok: false,
       bytes: 0,
-      error: message.includes('OpsMaxx backup')
+      error: message.includes('OpsSwift backup')
         ? message
         : `The bundle at the destination did not decrypt — ${message}`
     }

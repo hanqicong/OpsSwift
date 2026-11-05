@@ -99,7 +99,7 @@ export interface TrendSegment {
    *  change with no missing time — the line continues, its meaning changes. */
   gapBefore: number
   /**
-   * Set when the silence has a cause we know about: OpsMaxx was not running.
+   * Set when the silence has a cause we know about: OpsSwift was not running.
    *
    * "This server went quiet" and "we were not watching" are different facts
    * about the same hole in a line, and only one of them is about the server.
@@ -492,7 +492,7 @@ export function segments(points: TrendPoint[], resumedAt: number[] = []): TrendS
   let previousEnd: number | null = null
   for (const run of runs(points)) {
     let gapBefore = previousEnd === null ? 0 : run[0].ts - previousEnd
-    // A gap that CONTAINS a moment the sampler started again is a gap OpsMaxx
+    // A gap that CONTAINS a moment the sampler started again is a gap OpsSwift
     // was absent for. The end is inclusive and the start is not: a resume at
     // the instant the previous run ended did not interrupt anything.
     const known =
@@ -856,7 +856,7 @@ export interface ReportOptions {
    *  `Trend.bytes`. */
   bytes?: Partial<Record<CapacityMetric, BytesReading>>
   /** Moments the sampler started again after being stopped: app launch, and
-   *  the machine waking. A gap spanning one of these is a gap OpsMaxx caused,
+   *  the machine waking. A gap spanning one of these is a gap OpsSwift caused,
    *  and `segments` marks it so the panel can say which kind of silence it is
    *  looking at. */
   resumedAt?: number[]

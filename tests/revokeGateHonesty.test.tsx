@@ -83,7 +83,7 @@ describe('the revoke screen names the gate that is actually shut', () => {
     accessBridge()
     render(<KeyRevokePanel servers={SERVERS} />)
     const note = await screen.findByTestId('write-gated')
-    expect(note.textContent).toMatch(/restart opsmaxx/i)
+    expect(note.textContent).toMatch(/restart opsswift/i)
     // Not the operator's switch — turning it on would change nothing here.
     expect(screen.queryByRole('button', { name: /open the setting/i })).toBeNull()
   })

@@ -125,7 +125,7 @@ describe('the approval modal', () => {
     // Order in the document, not merely presence: the old modal had the
     // command as the headline and no consequence at all.
     expect(consequence.compareDocumentPosition(command) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
-    expect(screen.getByText(/What Claude Code asked OpsMaxx to run/)).toBeTruthy()
+    expect(screen.getByText(/What Claude Code asked OpsSwift to run/)).toBeTruthy()
   })
 
   it('says out loud that it cannot describe a command it does not recognise', async () => {
@@ -215,7 +215,7 @@ describe('provenance the request itself does not carry', () => {
   })
 
   // The bridge now DOES ask -- every gated tool takes an optional `intent` --
-  // so the absence moved from being OpsMaxx's gap to being the agent's
+  // so the absence moved from being OpsSwift's gap to being the agent's
   // silence, and the sentence had to move with it. See "what the agent itself
   // claims it is doing" below for both halves.
 })
@@ -262,12 +262,12 @@ describe('the facts main sends rather than the renderer re-deriving them', () =>
     harness({
       approvals: [
         request({
-          riskReason: 'OpsMaxx could not classify this statement as a read, so it is treated as one that changes data'
+          riskReason: 'OpsSwift could not classify this statement as a read, so it is treated as one that changes data'
         })
       ]
     })
     render(<ApprovalWatcher />)
-    expect(await screen.findByText(/HIGH because: OpsMaxx could not classify this statement as a read/)).toBeTruthy()
+    expect(await screen.findByText(/HIGH because: OpsSwift could not classify this statement as a read/)).toBeTruthy()
     // The local derivation's sentence for this same request. Seeing it would
     // mean the plumbing arrived and the modal ignored it.
     expect(screen.queryByText(/because: the command runs as root/)).toBeNull()
@@ -326,11 +326,11 @@ describe('the facts main sends rather than the renderer re-deriving them', () =>
 })
 
 describe('what the agent itself claims it is doing', () => {
-  it('shows the agent’s stated intent, attributed to the agent and not to OpsMaxx', async () => {
+  it('shows the agent’s stated intent, attributed to the agent and not to OpsSwift', async () => {
     harness({ approvals: [request({ intent: 'Restarting cron after the crontab edit you approved earlier' })] })
     render(<ApprovalWatcher />)
     expect(await screen.findByText(/Restarting cron after the crontab edit/)).toBeTruthy()
-    expect(screen.getByText(/Claude Code’s own words, not OpsMaxx’s/)).toBeTruthy()
+    expect(screen.getByText(/Claude Code’s own words, not OpsSwift’s/)).toBeTruthy()
     expect(screen.getByText(/Nothing checked whether they are true/)).toBeTruthy()
   })
 
@@ -468,7 +468,7 @@ describe('what write_file will write', () => {
     expect(frame.textContent).toContain('API_KEY=[REDACTED]')
     expect(frame.textContent).not.toContain('sk-live-abc123')
     expect(frame.textContent).not.toContain('hunter22')
-    expect(screen.getByText(/the agent’s content, not OpsMaxx’s/)).toBeTruthy()
+    expect(screen.getByText(/the agent’s content, not OpsSwift’s/)).toBeTruthy()
   })
 
   it('prints bidi overrides and zero-width characters as visible escapes', async () => {
@@ -622,7 +622,7 @@ describe('a request about a whole workspace', () => {
 
   it.each([
     ['fleet_drift', 'fleetRead', /whose watched configuration has changed/],
-    ['list_alerts', 'fleetRead', /alerts OpsMaxx has already raised for servers in the Alpha workspace/],
+    ['list_alerts', 'fleetRead', /alerts OpsSwift has already raised for servers in the Alpha workspace/],
     ['backup_status', 'backupRead', /every backup destination configured on this machine/],
     ['list_ci_connections', 'ciRead', /names and providers of the CI\/CD connections in the Alpha workspace/]
   ] as const)('describes %s by what it discloses', async (action, capability, says) => {

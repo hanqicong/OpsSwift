@@ -1,4 +1,4 @@
-// What OpsMaxx is called inside an MCP client's own config file, shared by the
+// What OpsSwift is called inside an MCP client's own config file, shared by the
 // two writers that register it: the app (main/services/clientConfig.ts) and the
 // `opsmaxx` CLI (cli/agents.ts). One copy, because two copies had already drifted
 // -- the Codex markers differed, so each writer failed to recognise the other's
@@ -7,12 +7,13 @@
 // No imports, on purpose: the CLI is type-checked under NodeNext and bundled
 // without electron, so this file has to be loadable from both sides as-is.
 
-/** The key OpsMaxx registers under. A client derives its tool prefix from this
+/** Compatibility key retained for the 1.x migration: existing client tool prefixes keep working.
+ * The key OpsSwift registers under. A client derives its tool prefix from this
  *  key (`mcp__opsmaxx__…`), not from the name the server declares about itself. */
 export const MCP_SERVER_KEY = 'opsmaxx'
 
 /**
- * Keys an older build registered under, removed whenever OpsMaxx registers again.
+ * Keys an older build registered under, removed whenever OpsSwift registers again.
  *
  * Why this has to exist: the client keeps the old entry working -- it points at
  * the same port -- so nothing ever signals that it is stale, and every agent goes
@@ -26,7 +27,7 @@ export const MCP_SERVER_KEY = 'opsmaxx'
  */
 export const LEGACY_MCP_SERVER_KEYS: readonly string[] = [['shell', 'pilot'].join('')]
 
-export const CODEX_BLOCK_START = '# >>> opsmaxx managed block — written by OpsMaxx, safe to remove >>>'
+export const CODEX_BLOCK_START = '# >>> opsmaxx managed block — written by OpsSwift, safe to remove >>>'
 export const CODEX_BLOCK_END = '# <<< opsmaxx managed block <<<'
 
 // Matched on this prefix rather than the whole line: the CLI used to write a

@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import type { SshCompatibility } from '../../../shared/networkDevice'
 import { useShallow } from 'zustand/react/shallow'
 import { FLEET_INTERVAL_DEFAULT_MS } from '../../../shared/fleet'
 import { defaultModuleState, type ModuleState } from '../../../shared/modules'
@@ -141,8 +142,10 @@ export interface AppSettings {
   // Minutes an authenticated SSH connection is kept alive after its last
   // session closes. 0 = close at once, -1 = keep until the app exits.
   sshMasterIdleMinutes: number
+  /** Human-selected default for connections without an explicit ssh-compat tag. */
+  sshCompatibilityDefault: SshCompatibility
   /**
-   * The SSH agent OpsMaxx SERVES, for other tools to use.
+   * The SSH agent OpsSwift SERVES, for other tools to use.
    *
    * Persisted here rather than in main so it travels with the rest of the
    * user's settings -- including into a backup, which matters: a restored
@@ -398,7 +401,7 @@ export interface AppSettings {
   // main, for localTerminalEnabled's reason a few lines above: a `false` that
   // ever shipped as a default would be written into every install's data file
   // and outrank a later change. Off yields B1's behaviour — nothing whatsoever
-  // is written to a host, and a job that was running when OpsMaxx stopped is
+  // is written to a host, and a job that was running when OpsSwift stopped is
   // abandoned, which for a package operation means dpkg took a SIGHUP.
   jobsDetached: boolean
   // Keyboard shortcut overrides, command id -> canonical combo ("Ctrl+Shift+P").
@@ -415,6 +418,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   lastBackupTo: null,
   switchHiddenWorkspaces: false,
   sshMasterIdleMinutes: 15,
+  sshCompatibilityDefault: 'strict',
   sshAgent: DEFAULT_SSH_AGENT_SETTINGS,
   vaultAutoLockMinutes: 15,
   dbSizeSamplingEnabled: false,

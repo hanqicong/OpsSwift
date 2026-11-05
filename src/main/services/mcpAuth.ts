@@ -61,7 +61,7 @@ let sessions: McpAgentSession[] | null = null
 
 // Sessions saved before a session could be granted more than one workspace
 // are still `{ workspaceId, workspaceName }` on disk, not `{ workspaces }` —
-// upgrading OpsMaxx must not turn every pre-existing session into a
+// upgrading OpsSwift must not turn every pre-existing session into a
 // crash the first time something reads `.workspaces`.
 function migrateSession(raw: unknown): McpAgentSession {
   const r = raw as McpAgentSession & { workspaceId?: string; workspaceName?: string }
@@ -232,7 +232,7 @@ export function setSessionGroup(id: string, groupId: string | null, groupName: s
  * Change a live session's mode. Takes effect on its next tool call: tools read
  * the session record they authenticated, which is this same object.
  *
- * Only IPC calls this -- the human, in the OpsMaxx window. An agent asking for
+ * Only IPC calls this -- the human, in the OpsSwift window. An agent asking for
  * Bypass through any MCP tool has no path here, and tests/permissionModes
  * holds mcpServer.ts to never referencing it.
  */

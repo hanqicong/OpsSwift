@@ -59,7 +59,7 @@ export async function deriveMasterKey(
     // produce a wrong key and report "wrong password" -- sending the user to
     // reset a password that was correct.
     throw new BitwardenImportError(
-      'This account uses Argon2id, which OpsMaxx cannot derive yet. ' +
+      'This account uses Argon2id, which OpsSwift cannot derive yet. ' +
         'Bitwarden lets you switch an account to PBKDF2 in Security > Keys; ' +
         'that re-encrypts your vault and lets this import run.'
     )
@@ -216,7 +216,7 @@ export function unwrapUserKey(
  */
 export function unwrapOrganisationKey(): never {
   throw new BitwardenImportError(
-    'Items shared with an organisation are wrapped with an RSA key that OpsMaxx does not read yet. ' +
+    'Items shared with an organisation are wrapped with an RSA key that OpsSwift does not read yet. ' +
       'Personal items import; shared ones are listed and skipped rather than silently dropped.'
   )
 }

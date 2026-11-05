@@ -3,6 +3,17 @@ import { closeSync, constants, fchmodSync, lstatSync, mkdirSync, openSync } from
 import { join } from 'node:path'
 import { demoProfileDir } from './demoGuard'
 
+// Keep macOS Safe Storage/backup compatibility across the product rename.
+// UI/bundle/installation identity is OpsSwift; personal data is isolated from OpsMaxx.
+try {
+  app.setName('OpsMaxx')
+  if (!process.env.OPSMAXX_DEMO_PROFILE && !process.env.PORTABLE_EXECUTABLE_DIR) {
+    app.setPath('userData', join(app.getPath('appData'), 'OpsSwift'))
+  }
+} catch (err) {
+  console.error('[portable] Unable to resolve the product data directory:', err)
+}
+
 // electron-builder's portable target sets PORTABLE_EXECUTABLE_DIR to the folder
 // the .exe was launched from. When present, keep all app data beside the
 // executable instead of in %APPDATA%, so copying the exe carries the servers,
@@ -14,7 +25,7 @@ import { demoProfileDir } from './demoGuard'
 const portableDir = process.env.PORTABLE_EXECUTABLE_DIR
 
 if (portableDir) {
-  app.setPath('userData', join(portableDir, 'OpsMaxx-data'))
+  app.setPath('userData', join(portableDir, 'OpsSwift-data'))
 }
 
 export const isPortable = !!portableDir

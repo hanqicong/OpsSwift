@@ -1479,7 +1479,7 @@ describe.skipIf(process.platform === 'win32')('the collector, run against a host
   })
 
   it('is not sure when the session used no key at all', () => {
-    // Provable, and still not enough: nothing here is what OpsMaxx's own
+    // Provable, and still not enough: nothing here is what OpsSwift's own
     // reconnection will present, and the account it connects as is not where
     // this build spends a maybe.
     const a = parse(host().collect({ env: { SSH_AUTH_INFO_0: 'password' } }))

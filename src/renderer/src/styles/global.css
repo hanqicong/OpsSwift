@@ -150,6 +150,8 @@ button {
   color: var(--brand-ink);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
 }
+.brand-mark { background: transparent; box-shadow: none; width: 36px; }
+.brand-mark img { display: block; width: 36px; height: auto; object-fit: contain; }
 .brand-name {
   font-size: var(--fs-md);
 }
@@ -2057,7 +2059,7 @@ details[open] > .disclosure-head .chev {
   justify-content: space-between;
   /* Both halves are identity strings and there was no gap between them, so a
      server name longer than the card ran straight into its address and pushed
-     the address off the edge — "TestServerOpsMaxx169.58.227.8", with the
+     the address off the edge — "TestServerOpsSwift169.58.227.8", with the
      last octet gone. A clipped IP is not a shortened IP, it is a different one,
      and nothing on screen said it had been cut. */
   gap: var(--sp-3);
@@ -4208,7 +4210,7 @@ body:has(.palette-scrim) .toasts:not(.in-slot) {
   --state-unknown-soft: rgba(154, 156, 143, 0.16);
 }
 
-/* The OpsMaxx theme's display type is set tight, as its heavier weight wants,
+/* The OpsSwift theme's display type is set tight, as its heavier weight wants,
    and an empty view carries the faint square grid the site uses. Only the
    empty state: a grid behind a table or a terminal is noise over data. */
 :root[data-theme='opsmaxx-light'] {
@@ -5190,7 +5192,7 @@ body:has(.palette-scrim) .toasts:not(.in-slot) {
   text-transform: uppercase;
 }
 
-/* What OpsMaxx offered, under an authentication failure. Muted against the
+/* What OpsSwift offered, under an authentication failure. Muted against the
    hint above it: the hint is what to do, this is what happened. */
 .td-credential {
   color: var(--text-faint);

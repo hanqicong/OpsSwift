@@ -9,7 +9,7 @@ import { useT } from '../../lib/i18n'
  * The prompt that appears when something asks the agent to sign.
  *
  * MOUNTED AT APP LEVEL, like the AI approval watcher and the SSH prompt, and
- * for a stronger reason than either: the thing asking is almost never OpsMaxx.
+ * for a stronger reason than either: the thing asking is almost never OpsSwift.
  * It is `git push` in a terminal, or ansible, or a script. The user is looking
  * at something else entirely, so a prompt that only appeared on a settings page
  * would be a prompt nobody answers and a command that hangs for two minutes.

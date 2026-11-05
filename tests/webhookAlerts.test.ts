@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { validateWebhookUrl } from '../src/shared/webhook'
 import type { AlertPayload } from '../src/shared/webhook'
 
-// This is the first outbound call OpsMaxx makes to an endpoint a user
+// This is the first outbound call OpsSwift makes to an endpoint a user
 // chooses, so the tests here are mostly about what must NOT happen: a
 // credential on the wire in clear, and infrastructure detail in a payload.
 

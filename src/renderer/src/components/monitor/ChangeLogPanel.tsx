@@ -53,7 +53,7 @@ import type { MessageKey, Translate } from '../../../../shared/i18n'
 //
 // It was four dropdowns, three paragraphs of coverage prose, and then a flat
 // list of undifferentiated rows. Measured on a real estate: eighteen visible
-// rows, fourteen of them `OpsMaxx itself · fact-changed · Chain305`, several
+// rows, fourteen of them `OpsSwift itself · fact-changed · Chain305`, several
 // sharing a timestamp. Three things were wrong with that and only the third is
 // cosmetic:
 //

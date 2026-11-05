@@ -23,7 +23,7 @@ import { useToasts } from '../src/renderer/src/store/toast'
 // file is what actually happened to it.
 
 const BUNDLE = {
-  text: 'OpsMaxx bug report\nversion: 0.36.12\n\n[trace]\n  {"event":"ipc"}\n',
+  text: 'OpsSwift bug report\nversion: 0.36.12\n\n[trace]\n  {"event":"ipc"}\n',
   version: '0.36.12',
   os: 'macOS' as const,
   events: 1,
@@ -287,9 +287,9 @@ describe('the issue URL carries the two short fields and nothing else', () => {
     // The chooser asked every reporter to first classify their own bug, which
     // is the question the button they pressed has already answered -- and it
     // takes no parameters, so prefilling anything requires this path.
-    expect(url().pathname).toBe('/OpsMaxx/OpsMaxx/issues/new')
+    expect(url().pathname).toBe('/hanqicong/OpsSwift/issues/new')
     expect(url().searchParams.get('template')).toBe(ISSUE_TEMPLATE)
-    expect(ISSUES_BASE).toBe('https://github.com/OpsMaxx/OpsMaxx/issues/new')
+    expect(ISSUES_BASE).toBe('https://github.com/hanqicong/OpsSwift/issues/new')
   })
 
   it('prefills field ids the template actually has', () => {

@@ -50,12 +50,12 @@ type Theme = 'dark' | 'light' | 'opsmaxx' | 'opsmaxx-light'
  *
  * Each block is sliced between its own selector and the next one, so a token
  * missing from the light block is not silently read out of the block after
- * it -- which is the exact bug class this file exists to catch. The OpsMaxx
- * blocks restate only what differs from their base -- dark for OpsMaxx, light
- * for OpsMaxx Light -- so a token one does not define is read from its base:
+ * it -- which is the exact bug class this file exists to catch. The OpsSwift
+ * blocks restate only what differs from their base -- dark for OpsSwift, light
+ * for OpsSwift Light -- so a token one does not define is read from its base:
  * that is what the cascade does with it too.
  *
- * OpsMaxx Light is located by its LAST occurrence: its name also appears in
+ * OpsSwift Light is located by its LAST occurrence: its name also appears in
  * the classic light block's selector list, which is how it inherits.
  */
 function token(theme: Theme, name: string): string {
@@ -160,13 +160,13 @@ describe('hover and press darken on a light ground', () => {
   // top of it, so the hover state was less legible than the resting state —
   // 3.86:1 against 3.38:1. The direction is a consequence of the theme, not a
   // stylistic preference.
-  // The terminal's sixteen, on the terminal's own ground. Only OpsMaxx Light
+  // The terminal's sixteen, on the terminal's own ground. Only OpsSwift Light
   // restates them; the others use themeFromCss's dark defaults on a dark ground.
   it.each([
     'black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white',
     'bright-black', 'bright-red', 'bright-green', 'bright-yellow',
     'bright-blue', 'bright-magenta', 'bright-cyan', 'bright-white'
-  ])('OpsMaxx Light --ansi-%s clears AA on --bg-terminal', (slot) => {
+  ])('OpsSwift Light --ansi-%s clears AA on --bg-terminal', (slot) => {
     const ratio = contrast(token('opsmaxx-light', `ansi-${slot}`), token('opsmaxx-light', 'bg-terminal'))
     expect(ratio, `--ansi-${slot} is ${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(AA)
   })

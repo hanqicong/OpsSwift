@@ -81,7 +81,7 @@ describe('saving the theme', () => {
 })
 
 /**
- * The OpsMaxx theme became the default, and existing installs move to it ONCE.
+ * The OpsSwift theme became the default, and existing installs move to it ONCE.
  *
  * Every save before this says `'dark'`, chosen or not, because `save()` writes
  * the theme unconditionally. So `'dark'` without a revision is the old default
@@ -89,7 +89,7 @@ describe('saving the theme', () => {
  * Through `initPersistence` rather than a helper, because the real call site is
  * what the module-backfill bug in the same function taught us to test.
  */
-describe('moving the old default to the OpsMaxx theme', () => {
+describe('moving the old default to the OpsSwift theme', () => {
   it("moves a 'dark' saved before the revision existed", () => {
     expect(isOldDefaultTheme({ theme: 'dark' })).toBe(true)
   })

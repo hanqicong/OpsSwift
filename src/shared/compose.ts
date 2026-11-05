@@ -1034,8 +1034,8 @@ export function joinComposeState(
  * What the panel is allowed to say about a `.env`, and the sentence it says it with.
  *
  * On screen, verbatim. The operator should learn this from the UI rather than
- * from a surprise, because "OpsMaxx cannot show me this" is a support
- * question and "OpsMaxx showed my production database password to whoever
+ * from a surprise, because "OpsSwift cannot show me this" is a support
+ * question and "OpsSwift showed my production database password to whoever
  * was standing behind me" is an incident.
  */
 export const COMPOSE_ENV_DISCLOSURE = englishT('shared.compose.envDisclosure')
@@ -1656,9 +1656,9 @@ export function planComposeImageEdit(
 // same planner, same approval, same dialog, same write.
 //
 // WHAT IT IS, SAID PLAINLY. One level deep, and it is "the file as it was
-// immediately before OpsMaxx last wrote to it" -- NOT "the last known good
+// immediately before OpsSwift last wrote to it" -- NOT "the last known good
 // version" and not "what is running". Those are three different claims and only
-// the first is true. A stack whose bad tag was applied by two OpsMaxx edits
+// the first is true. A stack whose bad tag was applied by two OpsSwift edits
 // has a backup holding the first bad tag, and `revertDescription` says which
 // edit it is undoing so nobody reads it as a guarantee.
 
@@ -1758,7 +1758,7 @@ export function planComposeRevert(
       ok: false,
       refusal: 'no-backup',
       reason:
-        'there is no OpsMaxx backup beside this compose file on the server, so there is no previous tag to go back to. A backup is only written when OpsMaxx itself edits the file.'
+        'there is no OpsSwift backup beside this compose file on the server, so there is no previous tag to go back to. A backup is only written when OpsSwift itself edits the file.'
     }
   }
   const was = composeServiceImage(backupText, service)

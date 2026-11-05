@@ -83,7 +83,7 @@ describe('the previous tag comes off the host, not out of a new record', () => {
     const r = planComposeRevert(FILE, BACKUP, 'gateway')
     if (!r.ok) throw new Error(r.reason)
     const d = revertDescription(r)
-    expect(d).toContain('immediately before OpsMaxx last edited this file')
+    expect(d).toContain('immediately before OpsSwift last edited this file')
     expect(d).toContain('not a guarantee')
     expect(d).not.toMatch(/last known good|working version|safe/i)
   })
@@ -94,7 +94,7 @@ describe('what it refuses, and why each is its own answer', () => {
     const r = planComposeRevert(FILE, null, 'gateway')
     expect(r).toMatchObject({ ok: false, refusal: 'no-backup' })
     if (r.ok) throw new Error('unreachable')
-    expect(r.reason).toContain('only written when OpsMaxx itself edits the file')
+    expect(r.reason).toContain('only written when OpsSwift itself edits the file')
   })
 
   // An empty `.opsmaxx-bak` is a file that IS there with nothing in it —
@@ -106,7 +106,7 @@ describe('what it refuses, and why each is its own answer', () => {
     expect(r).toMatchObject({ ok: false })
     if (r.ok) throw new Error('unreachable')
     expect(r.refusal).not.toBe('no-backup')
-    expect(r.reason).not.toMatch(/there is no OpsMaxx backup/i)
+    expect(r.reason).not.toMatch(/there is no OpsSwift backup/i)
   })
 
   it('says so when the service never moved', () => {

@@ -79,7 +79,7 @@ function allowAll(overrides: Partial<AccessGroup['capabilities']> = {}): AccessG
     // nobody can answer during an unattended sweep.
     sudoersRead: 'deny',
     // Not 'allow', despite the name. Every other capability here is an action
-    // performed ON a server the user already added; this one edits OpsMaxx's
+    // performed ON a server the user already added; this one edits OpsSwift's
     // own connection list and stores a credential. Groups that predate it never
     // had that power, and a helper called allowAll should not be what silently
     // hands it to them — each group opts in below.
@@ -101,7 +101,7 @@ function allowAll(overrides: Partial<AccessGroup['capabilities']> = {}): AccessG
     //
     // The substantive reason is that neither is bounded by a host the user
     // administers. ciRead returns build output written by whoever opened the
-    // merge request; ciTrigger starts work on infrastructure OpsMaxx cannot
+    // merge request; ciTrigger starts work on infrastructure OpsSwift cannot
     // inspect and cannot stop once the provider has accepted it.
     ciRead: 'deny',
     ciTrigger: 'deny',
@@ -153,7 +153,7 @@ function defaultFilePolicies(): AccessGroup['filePolicies'] {
     // above. Same reasoning: a token pasted onto a command line is in the
     // history file in plaintext, and `.psql_history` / `.mysql_history` hold
     // connection strings with passwords in them — which matters here more than
-    // most places, because OpsMaxx is also a database client.
+    // most places, because OpsSwift is also a database client.
     //
     // `.*_history` is one rule per home root instead of a dozen literals: the
     // leading dot is matched literally and `*` stays inside the filename, so it
@@ -312,7 +312,7 @@ function defaultGroups(): AccessGroup[] {
       // this group, allow means allow.
       //
       // firewallRules and sudoersRead stay denied because no agent tool uses
-      // them. They are consent for OpsMaxx's own unattended background
+      // them. They are consent for OpsSwift's own unattended background
       // collection on servers assigned this group (posture.ts, access.ts), and
       // flipping them here would silently start collecting on every such box.
       capabilities: allowAll(FULL_ACCESS_GRANTS),
@@ -709,7 +709,7 @@ export function removeAssignment(id: string): void {
  * the set of capabilities it reaches.
  *
  * Every capability an agent tool uses is allow. Two are not agent capabilities
- * at all -- firewallRules and sudoersRead consent to OpsMaxx's own background
+ * at all -- firewallRules and sudoersRead consent to OpsSwift's own background
  * collection -- and stay deny. The seeded sensitive-path DENY rules come along
  * (/etc/shadow, SSH keys, shell history), so no predefined profile short of
  * Bypass reads them; the seeded write-ASK rules do not, because asking is the

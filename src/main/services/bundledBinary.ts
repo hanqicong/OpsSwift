@@ -5,7 +5,7 @@ import { join } from 'node:path'
 import { app } from 'electron'
 
 /**
- * Locating and integrity-checking a binary OpsMaxx ships.
+ * Locating and integrity-checking a binary OpsSwift ships.
  *
  * LIFTED OUT OF `vpn/binaries.ts` WITHOUT CHANGING WHAT IT DOES. That module
  * owns the most security-sensitive decision the VPN layer makes -- which file

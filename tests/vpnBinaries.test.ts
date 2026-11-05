@@ -250,7 +250,7 @@ describe('system binary resolution', () => {
 })
 
 describe('bundled first, system second', () => {
-  // OpsMaxx ships `openvpn` on macOS and Linux but not on Windows, and a
+  // OpsSwift ships `openvpn` on macOS and Linux but not on Windows, and a
   // user may still have their own copy anywhere. `resolveEngineBinary` is the
   // one place that decides between them, and the order it decides in is a
   // security property rather than a preference — so each rung is asserted
@@ -267,7 +267,7 @@ describe('bundled first, system second', () => {
     return file
   }
 
-  it('prefers the copy OpsMaxx ships', async () => {
+  it('prefers the copy OpsSwift ships', async () => {
     const file = bundleOpenVpn('#!/bin/sh\necho "OpenVPN 2.6.22 bundled"\n')
 
     const info = await resolveEngineBinary('openvpn', {})
@@ -350,7 +350,7 @@ describe('bundled first, system second', () => {
 
   it('does not mention a bundled OpenVPN on Windows, where there is none', async () => {
     // The opposite failure: telling a Windows user to run a build script for a
-    // target OpsMaxx deliberately does not produce.
+    // target OpsSwift deliberately does not produce.
     process.env.PATH = ''
     stubPlatform('win32')
 

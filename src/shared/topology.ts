@@ -3,7 +3,7 @@
 //
 // This file exists for one question, asked at the moment a patch run is about
 // to restart a machine: WHO ELSE GOES DOWN WITH IT. There is no general answer
-// to that. OpsMaxx is not a CMDB, it does not read your load balancer, it
+// to that. OpsSwift is not a CMDB, it does not read your load balancer, it
 // has never seen your replication topology, and a feature that pretended
 // otherwise would be worse than one that says nothing — an operator who
 // believes a reboot has been checked stops checking it themselves.

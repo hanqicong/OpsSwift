@@ -160,14 +160,14 @@ function sidecarHasPrivilegedMode(platform: NodeJS.Platform): boolean {
 }
 
 const NO_PRIVILEGED_BUILD =
-  'OpsMaxx cannot create a system network interface on this platform. Switch this profile to userspace mode.'
+  'OpsSwift cannot create a system network interface on this platform. Switch this profile to userspace mode.'
 
 // E02. There is no Developer ID for this project, so `SMJobBless` — the only
 // supported way to install a privileged helper on macOS — is impossible, and a
 // per-launch `osascript` prompt cannot own a persistent utun device. Saying so
 // plainly beats an elevation prompt that leads nowhere.
 const DARWIN_SYSTEM_MODE =
-  'System mode is not available on macOS: OpsMaxx has no signed privileged helper, so it cannot create a system network interface. Userspace mode gives the same tunnel through local listeners and needs no administrator rights.'
+  'System mode is not available on macOS: OpsSwift has no signed privileged helper, so it cannot create a system network interface. Userspace mode gives the same tunnel through local listeners and needs no administrator rights.'
 
 // --------------------------------------------------------------- wire types
 
@@ -479,7 +479,7 @@ export function validateWireGuardSpec(spec: WireGuardSpec): VpnValidation {
           issues.push(issue(`listeners[${i}].targetPort`, 'target-port-range', 'A forward needs a target port from 1 to 65535.'))
         }
       } else if (l.kind !== 'socks5' && l.kind !== 'http') {
-        issues.push(issue(`listeners[${i}].kind`, 'listener-kind', `"${(l as VpnListener).kind}" is not a listener OpsMaxx can open.`))
+        issues.push(issue(`listeners[${i}].kind`, 'listener-kind', `"${(l as VpnListener).kind}" is not a listener OpsSwift can open.`))
       }
     })
   }
@@ -1061,7 +1061,7 @@ async function startSystem(run: Run): Promise<void> {
         enginePath,
         planned,
         elevator,
-        `OpsMaxx needs administrator rights to create a network interface for "${run.profile.name}".`
+        `OpsSwift needs administrator rights to create a network interface for "${run.profile.name}".`
       )
       run.privileged = sidecar
       const up = await send<NetdUpResult>(run, 'wg.up', {
@@ -1515,7 +1515,7 @@ function privilegedExitError(elevator: Elevator, exit: ElevationExit): VpnError 
     case NETD_EXIT.authFailed:
       return new VpnError(
         'permission-denied',
-        'The elevated WireGuard helper rejected OpsMaxx\'s connection. Stop the tunnel and try again.'
+        'The elevated WireGuard helper rejected OpsSwift\'s connection. Stop the tunnel and try again.'
       )
     case NETD_EXIT.badArguments:
       return new VpnError(
@@ -1544,13 +1544,13 @@ function guardSystemMode(platform: NodeJS.Platform): void {
 // the tunnel — otherwise the encrypted packets carrying the tunnel match the
 // route they created and loop. Real clients solve it with a firewall mark and
 // a policy-routing rule (`wg-quick`) or a host route to the server via the old
-// gateway. OpsMaxx does neither yet, and bringing a full tunnel up without
+// gateway. OpsSwift does neither yet, and bringing a full tunnel up without
 // it would take the machine off the network until the profile is stopped.
 //
 // So it is refused, by name, rather than attempted. Split-tunnel system mode —
 // the common corporate case — is unaffected.
 const FULL_TUNNEL_SYSTEM_MODE =
-  'This profile routes all traffic (0.0.0.0/0 or ::/0), which system mode cannot do safely yet: OpsMaxx cannot keep the connection to the VPN server itself outside the tunnel, so bringing it up would take this machine off the network. Use userspace mode, or list only the ranges you need in AllowedIPs.'
+  'This profile routes all traffic (0.0.0.0/0 or ::/0), which system mode cannot do safely yet: OpsSwift cannot keep the connection to the VPN server itself outside the tunnel, so bringing it up would take this machine off the network. Use userspace mode, or list only the ranges you need in AllowedIPs.'
 
 /** The routes a system-mode tunnel would claim: one per distinct allowed
  *  prefix, all pointed at the tunnel interface. */
@@ -1572,7 +1572,7 @@ export function systemRoutes(spec: WireGuardSpec, interfaceName: string): RouteS
  *  Windows shows them to the user in `ncpa.cpl`. */
 export function systemInterfaceName(profileId: string, platform: NodeJS.Platform): string {
   const short = profileId.replace(/[^A-Za-z0-9]/g, '').slice(0, 8) || 'wg'
-  if (platform === 'win32') return `OpsMaxx ${short}`
+  if (platform === 'win32') return `OpsSwift ${short}`
   return `wg-${short}`.slice(0, 15)
 }
 
@@ -1724,7 +1724,7 @@ export async function applySystemNetworking(
     runId,
     ctx.runDir,
     elevator,
-    `OpsMaxx needs administrator rights to route "${profile.name}" through a system network interface.`
+    `OpsSwift needs administrator rights to route "${profile.name}" through a system network interface.`
   )
 
   const dns: DnsSpec | undefined =
@@ -1879,7 +1879,7 @@ export async function askNetdOnce<T>(method: string, params?: unknown): Promise<
 /**
  * A WireGuard keypair, or the public half of one the caller already has.
  *
- * OpsMaxx bundles everything WireGuard needs to run and, until this
+ * OpsSwift bundles everything WireGuard needs to run and, until this
  * existed, no way at all to make a key: importing a provider's `.conf` worked
  * because the key is in the file, and setting up your own peer meant running
  * `wg genkey`, which meant installing wireguard-tools in an app whose headline

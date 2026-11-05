@@ -125,7 +125,7 @@ function approved(req: Omit<JobRunRequest, 'approval'>): JobRunRequest {
 //   | Read-only $HOME image       | falls through to /var/tmp/opsmaxx-$uid |
 //   | Any host, then `reboot`     | state reads `rebooting`, not unreachable; |
 //   |                             | after boot the marker is gone or orphaned |
-//   | Two OpsMaxxs, one host   | the second reads output and rc, refuses   |
+//   | Two OpsSwifts, one host   | the second reads output and rc, refuses   |
 //   |                             | to reap, reports `foreign`                |
 
 const DAY = 86_400_000
@@ -354,7 +354,7 @@ class FakeHost {
     this.marker(dir).alive = false
   }
 
-  /** A different OpsMaxx launched this. */
+  /** A different OpsSwift launched this. */
   steal(dir: string, instance: string): void {
     this.marker(dir).instance = instance
   }
@@ -928,7 +928,7 @@ describe('reclaiming a marker', () => {
   })
 
   it('reads a foreign marker, and refuses to reap it', async () => {
-    // Detect and degrade, do not lock. Two OpsMaxxs against one estate is a
+    // Detect and degrade, do not lock. Two OpsSwifts against one estate is a
     // real configuration, and a lock file would turn it into a job neither of
     // them can read.
     const host = new FakeHost()
@@ -1289,7 +1289,7 @@ describe('picking a job up after a restart', () => {
     const s = await store()
     const host = new FakeHost()
 
-    // --- the first OpsMaxx: launches, reads some output, and is closed ---
+    // --- the first OpsSwift: launches, reads some output, and is closed ---
     const first = harness(host)
     const progress: JobProgress[] = []
     const outputs: JobOutput[] = []
@@ -1324,7 +1324,7 @@ describe('picking a job up after a restart', () => {
     expect(isJobDetachedHandle(mid?.targets[0].detached)).toBe(true)
     expect(mid?.state, 'the job row stays open for the next launch to reclaim').toBe('running')
 
-    // --- a second OpsMaxx, which never saw any of that ---
+    // --- a second OpsSwift, which never saw any of that ---
     host.write(marker, 'second half\n')
     host.exit(marker, 0)
     const second = harness(host)
@@ -1608,7 +1608,7 @@ describe('stopping a job this build cannot identify', () => {
     // anyway, including `kill -TERM -- -$SP_PID` to a whole PROCESS GROUP. If
     // that host has rebooted since the marker was written, the recorded pid is
     // very likely to have been recycled onto something else; if that something
-    // else leads its own group, OpsMaxx stops a stranger's processes. The
+    // else leads its own group, OpsSwift stops a stranger's processes. The
     // poll has been computing `pidcheck=weak` for exactly this host all along,
     // and nothing consulted it.
     const host = new FakeHost({ weakPidCheck: true })
@@ -1638,7 +1638,7 @@ describe('stopping a job this build cannot identify', () => {
   it('does not kill another instance’s job because our own clock ran out', async () => {
     // JOB_INSTANCE_NOTE argues that cancel is not gated on the instance, and
     // that argument is about a PERSON deciding to stop an upgrade. An automatic
-    // timeout is a different act: it is one OpsMaxx's deadline — measured
+    // timeout is a different act: it is one OpsSwift's deadline — measured
     // from a launch it did not make — ending a run somebody else is watching.
     const host = new FakeHost()
     const h = harness(host)
@@ -1653,7 +1653,7 @@ describe('stopping a job this build cannot identify', () => {
     const r = await p
     expect(host.countVerb('signal'), 'their job, their decision').toBe(0)
     expect(host.dirs.has(dir), 'and their marker is left alone').toBe(true)
-    expect(r.error).toMatch(/different OpsMaxx instance/i)
+    expect(r.error).toMatch(/different OpsSwift instance/i)
     expect(r.finalOutcome).toBe('timeout')
   })
 

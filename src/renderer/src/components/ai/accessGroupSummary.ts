@@ -54,7 +54,7 @@ const PHRASING: Record<AiCapability, Phrasing> = {
   serverMetrics: { verbKey: 'ai.summary.verb.serverMetrics', gerundKey: 'ai.summary.gerund.serverMetrics' },
   hostFacts: { verbKey: 'ai.summary.verb.hostFacts', gerundKey: 'ai.summary.gerund.hostFacts' },
   // "collect", not "read": no agent can read these at all, and the verb has to
-  // survive being read quickly. What the grant does is let OpsMaxx's own
+  // survive being read quickly. What the grant does is let OpsSwift's own
   // hourly posture probe ASK the host for its rule lines.
   sudoersRead: { verbKey: 'ai.summary.verb.sudoersRead', gerundKey: 'ai.summary.gerund.sudoersRead' },
   firewallRules: { verbKey: 'ai.summary.verb.firewallRules', gerundKey: 'ai.summary.gerund.firewallRules' },
@@ -73,7 +73,7 @@ const PHRASING: Record<AiCapability, Phrasing> = {
 }
 
 // The three that do not merely act on a server the user already trusts: sudo is
-// root, manageServers writes a new credential into OpsMaxx itself, and
+// root, manageServers writes a new credential into OpsSwift itself, and
 // vpnControl decides which network every later session travels over. They are
 // listed first inside whichever clause they land in, so a summary can never
 // bury "can use sudo" behind six mundane capabilities.

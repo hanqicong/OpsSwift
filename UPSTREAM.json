@@ -1,0 +1,11 @@
+{
+  "project": "OpsMaxx",
+  "repository": "https://github.com/OpsMaxx/OpsMaxx",
+  "baseTag": "v0.60.2",
+  "baseCommit": "40c8f17bc09ea979d24428475eb8ac94a0c0930c",
+  "extensionBaseline": "0.60.2-network.4",
+  "extensionPatchSha256": "43f432253f3c89d43b3bc4f7d11c319f0dddf92fedef2881074bc547c2de87a5",
+  "product": "OpsSwift",
+  "supportLine": "1.0.x LTS",
+  "license": "MIT"
+}

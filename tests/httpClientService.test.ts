@@ -193,7 +193,7 @@ describe('httpRequest, direct', () => {
     const headers = JSON.parse(text(result.body)).headers
     // The version is whatever the electron mock reports, and asserting it would
     // make a release bump a test change. That it names the app is the contract.
-    expect(headers['user-agent']).toMatch(/^OpsMaxx\//)
+    expect(headers['user-agent']).toMatch(/^OpsSwift\//)
   })
 
   it('lets a caller set its own User-Agent instead', async () => {
@@ -238,7 +238,7 @@ describe('httpRequest, direct', () => {
     expect(result.ok).toBe(false)
     if (result.ok) return
     expect(result.code).toBe('ECONNREFUSED')
-    // The message names the fix a OpsMaxx user most often needs.
+    // The message names the fix a OpsSwift user most often needs.
     expect(result.error).toMatch(/through that server/)
   })
 

@@ -1,4 +1,4 @@
-// Which tunnel engines OpsMaxx actually ships, and where.
+// Which tunnel engines OpsSwift actually ships, and where.
 //
 // This is one fact that two processes have to agree on, and they cannot import
 // each other's code to get it. The main process asks it to decide whether to
@@ -36,7 +36,7 @@ const BUNDLED_PLATFORMS: Record<string, readonly NodeJS.Platform[]> = {
   // which would make the UI claim we provide it.
 }
 
-/** Whether OpsMaxx ships `name` on `platform`. */
+/** Whether OpsSwift ships `name` on `platform`. */
 export function isEngineBundledOn(name: string, platform: NodeJS.Platform): boolean {
   const base = name.endsWith('.exe') ? name.slice(0, -4) : name
   const platforms = BUNDLED_PLATFORMS[base]
@@ -61,7 +61,7 @@ export function userSuppliesEngine(name: string, platform: NodeJS.Platform | nul
  *
  * Everything above is keyed by binary name, because that is what the resolver
  * looks for; the renderer only ever holds a `VpnKind`. `tailscale` and `ngrok`
- * are absent deliberately — OpsMaxx starts neither, so there is no engine of
+ * are absent deliberately — OpsSwift starts neither, so there is no engine of
  * ours for them to be missing.
  */
 const KIND_BINARY: Record<string, string> = {
@@ -71,7 +71,7 @@ const KIND_BINARY: Record<string, string> = {
 }
 
 /**
- * Whether the engine for `kind` is one OpsMaxx ships on this platform — so a
+ * Whether the engine for `kind` is one OpsSwift ships on this platform — so a
  * missing one is a damaged install rather than something to go and fetch.
  *
  * `null` platform answers false for the same reason `userSuppliesEngine` does:

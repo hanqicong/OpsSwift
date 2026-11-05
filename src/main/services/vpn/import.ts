@@ -248,11 +248,11 @@ export async function profileDirs(kinds: DiscoveredVpnProfile['kind'][]): Promis
 }
 
 /**
- * Profile stores OpsMaxx cannot read, and the reason.
+ * Profile stores OpsSwift cannot read, and the reason.
  *
  * Listed rather than scanned. Both of these hold real profiles and neither can
  * be opened by anything but the app that wrote it, so a scan that simply found
- * nothing in them would read as OpsMaxx having missed the profiles the user can
+ * nothing in them would read as OpsSwift having missed the profiles the user can
  * see in another window. Same shape as the DPAPI entry in `readProfile`: the
  * dialog lists it with its reason and no Import button.
  *
@@ -268,7 +268,7 @@ export function noteDirs(kinds: DiscoveredVpnProfile['kind'][]): NoteDir[] {
   const home = homedir()
   const out: NoteDir[] = []
   const connect =
-    'OpenVPN Connect 3 keeps imported profiles in its own database rather than as files, and that database is not a format OpsMaxx can read. Export the profile from OpenVPN Connect, or import the original .ovpn file here.'
+    'OpenVPN Connect 3 keeps imported profiles in its own database rather than as files, and that database is not a format OpsSwift can read. Export the profile from OpenVPN Connect, or import the original .ovpn file here.'
 
   if (kinds.includes('openvpn')) {
     if (process.platform === 'darwin') {
@@ -399,7 +399,7 @@ async function runScan(
     // A directory we are not allowed to read is reported, not skipped. On
     // Linux `/etc/wireguard` is 0700 root, so this is the ordinary case
     // there — and a profile the user can see in a terminal and not here
-    // reads as OpsMaxx having missed it.
+    // reads as OpsSwift having missed it.
     for (const path of denied) push(deniedEntry(kind, path, true))
     for (const file of files) {
       if (profiles.length >= MAX_PROFILES || Date.now() > deadline) {
@@ -446,7 +446,7 @@ function deniedEntry(
     report: {
       ok: false,
       error: isDir
-        ? `${path} needs administrator rights to read, so OpsMaxx cannot list what is in it.`
+        ? `${path} needs administrator rights to read, so OpsSwift cannot list what is in it.`
         : `${path} needs administrator rights to read.`,
       errorCode: 'config-invalid',
       stripped: [],

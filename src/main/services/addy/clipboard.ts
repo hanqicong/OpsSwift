@@ -236,7 +236,7 @@ export async function receiveClipboard(
       // A payload this device cannot open is one to acknowledge and forget
       // rather than retry for ever: sealed to another device, signed by one
       // that is not on the roster, already delivered once, or from an
-      // OpsMaxx too old to sign it.
+      // OpsSwift too old to sign it.
       legacy ||= isLegacyMail(m.sealed)
     }
   }

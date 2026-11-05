@@ -47,6 +47,8 @@ export const DEFAULT_UPDATE_PREFS: UpdatePrefs = {
 // What this particular build can actually do, decided in main and sent to the
 // renderer so the UI never has to re-derive platform rules of its own.
 export interface UpdaterCapabilities {
+  /** Signed/reviewed OpsSwift releases are selected by the maintainer, never by the upstream feed. */
+  managedReleaseUrl?: string
   // False on macOS (ad-hoc signed, and the mac target is dmg-only while
   // Squirrel.Mac needs a zip) and on the Windows portable build (electron-
   // updater cannot replace a portable exe). Those platforms check and then

@@ -128,7 +128,7 @@ describe('HeadersEditor', () => {
     const ct = screen.getByRole('row', { name: /Content-Type application\/json/ })
     expect(ct.className).toContain('hc-replaced')
     expect(ct.textContent).toContain('Replaced by your header')
-    expect(screen.getByRole('row', { name: /User-Agent/ }).textContent).toContain('OpsMaxx names itself')
+    expect(screen.getByRole('row', { name: /User-Agent/ }).textContent).toContain('OpsSwift names itself')
   })
 
   it('warns on a literal credential, and offers Move to vault', () => {

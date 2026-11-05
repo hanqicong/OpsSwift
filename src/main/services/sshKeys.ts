@@ -69,7 +69,7 @@ export function isEncryptedPrivateKey(head: string): boolean {
  * "All configured authentication methods failed" — the same message a wrong
  * username gives, which is where it sends the user to look.
  *
- * `DEFAULT_IDENTITIES` lists `id_ecdsa_sk` and `id_ed25519_sk`, so OpsMaxx
+ * `DEFAULT_IDENTITIES` lists `id_ecdsa_sk` and `id_ed25519_sk`, so OpsSwift
  * OFFERS these keys to anyone who has one and no explicit IdentityFile. This
  * is what makes the offer honest.
  *
@@ -156,7 +156,7 @@ export function sshDir(): string {
  * The identities OpenSSH tries when a connection names no key, in its order.
  *
  * From ssh_config(5)'s IdentityFile default. Order matters: it is the one a
- * user's `ssh host` already follows, so following it is what makes OpsMaxx
+ * user's `ssh host` already follows, so following it is what makes OpsSwift
  * pick the same key their terminal picks.
  */
 export const DEFAULT_IDENTITIES = ['id_ed25519', 'id_ecdsa', 'id_ecdsa_sk', 'id_ed25519_sk', 'id_rsa', 'id_dsa'] as const
@@ -227,7 +227,7 @@ export function listDefaultKeys(): DetectedKey[] {
  * of a path to it.
  *
  * `shared/vault.ts` states the problem this closes: a key stored as a `keyPath`
- * is "the one credential OpsMaxx never actually held — not in the OS keychain,
+ * is "the one credential OpsSwift never actually held — not in the OS keychain,
  * not in the encrypted vault, just a filename pointing at plaintext on disk,
  * which also does not travel with an encrypted backup."
  *

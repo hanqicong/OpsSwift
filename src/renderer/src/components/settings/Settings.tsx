@@ -103,8 +103,8 @@ import {
   type MessageKey
 } from '../../../../shared/i18n'
 
-// The OpsMaxx pair first, the classic pair after. Labelled rather than
-// capitalised, because "OpsMaxx" is not what capitalising "opsmaxx" gives.
+// The OpsSwift pair first, the classic pair after. Labelled rather than
+// capitalised, because "OpsSwift" is not what capitalising "opsmaxx" gives.
 const THEME_OPTIONS: [ThemeMode, MessageKey][] = [
   ['opsmaxx', 'settingsPage.appearance.theme.opsmaxx'],
   ['opsmaxx-light', 'settingsPage.appearance.theme.opsmaxxLight'],
@@ -440,7 +440,7 @@ function SettingSwitch({
  * Starting with the machine.
  *
  * This pairs with background checking rather than being a cosmetic preference:
- * the fleet poll runs from the app root, so an OpsMaxx that starts at login
+ * the fleet poll runs from the app root, so an OpsSwift that starts at login
  * is a fleet watched from login. Without it, "background checking" only means
  * background of whenever somebody last opened the app.
  *
@@ -1377,7 +1377,7 @@ export function Settings(): React.JSX.Element {
               <div className="sub">{t('settingsPage.ssh.sub')}</div>
               <SshSessions />
               {/* Spelled out rather than summarised, because it is the one
-                  setting here that decides whether OpsMaxx writes anything
+                  setting here that decides whether OpsSwift writes anything
                   to your machines. An operator is owed the exact list, and the
                   honest description of what turning it OFF costs — which is not
                   "less is written", it is "a long command dies with the

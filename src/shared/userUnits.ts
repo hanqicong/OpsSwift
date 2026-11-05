@@ -236,7 +236,7 @@ export function summariseUserUnits(r: UserUnitsReading): {
  * manager is running — which is a failure of the ENVIRONMENT we handed it, not
  * a fact about the server, and reporting it as one would be our bug shown as
  * theirs. `id -u` rather than a literal, because the account is whoever
- * OpsMaxx connected as.
+ * OpsSwift connected as.
  *
  * `|| true` after each read: a missing loginctl must not take the units with
  * it, and the marker layout is what tells the two halves apart afterwards.
@@ -326,7 +326,7 @@ export function checkUnitDraft(d: UnitDraft): UnitDraftRefusal {
 /** The unit file itself. Deterministic, so a diff of two of these is readable. */
 export function renderUnitFile(d: UnitDraft): string {
   const lines = [
-    '# Written by OpsMaxx. Edit here or on the server; OpsMaxx reads it back either way.',
+    '# Written by OpsSwift. Edit here or on the server; OpsSwift reads it back either way.',
     '[Unit]',
     `Description=${d.description}`,
     '',

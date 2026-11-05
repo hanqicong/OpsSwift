@@ -18,7 +18,7 @@ import {
 
 const SERVER_KEY = MCP_SERVER_KEY
 
-// process.execPath is OpsMaxx's own Electron binary. With
+// process.execPath is OpsSwift's own Electron binary. With
 // ELECTRON_RUN_AS_NODE it runs plain JS, so the bridge needs no separate Node
 // install and does not depend on PATH — which Claude Desktop does not inherit
 // from a login shell, and which is the usual reason a `"command": "node"` entry

@@ -50,7 +50,7 @@ import {
 // So the command is launched into its own session with `setsid`, the channel
 // that launched it closes immediately, and everything after that is a POLL of
 // five small marker files and one output file whose size is the command's own
-// business — see JOB_OUT_SIZE_NOTE. The link may drop, the laptop may sleep, OpsMaxx may be
+// business — see JOB_OUT_SIZE_NOTE. The link may drop, the laptop may sleep, OpsSwift may be
 // restarted; none of it reaches the process doing the work.
 //
 // What lands on the host, why that is defensible, and why `/tmp` is not in the
@@ -84,7 +84,7 @@ export interface DetachedDeps {
   /** One command, buffered result out. `sshExec` bound with secret resolution. */
   run: (cfg: unknown, command: string, timeoutMs: number) => Promise<JobRunResult>
   /**
-   * This OpsMaxx's id, stable across restarts on this machine.
+   * This OpsSwift's id, stable across restarts on this machine.
    *
    * Stable is the requirement, not unique-per-launch: a job launched before a
    * restart must be OURS after it, or every reclaim would report `foreign` and
@@ -306,7 +306,7 @@ export function detachedJobExecutor(deps: DetachedDeps): DetachedExecutor {
     }
 
     // PERSISTED BEFORE THE FIRST POLL, and this ordering is the whole of "a
-    // OpsMaxx that never saw it start can pick it up". A crash between the
+    // OpsSwift that never saw it start can pick it up". A crash between the
     // launch and the first write would leave a running command with nothing
     // recording where its marker is — reclaimable by nobody, swept a week
     // later, its output lost. The write costs one row.
@@ -319,7 +319,7 @@ export function detachedJobExecutor(deps: DetachedDeps): DetachedExecutor {
    *
    * Everything below is a loop over one poll, and the loop is the same whether
    * this instance launched the job a second ago or is picking up a marker
-   * written by a OpsMaxx that has since been restarted. That is deliberate:
+   * written by a OpsSwift that has since been restarted. That is deliberate:
    * a reclaim path that is a different code path from the live one is a reclaim
    * path that is exercised only in the failure people report.
    */
@@ -337,7 +337,7 @@ export function detachedJobExecutor(deps: DetachedDeps): DetachedExecutor {
         code: null,
         error:
           `This job’s recorded marker directory (${JSON.stringify(handle.dir)}) is not one ` +
-          'OpsMaxx creates, so nothing was read from the server and nothing was removed from it.',
+          'OpsSwift creates, so nothing was read from the server and nothing was removed from it.',
         finalState: 'orphaned',
         finalOutcome: 'orphaned',
         detachedHandle: null
@@ -691,7 +691,7 @@ export function detachedJobExecutor(deps: DetachedDeps): DetachedExecutor {
             code: null,
             error:
               'The marker directory for this job is no longer on the server, so its exit status ' +
-              'cannot be read. Another OpsMaxx may have reaped it, or the state directory was ' +
+              'cannot be read. Another OpsSwift may have reaped it, or the state directory was ' +
               'cleared underneath it.',
             finalState: 'orphaned',
             finalOutcome: 'orphaned',
@@ -719,8 +719,8 @@ export function detachedJobExecutor(deps: DetachedDeps): DetachedExecutor {
             // NOT FOR A FOREIGN MARKER. JOB_INSTANCE_NOTE argues that cancel is
             // not gated on the instance, and that argument is about a person in
             // front of the machine deciding to stop an upgrade. This is not
-            // that: it is one OpsMaxx's clock automatically killing another
-            // OpsMaxx's job, on a deadline the other one never agreed to and
+            // that: it is one OpsSwift's clock automatically killing another
+            // OpsSwift's job, on a deadline the other one never agreed to and
             // measured from a launch it may have watched for hours. So it is
             // reported and left alone.
             if (verdict.foreign) {
@@ -729,7 +729,7 @@ export function detachedJobExecutor(deps: DetachedDeps): DetachedExecutor {
                 code: null,
                 error:
                   `Command timed out after ${req.timeoutMs}ms. Nothing was signalled: this job ` +
-                  'was launched by a different OpsMaxx instance, and an automatic timeout is ' +
+                  'was launched by a different OpsSwift instance, and an automatic timeout is ' +
                   'not a reason to stop somebody else’s run. It may still be going; its marker ' +
                   `directory is at ${handle.dir}.`,
                 finalOutcome: 'timeout',

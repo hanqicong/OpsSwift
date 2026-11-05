@@ -191,7 +191,7 @@ describe('a profile can be checked before it is saved', () => {
    * The one case where the driver string IS the honest answer.
    *
    * `unknown` exists to admit the classifier did not recognise the text, and
-   * this dialog used to drop that text — leaving "OpsMaxx could not tell what
+   * this dialog used to drop that text — leaving "OpsSwift could not tell what
    * went wrong from what the server said" with the thing the server said thrown
    * away. lib/connectionError.ts says as much in its own comment: for an
    * unrecognised failure the raw text underneath is the honest thing to show.
@@ -266,9 +266,10 @@ describe('a profile can be checked before it is saved', () => {
   // fingerprint to confirm or a code to type is the answer to their click.
   it('is opted in to prompting only from the IPC handler', () => {
     const main = read('src/main/index.ts')
-    // The handler spreads the prepared target and overrides the VPN with the
-    // form's choice (tests/sshTestVpnState.test.ts), so match the shape.
-    expect(main).toMatch(/sshTest\(\s*\{\s*\.\.\.preparedSshTarget\(cfg\),[\s\S]{0,200}?\},\s*true\s*\)/)
+    // The human-only IPC adapter owns protocol selection and SSH prompting.
+    expect(main).toContain('nativeNetworkTest(cfg)')
+    const native = read('src/main/services/nativeNetworkTerminal.ts')
+    expect(native).toContain('sshTest(target, true)')
     // And not by the agent-facing probe, which has nobody to ask.
     const mcp = read('src/main/services/mcpServer.ts')
     expect(mcp).toContain('sshTest(preparedSshTarget(serverToSshConfig(server)))')

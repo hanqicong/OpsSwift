@@ -79,7 +79,7 @@ function cwdsReported(out: string): string[] {
   for (const m of out.matchAll(/\x1b\]7;([^\x07\x1b]*)(?:\x07|\x1b\\)/g)) {
     // The host field must be EMPTY. macOS ships its own OSC 7 emitter in
     // /etc/zshrc and /etc/bashrc which reports `file://<hostname>/path`; without
-    // this the test would pass on a Mac whatever OpsMaxx emitted.
+    // this the test would pass on a Mac whatever OpsSwift emitted.
     if (!m[1].startsWith('file:///')) continue
     const p = parseOsc7(m[1])
     if (p) found.push(p)
@@ -122,8 +122,8 @@ async function transcript(
  * A shell environment with none of the developer's own configuration in it.
  *
  * Not to make the test easier: a machine whose ~/.zshrc opens a prompt
- * framework would hang a pty forever, and the thing under test is OpsMaxx's
- * snippet, not the tester's dotfiles. Everything OpsMaxx itself contributes —
+ * framework would hang a pty forever, and the thing under test is OpsSwift's
+ * snippet, not the tester's dotfiles. Everything OpsSwift itself contributes —
  * the arguments, the ZDOTDIR redirection, the file contents — is left exactly
  * as it ships.
  */
@@ -133,7 +133,7 @@ function bareEnv(home: string): Record<string, string> {
     HOME: home,
     TERM: 'xterm-256color',
     // macOS's /etc/zshrc and /etc/bashrc emit their own OSC 7 when this is set,
-    // and an OpsMaxx that emitted nothing would inherit the credit.
+    // and an OpsSwift that emitted nothing would inherit the credit.
     TERM_PROGRAM: ''
   }
 }

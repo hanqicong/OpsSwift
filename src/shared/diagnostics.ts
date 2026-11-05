@@ -120,7 +120,7 @@ export interface Diagnostics {
 }
 
 /** First line of the text, and how a reader knows what they pasted. */
-export const DIAGNOSTICS_HEADING = 'OpsMaxx diagnostics'
+export const DIAGNOSTICS_HEADING = 'OpsSwift diagnostics'
 
 /** How many lines of a stack are worth having. Past this it is framework
  *  internals, and the point of the block is to stay readable. */
@@ -129,7 +129,7 @@ const STACK_LINES = 24
 /**
  * Absolute paths down to their last segment.
  *
- * A renderer stack frame reads `at render (/Users/someone/OpsMaxx/out/...)`,
+ * A renderer stack frame reads `at render (/Users/someone/OpsSwift/out/...)`,
  * and under a dev build the leading part of that is the user's home directory
  * and therefore their name. The last segment is the part that identifies the
  * code; everything before it identifies the machine.

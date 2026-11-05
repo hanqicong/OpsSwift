@@ -14,7 +14,7 @@ import type { CicdBridge, CicdConnection, CicdPipeline, CicdRun } from '../src/s
  * The Activity feed answers "is anything broken" over a 24-hour window, which
  * means a job that last ran a month ago is invisible on it. Pointed at a real
  * Jenkins with four jobs -- three built 13 hours earlier, one 35 days earlier --
- * the panel was blank and there was no screen anywhere in OpsMaxx that would
+ * the panel was blank and there was no screen anywhere in OpsSwift that would
  * name those jobs. These pin the screen that fixes that.
  */
 
@@ -261,7 +261,7 @@ describe('the write half, which is a separate grant', () => {
    * The label, and the whole reason this control was rewritten.
    *
    * Two always-present buttons called "Disable" and "Enable" said nothing about
-   * WHAT they enabled -- the operator read them as switches on the OpsMaxx side
+   * WHAT they enabled -- the operator read them as switches on the OpsSwift side
    * -- and nothing about which state the job was actually in. One button whose
    * text is the verb it is about to perform answers both.
    */

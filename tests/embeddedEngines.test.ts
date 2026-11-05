@@ -81,7 +81,7 @@ describe('nothing is executed from the host', () => {
 
 describe('bundling and classification', () => {
   /**
-   * `isEngineBundledOn` answers whether OpsMaxx SHIPS an engine, and it is what
+   * `isEngineBundledOn` answers whether OpsSwift SHIPS an engine, and it is what
    * the UI asks before offering to install one. Both are shipped now — inside
    * the sidecar — so neither should ever tell a user to go and install it.
    */

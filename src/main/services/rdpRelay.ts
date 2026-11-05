@@ -949,7 +949,7 @@ function negotiationFailure(confirm: Buffer): string | null {
     case 0x00000001:
       return 'This host requires TLS for remote desktop and the connection did not offer it.'
     case 0x00000002:
-      return 'This host refuses TLS for remote desktop, which OpsMaxx requires.'
+      return 'This host refuses TLS for remote desktop, which OpsSwift requires.'
     case 0x00000003:
       return 'This host has no certificate installed for remote desktop, so it cannot start TLS.'
     case 0x00000004:
@@ -959,7 +959,7 @@ function negotiationFailure(confirm: Buffer): string | null {
       // it is a per-server switch in this app, so the user can act on it.
       return 'This host requires Network Level Authentication. Turn NLA on for this server in its settings, then reconnect.'
     case 0x00000006:
-      return 'This host requires TLS with user authentication, which OpsMaxx does not offer.'
+      return 'This host requires TLS with user authentication, which OpsSwift does not offer.'
     default:
       return `This host refused the remote desktop security options offered (code ${code}).`
   }

@@ -14,7 +14,7 @@ export type ConnectionFault =
    * It is in this union because the dead-session card asks this classifier
    * what happened, and every unrecognised string fell through to `unknown` —
    * whose whole job is to admit it cannot explain a FAILURE. So typing `exit`
-   * produced "OpsMaxx could not tell what went wrong from what the server
+   * produced "OpsSwift could not tell what went wrong from what the server
    * said." over a session that had done exactly what it was told, which reads
    * as a bug in the app rather than a shell closing.
    */
@@ -24,7 +24,7 @@ export type ConnectionFault =
    *
    * `exit` with no argument returns the status of the last command, so a typo
    * at the prompt followed by `exit` ends the session with 127. That was
-   * classified as `unknown` — "OpsMaxx could not tell what went wrong from what
+   * classified as `unknown` — "OpsSwift could not tell what went wrong from what
    * the server said", beside a button offering to edit the connection — for a
    * session in which nothing whatsoever had gone wrong.
    *
@@ -36,6 +36,7 @@ export type ConnectionFault =
    */
   | 'exited-nonzero'
   | 'host-key'
+  | 'algorithm'
   | 'port-in-use'
   | 'passphrase'
   | 'key-missing'
@@ -59,13 +60,14 @@ const PATTERNS: [ConnectionFault, RegExp][] = [
   // failure" — aimed at a container exec failing with 127 because the image has
   // no shell — but it also caught every interactive session where somebody
   // mistyped a command and then typed `exit`, which is not a failure and is far
-  // more common. Both are non-zero exits; neither is something OpsMaxx failed
+  // more common. Both are non-zero exits; neither is something OpsSwift failed
   // to understand.
   ['exited-nonzero', /\bshell exited with\b/i],
   ['exited', /\bshell exited\b(?! with)/i],
   // `Host denied (verification failed)` is ssh2's own wording when our verifier
   // refuses, and it matched none of the patterns beside it -- so the one error
   // the user can actually finish in a single action was classified as generic.
+  ['algorithm', /no matching (?:key exchange|host key|hostkey|cipher|hmac|mac|compression)(?: algorithm)?|no compatible (?:key exchange|cipher|signature)|unsupported key exchange/i],
   ['host-key', /host key|host verification|hostkey|fingerprint|host denied|no trusted host key/i],
   ['port-in-use', /EADDRINUSE|already in use/i],
   ['passphrase', /passphrase|encrypted private key/i],
@@ -106,6 +108,7 @@ export function classifyConnectionError(text: string | null | undefined): Connec
 // these sentences are written from the fault alone. They cannot leak an address
 // because no address was ever in them.
 const AGENT_SENTENCE: Record<ConnectionFault, string> = {
+  algorithm: 'the SSH algorithms do not overlap; review this connection’s SSH compatibility setting',
   'host-key': 'the host key does not match the one saved for this server',
   'port-in-use': 'something on this machine is already listening on that port',
   passphrase: 'the private key is encrypted and no passphrase is stored for it',
@@ -122,7 +125,7 @@ const AGENT_SENTENCE: Record<ConnectionFault, string> = {
   // Admits it cannot explain, rather than picking the nearest plausible cause.
   // An agent that is told "authentication failed" when the truth is unknown
   // will go and rewrite a credential that was never wrong.
-  unknown: 'OpsMaxx could not tell what went wrong from what the server said'
+  unknown: 'OpsSwift could not tell what went wrong from what the server said'
 }
 
 /**

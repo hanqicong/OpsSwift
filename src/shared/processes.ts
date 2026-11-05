@@ -53,7 +53,7 @@
 //       1. TRANSLATE, do not supervise — write a `systemd --user` unit or a
 //          launchd plist on the host and let the host's own supervisor own the
 //          restart policy. The host is there when we are not. This is the one
-//          worth doing, and it is a different feature: what OpsMaxx would
+//          worth doing, and it is a different feature: what OpsSwift would
 //          ship is a unit-file editor and a `systemctl --user` reader, not a
 //          supervisor.
 //       2. An agent-side runner. A real design, and a real decision about

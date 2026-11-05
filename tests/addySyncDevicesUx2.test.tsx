@@ -38,7 +38,7 @@ describe('a half-typed relay address', () => {
   it('does not take the app down', async () => {
     stubBridge({ addy: { status: vi.fn().mockResolvedValue(notEnrolled) } })
     render(<AddySetup />)
-    fireEvent.click(await screen.findByRole('button', { name: /already use OpsMaxx/ }))
+    fireEvent.click(await screen.findByRole('button', { name: /already use OpsSwift/ }))
     fireEvent.change(screen.getByPlaceholderText('https://relay.example'), { target: { value: 'h' } })
     expect(screen.getByRole('button', { name: /Type a code/ })).toBeTruthy()
   })

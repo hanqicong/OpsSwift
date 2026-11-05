@@ -1,6 +1,6 @@
 // The words an AI approval prompt is allowed to say.
 //
-// An approval modal is the one screen in OpsMaxx where the person deciding
+// An approval modal is the one screen in OpsSwift where the person deciding
 // did not start the thing they are deciding about. Everywhere else — a cordon,
 // a drain, a broadcast — the operator typed the intent themselves and the
 // dialog only has to describe the blast radius. Here the operator arrives cold,
@@ -80,7 +80,7 @@ export interface ApprovalSubject {
  * Null is the honest answer for an unrecognised word and the callers below
  * treat it as *more* serious than `high`, never less. Defaulting an unknown
  * level to `low` — the tempting one-liner — would take the single case where
- * OpsMaxx understands the request least and render it as the case where
+ * OpsSwift understands the request least and render it as the case where
  * there is least to worry about.
  */
 export function riskPosition(level: string): { ordinal: number; of: number } | null {
@@ -126,7 +126,7 @@ export function riskTone(level: string): 'danger' | 'warn' | 'neutral' {
 // than importing it: that module is 127KB of cluster parsing and the approval
 // path should not pull it in for one regex, and the constant is not exported
 // there anyway. Widened by one character class — whitespace is a separator
-// here, because OpsMaxx server names are display names ("Nginx Server Prod")
+// here, because OpsSwift server names are display names ("Nginx Server Prod")
 // and not DNS labels, and the k8s version would have missed that one entirely.
 const PROD_RE = /(^|[\s\-_./:])(prod|production|prd|live)([\s\-_./:]|$)/i
 
@@ -267,7 +267,7 @@ export interface RiskExplanation {
  * `sentence` is never empty and never omitted, which is the point. A band that
  * renders a reason when it has one and blank space when it does not teaches the
  * operator that blank space means "nothing to say", when what it actually means
- * is "OpsMaxx did not record why". Those are opposite readings of the same
+ * is "OpsSwift did not record why". Those are opposite readings of the same
  * pixels.
  */
 export function explainRisk(s: ApprovalSubject): RiskExplanation {
@@ -327,15 +327,15 @@ const INTENT_INVISIBLE = /[\u0000-\u001F\u007F-\u009F\u00AD\u200B-\u200F\u202A-\
 // complete rule rather than a sample of one. The bracket form is capped short
 // so it cannot swallow INTENT_REDACTION.
 const INTENT_SPEAKER_LABEL =
-  /^\s*(?:\[[^\]]{0,24}\]|(?:opsmaxx|system|admin(?:istrator)?|operator|user|security|note|notice|warning|important|assistant|claude|codex)\s*[:>»\-–—])\s*/i
+  /^\s*(?:\[[^\]]{0,24}\]|(?:opsswift|opsmaxx|system|admin(?:istrator)?|operator|user|security|note|notice|warning|important|assistant|claude|codex)\s*[:>»\-–—])\s*/i
 
 // Claims that the decision has already been made. These are the sentences that
 // would actually change an operator's answer, and every one of them is a lie
-// by construction: OpsMaxx is asking BECAUSE nothing has approved this. They
+// by construction: OpsSwift is asking BECAUSE nothing has approved this. They
 // are replaced rather than deleted, so the operator can see that the agent
 // asking for permission also tried to tell them permission was not needed.
 const INTENT_IMPERSONATION: RegExp[] = [
-  /\bopsmaxx\b[^.!?]{0,60}?\b(?:approv\w*|authoris\w*|authoriz\w*|verified|whitelist\w*|permits?|allows?)\b[^.!?]*/gi,
+  /\b(?:opsswift|opsmaxx)\b[^.!?]{0,60}?\b(?:approv\w*|authoris\w*|authoriz\w*|verified|whitelist\w*|permits?|allows?)\b[^.!?]*/gi,
   /\b(?:pre-?approved|auto-?approved|already approved|previously approved|no approval (?:is )?(?:required|needed)|approval (?:is )?not (?:required|needed))\b[^.!?]*/gi,
   /\b(?:the )?(?:user|operator|admin(?:istrator)?|human)\b[^.!?]{0,40}?\b(?:already )?(?:approved|authoris\w+|authoriz\w+|consented|signed off)\b[^.!?]*/gi
 ]
@@ -344,11 +344,11 @@ const INTENT_IMPERSONATION: RegExp[] = [
  * An agent's stated intent, made safe to put on the screen — or null.
  *
  * WHY THIS EXISTS AT ALL. Every other string in this dialog is written by
- * OpsMaxx or read off a host. This one is written by the party asking for
+ * OpsSwift or read off a host. This one is written by the party asking for
  * permission, which makes the justification the human reads an input controlled
  * by the thing being judged. That is a prompt-injection surface pointed at a
  * person rather than at a model, and the person is the last check in the chain:
- * if this text can make itself look like OpsMaxx's own copy, the agent gets
+ * if this text can make itself look like OpsSwift's own copy, the agent gets
  * to write the sentence that decides its own approval.
  *
  * So the intent is treated as DATA end to end. Nothing here is parsed, matched
@@ -361,7 +361,7 @@ const INTENT_IMPERSONATION: RegExp[] = [
  *     imitates the dialog's own rows cannot be built;
  *   - phrases claiming the action was already approved are replaced with a
  *     visible marker rather than dropped silently;
- *   - a leading speaker label ("OpsMaxx:", "[SYSTEM]", "Warning —") is
+ *   - a leading speaker label ("OpsSwift:", "[SYSTEM]", "Warning —") is
  *     stripped, so the quotation cannot open in somebody else's voice;
  *   - the result is capped at INTENT_MAX_CHARS.
  *
@@ -379,7 +379,7 @@ export function sanitizeAgentIntent(raw: unknown): string | null {
   // the gap left by a stripped label — reaches the screen.
   let s = raw.replace(INTENT_INVISIBLE, ' ')
   for (const rx of INTENT_IMPERSONATION) s = s.replace(rx, INTENT_REDACTION)
-  // Loop: "[SYSTEM] OpsMaxx: ..." is two labels, and stripping one would
+  // Loop: "[SYSTEM] OpsSwift: ..." is two labels, and stripping one would
   // leave the other doing exactly the job the strip was for.
   for (;;) {
     const next = s.replace(INTENT_SPEAKER_LABEL, '')
@@ -419,7 +419,7 @@ interface CommandShape {
 }
 
 // Small on purpose. Every entry here is a shape whose consequence is the same
-// on every Linux host OpsMaxx talks to; anything whose effect depends on the
+// on every Linux host OpsSwift talks to; anything whose effect depends on the
 // host's own configuration is left out, because a confident sentence about
 // something that varies is worse than NO_CONSEQUENCE_TEXT.
 const COMMAND_SHAPES: CommandShape[] = [
@@ -593,7 +593,7 @@ export function describeConsequence(s: ApprovalSubject): Consequence {
     // build starts on is most of the blast radius, because that is the estate
     // it can reach and the credentials it runs with.
     //
-    // What this sentence must not do is describe the pipeline. OpsMaxx has
+    // What this sentence must not do is describe the pipeline. OpsSwift has
     // never read it and has no way to: naming a deploy, an environment or a
     // target here would be a guess printed in the one place an operator is
     // entitled to trust. So it names what is certain -- something starts, we
@@ -619,7 +619,7 @@ export function describeConsequence(s: ApprovalSubject): Consequence {
  * The workspace-wide reads. Each is named by its tool, because one capability
  * (fleetRead) covers three reads that disclose very different things, and the
  * sentence is the operator's only way to tell them apart. Every one of them
- * reads what OpsMaxx already holds and opens no connection.
+ * reads what OpsSwift already holds and opens no connection.
  */
 function describeWorkspaceConsequence(s: ApprovalSubject): Consequence {
   const ws = approvalTarget(s)
@@ -806,7 +806,7 @@ export function contentPreview(redacted: string): ContentPreview {
   let head = redacted.slice(0, PREVIEW_MAX_CHARS).split('\n').slice(0, PREVIEW_MAX_LINES).join('\n')
   // Nor on part of a redaction marker. Nothing leaks -- the secret was replaced
   // before the cut -- but "[REDAC" reads as file content rather than as
-  // OpsMaxx having removed something, so the marker is shown whole or not at
+  // OpsSwift having removed something, so the marker is shown whole or not at
   // all. REDACTION_MARKER must match PLACEHOLDER in secretRedaction.ts; the
   // preview tests run real redactOutput output through here to hold them to it.
   const open = head.lastIndexOf('[')

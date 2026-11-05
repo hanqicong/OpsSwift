@@ -147,11 +147,11 @@ describe('who a clipboard came from', () => {
     expect(clip.read()).toBe('')
   })
 
-  it('from OpsMaxx 0.59.0 is refused with a reason that names the fix', async () => {
+  it('from OpsSwift 0.59.0 is refused with a reason that names the fix', async () => {
     const legacy = Buffer.concat([Buffer.from('addy-obj-v1\0', 'latin1'), Buffer.alloc(64)]).toString('base64')
     const r = await receiveClipboard(depsWithMail([{ id: 1, sealed: legacy }]))
     expect(r.applied).toBe(false)
-    expect(r.reason).toMatch(/Update OpsMaxx on the sending device/)
+    expect(r.reason).toMatch(/Update OpsSwift on the sending device/)
     expect(clip.read()).toBe('')
   })
 

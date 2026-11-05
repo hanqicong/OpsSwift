@@ -5,7 +5,7 @@
  * login: `az ssh config` writes a private key and a `*-cert.pub` beside it, and
  * the server accepts the certificate rather than any key we registered. That is
  * the whole point of the model - nothing is enrolled on the machine, and access
- * expires on its own - and it is also why OpsMaxx could not do it before.
+ * expires on its own - and it is also why OpsSwift could not do it before.
  *
  * ssh2 has no certificate support. What it does have is a parsed-key interface
  * narrow enough to stand in for: `authPK` reads exactly `key.type` and

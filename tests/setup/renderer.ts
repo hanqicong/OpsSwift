@@ -29,7 +29,7 @@ import { afterEach } from 'vitest'
 import { cleanup } from '@testing-library/react'
 
 /** Whatever slice of the preload bridge a test needs. Deliberately loose:
- *  OpsMaxxApi is several hundred methods and a test that had to satisfy it
+ *  OpsSwiftApi is several hundred methods and a test that had to satisfy it
  *  would stub the whole app to assert on one button. */
 export type BridgeStub = Record<string, unknown>
 

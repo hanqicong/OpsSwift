@@ -386,7 +386,7 @@ describe('what was run the last three times it fired', () => {
     unreachable: 'failed',
     unhealthy: 'failed',
     // Not failures. Each is a case where nobody watched the command end:
-    // `abandoned` is OpsMaxx stopping, `cancelled` never started, and
+    // `abandoned` is OpsSwift stopping, `cancelled` never started, and
     // `orphaned` lost the wrapper's pid before an `rc` was written — which
     // `src/shared/jobs.ts` says may be a command that finished a microsecond
     // before it could record so, or one that died mid-upgrade.

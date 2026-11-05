@@ -39,7 +39,7 @@ import { englishT } from '../../../shared/i18n'
  *
  * The defaults are GitHub's dark set, matching the normals that were already
  * here, and a program that asks for red gets red in every theme. A theme may
- * still restate a slot as `--ansi-<slot>` in tokens.css -- OpsMaxx Light does,
+ * still restate a slot as `--ansi-<slot>` in tokens.css -- OpsSwift Light does,
  * because GitHub's dark whites and yellows are unreadable on a light ground.
  * The literal stays as the fallback, so a theme that says nothing keeps it.
  */
@@ -53,9 +53,9 @@ import { englishT } from '../../../shared/i18n'
 export function brandBanner(): string {
   const hex = getComputedStyle(document.documentElement).getPropertyValue('--accent-ink').trim()
   const m = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex)
-  if (!m) return '\x1b[1mOpsMaxx\x1b[0m'
+  if (!m) return '\x1b[1mOpsSwift\x1b[0m'
   const [r, g, b] = m.slice(1).map((x) => parseInt(x, 16))
-  return `\x1b[1;38;2;${r};${g};${b}mOpsMaxx\x1b[0m`
+  return `\x1b[1;38;2;${r};${g};${b}mOpsSwift\x1b[0m`
 }
 
 /**

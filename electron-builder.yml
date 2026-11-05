@@ -1,11 +1,8 @@
-appId: com.opsmaxx.app
-productName: OpsMaxx
-copyright: Copyright © 2026 OpsMaxx contributors
+appId: com.lyitech.opsswift
+productName: OpsSwift
+copyright: Copyright © 2026 OpsSwift maintainers and OpsMaxx contributors
 
-publish:
-  provider: github
-  owner: OpsMaxx
-  repo: OpsMaxx
+publish: null
 
 directories:
   buildResources: build
@@ -119,10 +116,8 @@ asarUnpack:
 # The app still calls setAsDefaultProtocolClient at every launch — this is what
 # makes a link clickable before the app has ever run, and that is what makes it
 # work for the machine that has nothing set up yet.
-protocols:
-  - name: OpsMaxx sync link
-    schemes:
-      - opsmaxx
+# Do not take over the official app's opsmaxx:// association.
+protocols: []
 
 win:
   icon: build/icon.ico
@@ -277,14 +272,14 @@ mac:
   # Anyone building an x64 dmg by hand needs the same step.
   target:
     - target: dmg
-      arch: [x64, arm64]
+      arch: [arm64]
     # The auto-updater's artifact, not a second thing for humans to download.
     # Squirrel.Mac picks what it applies with findFile(files, "zip", ["pkg",
     # "dmg"]) — it looks for a zip and will not fall back to the dmg. A
     # dmg-only build therefore cannot self-update even with a valid Developer
     # ID, which is why the certificate alone was never the whole story.
     - target: zip
-      arch: [x64, arm64]
+      arch: [arm64]
 
 dmg:
   artifactName: ${productName}-${version}-${arch}.${ext}

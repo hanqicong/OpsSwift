@@ -1802,7 +1802,7 @@ export function parseAccessCollection(output: string, deps: ParseAccessDeps): Ho
     else sessionKeyFingerprints.push(fp)
   }
   // A session the host says used no key at all leaves nothing to compare
-  // against, and the account OpsMaxx connects as is not where this build
+  // against, and the account OpsSwift connects as is not where this build
   // spends a maybe. Treated as "cannot tell", which is the conservative branch.
   if (sessionKeyFingerprints.length === 0) sessionKeysCertain = false
 
@@ -2503,7 +2503,7 @@ export const ACCESS_WRITE_DISABLED_REASON = englishT('shared.access.write.disabl
  * refusal after somebody has selected twelve hosts. "Revoke a key across the
  * fleet" describes something broader than what this builds: the staged command
  * resolves `$HOME/.ssh/authorized_keys` on the host, so it can only ever edit
- * the account OpsMaxx connects as — and rule 1 blocks it even there unless
+ * the account OpsSwift connects as — and rule 1 blocks it even there unless
  * sshd will say which key the session is authenticated with, which is off by
  * default.
  */
@@ -2760,7 +2760,7 @@ export function planAccessChange(req: AccessChangeRequest): AccessChangePlan {
       if (protect.has(key)) {
         block(
           'is-session-key',
-          `that key is the one this session is authenticated with on ${t.serverName}. Removing it would end OpsMaxx's own way back into the server, so it is refused here rather than confirmed anywhere.`
+          `that key is the one this session is authenticated with on ${t.serverName}. Removing it would end OpsSwift's own way back into the server, so it is refused here rather than confirmed anywhere.`
         )
         continue
       }
@@ -2770,7 +2770,7 @@ export function planAccessChange(req: AccessChangeRequest): AccessChangePlan {
       if (!t.access.sessionKeysCertain && t.access.collectedAs === t.user) {
         block(
           'session-key-unknown',
-          `${t.serverName} did not name every key this session authenticated with — either sshd's ExposeAuthInfo is off, or what it said could not be turned into a fingerprint exactly — and this would edit the keys of the very account OpsMaxx connects as. Without that fact nothing can prove the key being removed is not the one holding this connection open.`
+          `${t.serverName} did not name every key this session authenticated with — either sshd's ExposeAuthInfo is off, or what it said could not be turned into a fingerprint exactly — and this would edit the keys of the very account OpsSwift connects as. Without that fact nothing can prove the key being removed is not the one holding this connection open.`
         )
         continue
       }
@@ -3442,7 +3442,7 @@ export function accessDisarmCommand(path: string, token: string): string {
 //                                  being rejected, and the operator has learned
 //                                  something real about that host.
 //   reverted-unconfirmed         — nobody ever told the host either way, so it
-//                                  did what it promised. OpsMaxx was closed,
+//                                  did what it promised. OpsSwift was closed,
 //                                  or the network went, or the confirmation
 //                                  itself could not be written. NOTHING IS
 //                                  WRONG WITH THE CHANGE. Reporting this as a

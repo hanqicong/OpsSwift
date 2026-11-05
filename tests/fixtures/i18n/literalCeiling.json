@@ -17,7 +17,6 @@
   "components/http/request/AuthEditor.tsx": 1,
   "components/http/ws/WsRequestPane.tsx": 3,
   "components/kubernetes/KubernetesPanel.tsx": 16,
-  "components/layout/TitleBar.tsx": 2,
   "components/monitor/AccessPanel.tsx": 2,
   "components/monitor/CronPanel.tsx": 1,
   "components/monitor/DriftPanel.tsx": 1,

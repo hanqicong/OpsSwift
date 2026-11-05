@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
  * The theme actually being painted: the root's `data-theme`, never 'system'.
  *
  * It returns the painted theme itself rather than 'dark' or 'light'. It did
- * the latter, and OpsMaxx and Classic dark are both dark -- so switching
+ * the latter, and OpsSwift and Classic dark are both dark -- so switching
  * between them changed nothing this reported, and every open terminal kept the
  * previous theme's background until it was closed.
  *

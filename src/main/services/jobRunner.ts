@@ -71,7 +71,7 @@ import { redactOutput } from './secretRedaction'
 //  3. OUTPUT IS COALESCED PER TICK, like ssh.ts's interactive terminal, and NOT
 //     per line like logTail. `apt` writes a progress line per package; one IPC
 //     message each is a flood the renderer does not survive, and the user's
-//     conclusion is "OpsMaxx froze". The per-host rate limit counts what it
+//     conclusion is "OpsSwift froze". The per-host rate limit counts what it
 //     dropped and says so on the next event — logTail's model, because a gap
 //     nobody mentions reads as "the upgrade hung".
 //
@@ -95,7 +95,7 @@ export interface JobExecRequest {
   command: string
   timeoutMs: number
   /** Which job and host this is, so a detached executor can name a marker
-   *  directory that a different OpsMaxx can find from the row alone. */
+   *  directory that a different OpsSwift can find from the row alone. */
   jobId: string
   serverId: string
   serverName: string
@@ -261,7 +261,7 @@ export interface JobRunnerDeps {
   /**
    * Secret values resolved for this host, blanked out of its output before it
    * is written down. Same contract as recordAudit's: the pattern rules in
-   * secretRedaction.ts always apply; this adds the values OpsMaxx already
+   * secretRedaction.ts always apply; this adds the values OpsSwift already
    * holds for the servers involved.
    */
   knownSecrets?: (cfg: unknown) => string[]
@@ -531,7 +531,7 @@ export class JobRunner {
           // `cancelled`, whose label is "not run" — NOT `abandoned`.
           //
           // `abandoned` is defined one line above and in shared/jobs.ts as
-          // "OpsMaxx stopped while this host was RUNNING": the channel went
+          // "OpsSwift stopped while this host was RUNNING": the channel went
           // and the remote process was sent SIGHUP. Nothing ever touched this
           // host, so there is no channel and no SIGHUP, and filing it under
           // `abandoned` inflates every summary with hosts that were never at
@@ -544,7 +544,7 @@ export class JobRunner {
           this.deps.store.updateJobTarget(job.id, t.serverId, {
             state: 'skipped',
             outcome: 'cancelled',
-            error: 'OpsMaxx stopped before this server was reached.',
+            error: 'OpsSwift stopped before this server was reached.',
             endedAt: at
           })
         }
@@ -1358,7 +1358,7 @@ export class JobRunner {
     // A reclaimed host rejoins at the step its marker names, and the steps
     // BEFORE it are not re-run. Re-running them would be the worst possible
     // reading of "resume": step 1 of an upgrade has already happened on that
-    // machine, and doing it twice because OpsMaxx restarted is OpsMaxx
+    // machine, and doing it twice because OpsSwift restarted is OpsSwift
     // causing the damage it exists to avoid.
     const resumeAt = resume?.handle.step ?? 1
     for (const step of req.spec.steps) {

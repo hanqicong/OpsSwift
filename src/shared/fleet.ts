@@ -179,7 +179,7 @@ export const FLEET_INTERVAL_MAX_MS = 3_600_000
  * end, so marking the far end catches all of them.
  *
  * What it buys is a distinction the panel could not previously draw: a hole in
- * a line because a server went quiet, and a hole because OpsMaxx was not
+ * a line because a server went quiet, and a hole because OpsSwift was not
  * running, are different facts and only one of them is about the server. Two
  * rows per launch and per wake, in a table that already holds alerts for four
  * hundred days -- which is why an event is the right carrier and a series

@@ -485,7 +485,7 @@ describe('resuming after a restart', () => {
     await settle()
 
     // FINISHING IS NOT AN ACTION. The command is running on that machine
-    // whether or not OpsMaxx is watching; refusing to read its output would
+    // whether or not OpsSwift is watching; refusing to read its output would
     // throw away the exit status of something already happening and leave the
     // marker directory behind.
     expect(h.reached('a'), 'the running server is still followed').toBe(true)

@@ -36,7 +36,7 @@ export interface MachineGrant {
   /**
    * ISO 8601, when the grant was first recorded.
    *
-   * Absent for every grant made before OpsMaxx started recording it, which is
+   * Absent for every grant made before OpsSwift started recording it, which is
    * every grant that already exists on a user's machine. The list says so
    * rather than showing a blank, because "granted at some unknown time" and
    * "granted just now" are not the same fact.

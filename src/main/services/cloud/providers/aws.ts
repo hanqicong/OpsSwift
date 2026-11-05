@@ -162,7 +162,7 @@ interface Tunnel {
  *
  * Normally this command is used as an OpenSSH ProxyCommand, speaking the
  * tunnel over its own stdio. We ask for `--local-port` instead so that ssh2 can
- * dial it like any other address - which is what keeps the rest of OpsMaxx
+ * dial it like any other address - which is what keeps the rest of OpsSwift
  * (SFTP, metrics, Docker) working against an EICE instance rather than only a
  * terminal.
  */

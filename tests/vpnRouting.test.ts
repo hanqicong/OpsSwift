@@ -132,7 +132,7 @@ default via fe80::1 dev eth0 proto ra metric 1024 expires 1798sec hoplimit 64 pr
 
 const WIN_ROUTE_PRINT = `===========================================================================
 Interface List
- 24...00 00 00 00 00 00 00 e0 ......OpsMaxx Tunnel
+ 24...00 00 00 00 00 00 00 e0 ......OpsSwift Tunnel
  12...ac de 48 00 11 22 ......Intel(R) Ethernet Connection
   1...........................Software Loopback Interface 1
 ===========================================================================
@@ -162,7 +162,7 @@ Idx     Met         MTU          State                Name
 ---  ----------  ----------  ------------  ---------------------------
   1          75  4294967295  connected     Loopback Pseudo-Interface 1
  12          25        1500  connected     Ethernet
- 24           5        1420  connected     OpsMaxx Tunnel
+ 24           5        1420  connected     OpsSwift Tunnel
 `
 
 const WIN_SHOW_ROUTE_V4 = `
@@ -175,7 +175,7 @@ No       System    256  127.0.0.0/8                 1  Loopback Pseudo-Interface
 
 // The same table after our own add landed: the prefix is on index 24, which is
 // what a retried add collides with.
-const WIN_SHOW_ROUTE_V4_OURS = WIN_SHOW_ROUTE_V4.replace('31  OtherVPN', '24  OpsMaxx Tunnel')
+const WIN_SHOW_ROUTE_V4_OURS = WIN_SHOW_ROUTE_V4.replace('31  OtherVPN', '24  OpsSwift Tunnel')
 
 const WIN_SHOW_ROUTE_V6 = `
 Publish  Type      Met  Prefix                    Idx  Gateway/Interface Name
@@ -695,7 +695,7 @@ describe('win32 routes', () => {
     expect(parseShowInterfaces(WIN_SHOW_INTERFACES)).toEqual({
       'Loopback Pseudo-Interface 1': 1,
       Ethernet: 12,
-      'OpsMaxx Tunnel': 24
+      'OpsSwift Tunnel': 24
     })
   })
 
@@ -731,7 +731,7 @@ describe('win32 routes', () => {
     winReads()
     const snap = await mgr().snapshot()
     expect(snap.defaults.map((d) => d.destination)).toEqual(['0.0.0.0/0', '::/0'])
-    expect(snap.interfaceIndex?.['OpsMaxx Tunnel']).toBe(24)
+    expect(snap.interfaceIndex?.['OpsSwift Tunnel']).toBe(24)
   })
 
   it('produces the exact argv for apply, addressing the interface by index', async () => {
@@ -739,9 +739,9 @@ describe('win32 routes', () => {
     const rec = recorder()
     await mgr().apply(
       [
-        { destination: '10.8.0.0/24', interfaceName: 'OpsMaxx Tunnel' },
-        { destination: 'fd00::/64', interfaceName: 'OpsMaxx Tunnel' },
-        { destination: '0.0.0.0/0', interfaceName: 'OpsMaxx Tunnel', gateway: '10.8.0.1', metric: 5 }
+        { destination: '10.8.0.0/24', interfaceName: 'OpsSwift Tunnel' },
+        { destination: 'fd00::/64', interfaceName: 'OpsSwift Tunnel' },
+        { destination: '0.0.0.0/0', interfaceName: 'OpsSwift Tunnel', gateway: '10.8.0.1', metric: 5 }
       ],
       rec.ctx
     )
@@ -779,10 +779,10 @@ describe('win32 routes', () => {
     const rec = recorder()
     rec.result = { code: 1 }
     await expect(
-      mgr().apply([{ destination: '10.8.0.0/24', interfaceName: 'OpsMaxx Tunnel' }], rec.ctx)
+      mgr().apply([{ destination: '10.8.0.0/24', interfaceName: 'OpsSwift Tunnel' }], rec.ctx)
     ).rejects.toMatchObject({
       code: 'internal',
-      detail: 'Could not add route 10.8.0.0/24 on OpsMaxx Tunnel: netsh exited 1'
+      detail: 'Could not add route 10.8.0.0/24 on OpsSwift Tunnel: netsh exited 1'
     })
   })
 
@@ -798,7 +798,7 @@ describe('win32 routes', () => {
       stderr: 'Configuration of the route failed.\nThe object already exists.'
     }
     await expect(
-      mgr().apply([{ destination: '10.8.0.0/24', interfaceName: 'OpsMaxx Tunnel' }], rec.ctx)
+      mgr().apply([{ destination: '10.8.0.0/24', interfaceName: 'OpsSwift Tunnel' }], rec.ctx)
     ).resolves.toBeUndefined()
   })
 
@@ -813,7 +813,7 @@ describe('win32 routes', () => {
     const rec = recorder()
     rec.result = { code: 1 }
     await expect(
-      mgr().apply([{ destination: '10.8.0.0/24', interfaceName: 'OpsMaxx Tunnel' }], rec.ctx)
+      mgr().apply([{ destination: '10.8.0.0/24', interfaceName: 'OpsSwift Tunnel' }], rec.ctx)
     ).resolves.toBeUndefined()
   })
 
@@ -829,7 +829,7 @@ describe('win32 routes', () => {
     const rec = recorder()
     rec.result = { code: 1 }
     await expect(
-      mgr().apply([{ destination: '10.8.0.1/24', interfaceName: 'OpsMaxx Tunnel' }], rec.ctx)
+      mgr().apply([{ destination: '10.8.0.1/24', interfaceName: 'OpsSwift Tunnel' }], rec.ctx)
     ).resolves.toBeUndefined()
     // And the add itself asked for the masked prefix, so the route that lands is
     // the one the table will print back.
@@ -845,7 +845,7 @@ describe('win32 routes', () => {
     const rec = recorder()
     rec.result = { code: 1 }
     await expect(
-      mgr().apply([{ destination: '10.8.0.0/24', interfaceName: 'OpsMaxx Tunnel' }], rec.ctx)
+      mgr().apply([{ destination: '10.8.0.0/24', interfaceName: 'OpsSwift Tunnel' }], rec.ctx)
     ).rejects.toMatchObject({ code: 'internal' })
   })
 
@@ -869,8 +869,8 @@ describe('win32 routes', () => {
         platform: 'win32',
         capturedAt: 0,
         defaults: [],
-        planned: [{ destination: '10.8.0.0/24', interfaceName: 'OpsMaxx Tunnel' }],
-        interfaceIndex: { 'OpsMaxx Tunnel': 24 }
+        planned: [{ destination: '10.8.0.0/24', interfaceName: 'OpsSwift Tunnel' }],
+        interfaceIndex: { 'OpsSwift Tunnel': 24 }
       },
       rec.ctx
     )
@@ -888,7 +888,7 @@ describe('win32 routes', () => {
         platform: 'win32',
         capturedAt: 0,
         defaults: [],
-        planned: [{ destination: '10.8.0.0/24', interfaceName: 'OpsMaxx Tunnel' }]
+        planned: [{ destination: '10.8.0.0/24', interfaceName: 'OpsSwift Tunnel' }]
       },
       rec.ctx
     )
@@ -897,7 +897,7 @@ describe('win32 routes', () => {
 
   it('compares interfaces by index when detecting a conflict', async () => {
     winReads()
-    const routes: RouteSpec[] = [{ destination: '10.8.0.0/24', interfaceName: 'OpsMaxx Tunnel' }]
+    const routes: RouteSpec[] = [{ destination: '10.8.0.0/24', interfaceName: 'OpsSwift Tunnel' }]
     const conflicts = await mgr().conflicts(routes)
     const claimed = conflicts.filter((c) => c.kind === 'prefix-claimed')
     expect(claimed).toHaveLength(1)
@@ -912,7 +912,7 @@ describe('win32 routes', () => {
     // prefix that would actually be installed.
     winReads()
     const conflicts = await mgr().conflicts([
-      { destination: '10.8.0.1/24', interfaceName: 'OpsMaxx Tunnel' }
+      { destination: '10.8.0.1/24', interfaceName: 'OpsSwift Tunnel' }
     ])
     const claimed = conflicts.filter((c) => c.kind === 'prefix-claimed')
     expect(claimed).toHaveLength(1)

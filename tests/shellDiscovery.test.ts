@@ -198,7 +198,7 @@ describe('sanitised environment', () => {
     const env = sanitisedEnv()
     expect(env.TERM).toBe('xterm-256color')
     expect(env.COLORTERM).toBe('truecolor')
-    expect(env.TERM_PROGRAM).toBe('OpsMaxx')
+    expect(env.TERM_PROGRAM).toBe('OpsSwift')
     // Comes from app.getVersion(). Asserting the shape rather than the mock's
     // literal: what matters is that a version reaches the shell, not which one,
     // and pinning the value would make a release bump break this test.
@@ -227,7 +227,7 @@ describe('sanitised environment', () => {
 describe('the app puts nothing secret into its own environment', () => {
   it('makes no process.env assignments outside the dev renderer URL', async () => {
     // sanitisedEnv() forwards the parent environment wholesale, so it is only
-    // safe as long as OpsMaxx never parks a credential, a vault key or the
+    // safe as long as OpsSwift never parks a credential, a vault key or the
     // MCP pairing token in process.env. Nothing enforces that but this.
     const files = ['src/main/index.ts']
     const assignments: string[] = []

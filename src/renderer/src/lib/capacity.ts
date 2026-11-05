@@ -110,7 +110,7 @@ export function shortDate(ts: number): string {
  * What to do about a window that is mostly one clump, said once.
  *
  * THIS REPLACES A SENTENCE THAT WAS AN ACCUSATION. The old one was attached to
- * every "not enough data" refusal and told the operator that quitting OpsMaxx
+ * every "not enough data" refusal and told the operator that quitting OpsSwift
  * broke the run, because the forecaster fitted one unbroken run and a laptop
  * shut overnight severed it. That was true of the code and it was the code that
  * was wrong: a disk keeps filling while the app is shut, so the reading after

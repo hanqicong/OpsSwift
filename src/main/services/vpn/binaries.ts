@@ -27,7 +27,7 @@ import {
 //    or symlinks out of an allowlisted root (E45).
 //
 // `resolveEngineBinary` is the two in order, and is what the OpenVPN driver
-// calls: OpsMaxx now ships `openvpn` on macOS and Linux, but a Windows
+// calls: OpsSwift now ships `openvpn` on macOS and Linux, but a Windows
 // build has none — and someone may still want the copy they installed
 // themselves. See its own comment for why the ordering is not symmetric.
 
@@ -226,9 +226,9 @@ interface Candidate {
  *    not a drop-in for `openvpn` at all: different arguments entirely.
  *
  * So they are detected and named, and nothing more. "Tunnelblick is installed,
- * but OpsMaxx needs an `openvpn` program of its own" is a sentence somebody
+ * but OpsSwift needs an `openvpn` program of its own" is a sentence somebody
  * can act on; "not found" on a machine with a working VPN client in the Dock
- * reads as OpsMaxx being broken.
+ * reads as OpsSwift being broken.
  */
 export async function otherVpnClients(): Promise<string[]> {
   const probes: [string, string][] =
@@ -277,11 +277,11 @@ async function openVpnClientSentence(): Promise<string> {
   return (
     `${others.join(' and ')} ${others.length > 1 ? 'are' : 'is'} installed, but ${
       others.length > 1 ? 'their' : 'its'
-    } copy of OpenVPN belongs to that app and OpsMaxx does not run it.`
+    } copy of OpenVPN belongs to that app and OpsSwift does not run it.`
   )
 }
 
-/** What a tunnel interface is called, on every platform OpsMaxx runs on.
+/** What a tunnel interface is called, on every platform OpsSwift runs on.
  *  Shared by the two sources below so they cannot drift into disagreeing
  *  about which names count. */
 const TUNNEL_NAME = /^(utun|tun|tap|wg|ppp)\d*/i
@@ -567,7 +567,7 @@ function kindOf(name: string): VpnKind {
 }
 
 /**
- * Locate and integrity-check a binary OpsMaxx ships. Throws rather than
+ * Locate and integrity-check a binary OpsSwift ships. Throws rather than
  * returning an unavailable `VpnEngineInfo` so a caller cannot accidentally
  * treat a tampered binary as merely absent; `VpnDriver.probe()` catches and
  * shapes it for the UI.
@@ -697,7 +697,7 @@ export async function resolveSystem(
     : 'the standard install locations'
   const parts = [
     win32
-      ? `Looked in ${where}. OpsMaxx does not search PATH on Windows.`
+      ? `Looked in ${where}. OpsSwift does not search PATH on Windows.`
       : `Looked in ${where} and on PATH.`
   ]
   // The distinction the reader needs first: a refused candidate means the
@@ -752,7 +752,7 @@ function loginPathCaveat(name: string): string {
   // would contradict the sentence next to it.
   if (name !== 'openvpn' || process.platform === 'win32') return ''
   return (
-    'OpsMaxx searched the PATH it was started with, which is not your login shell’s — ' +
+    'OpsSwift searched the PATH it was started with, which is not your login shell’s — ' +
     'a desktop launcher hands the app the session’s PATH, so an openvpn installed by nix, ' +
     'asdf or into a custom prefix answers `which openvpn` in a terminal and is not found ' +
     'here. Use “Set the path” to point at it.'
@@ -778,7 +778,7 @@ async function installAdvice(name: string): Promise<string> {
   // comment says it plainly — "installing OpenVPN is not what fixes it".
   //
   // The distribution detection below is kept rather than deleted: it is the
-  // correct answer for any engine on any platform OpsMaxx does not bundle for,
+  // correct answer for any engine on any platform OpsSwift does not bundle for,
   // which is the case this whole branch exists to serve.
   if (isEngineBundledOn(name, process.platform)) return ''
   if (process.platform === 'darwin') return 'You can install one with `brew install openvpn`.'
@@ -805,7 +805,7 @@ async function installAdvice(name: string): Promise<string> {
 }
 
 /**
- * Locate an engine: the copy OpsMaxx ships if there is one, otherwise the
+ * Locate an engine: the copy OpsSwift ships if there is one, otherwise the
  * copy the user installed.
  *
  * The order is not symmetric, and each step is a separate decision:
@@ -817,7 +817,7 @@ async function installAdvice(name: string): Promise<string> {
  *     manifest check runs before the first exec. A system install can be any
  *     version, patched or not, and on Windows arrives from a `PATH` we refuse
  *     to search at all.
- *  3. **Then the system allowlist.** OpsMaxx ships `openvpn` on macOS and
+ *  3. **Then the system allowlist.** OpsSwift ships `openvpn` on macOS and
  *     Linux only, so on Windows this is the sole path — and on the other two
  *     it still serves the person who deliberately runs their distribution's
  *     build.
@@ -841,7 +841,7 @@ export async function resolveEngineBinary(
   let bundledProblem: string
   try {
     // The bundled copy needs this as much as a system one — arguably more:
-    // OpsMaxx ships its own openvpn on macOS and Linux, which is exactly
+    // OpsSwift ships its own openvpn on macOS and Linux, which is exactly
     // where Tunnelblick and Viscosity also live.
     return await withAdvisories(resolveBundled(name))
   } catch (e) {
@@ -892,7 +892,7 @@ async function describe(kind: VpnKind, path: string): Promise<VpnEngineInfo> {
 /** What else on this machine might be in the way. Empty on the ordinary
  *  machine, which is why it is a list and not a flag.
  *
- *  Empty is also what a machine OpsMaxx cannot see into returns, and the two
+ *  Empty is also what a machine OpsSwift cannot see into returns, and the two
  *  are not distinguishable from here — see `activeTunnelInterfaces`, which now
  *  reads the routing table as well but is still blind to a macOS split-tunnel
  *  NetworkExtension VPN. So the list says what was found and never that nothing
@@ -918,7 +918,7 @@ export async function coexistenceAdvisories(): Promise<string[]> {
   if (up.length) {
     out.push(
       `${up.join(', ')} already ${up.length > 1 ? 'carry' : 'carries'} traffic, ` +
-        'so something on this machine has a tunnel up. OpsMaxx cannot tell what owns it; ' +
+        'so something on this machine has a tunnel up. OpsSwift cannot tell what owns it; ' +
         'if both claim the default route, the last one to start wins. ' +
         // Said out loud because the reader is about to draw the wrong
         // conclusion from a short list. This used to say that a VPN macOS runs
@@ -987,10 +987,10 @@ async function checkExecutable(candidate: string, allowedRoots: string[]): Promi
         ? 'Point this at the community `openvpn.exe` — usually ' +
           'C:\\Program Files\\OpenVPN\\bin\\openvpn.exe — or clear the field to use an ' +
           'allowlisted system install.'
-        : 'Clear the field to use the copy OpsMaxx ships, or point this at a community ' +
+        : 'Clear the field to use the copy OpsSwift ships, or point this at a community ' +
           '`openvpn` such as the one `brew install openvpn` installs.'
     return (
-      `is ${named}, which cannot run tunnels for OpsMaxx. It does not accept openvpn's ` +
+      `is ${named}, which cannot run tunnels for OpsSwift. It does not accept openvpn's ` +
       'command line and has no management interface, so credentials could not be handed to it ' +
       `and a connection would simply time out. ${instead}`
     )

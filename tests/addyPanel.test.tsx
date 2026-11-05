@@ -235,7 +235,7 @@ describe('what the panel says on a build with no sync', () => {
     // thing a person with no account could do.
     render(<AddyPanel />)
     fireEvent.click(
-      screen.getByRole('button', { name: /already use OpsMaxx on another machine/i })
+      screen.getByRole('button', { name: /already use OpsSwift on another machine/i })
     )
     expect(screen.getByText(/Start on the machine you already use/)).toBeTruthy()
     // And it does not ask for an invite on the way, which is the whole point.

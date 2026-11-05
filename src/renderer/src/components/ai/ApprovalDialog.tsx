@@ -28,7 +28,7 @@ import {
 
 // The approval modal.
 //
-// WHAT THIS SCREEN IS. Everywhere else in OpsMaxx the person confirming an
+// WHAT THIS SCREEN IS. Everywhere else in OpsSwift the person confirming an
 // action is the person who started it, and the dialog only has to describe the
 // blast radius. Here they did not start it, are probably part-way through
 // something else, and have no idea what the agent is pursuing. Before this
@@ -75,7 +75,7 @@ interface Provenance {
  *
  * THE READS STAY, as the fallback for a request that arrives without them —
  * and they stay honest. Both can fail, and when they do this reports null
- * rather than 0: "this session has taken no actions" and "OpsMaxx could not
+ * rather than 0: "this session has taken no actions" and "OpsSwift could not
  * find out" are opposite pieces of news, and rendering the second as the first
  * is exactly the failure this product's rules forbid. The tail read also
  * reports `capped`, so a number derived from a truncated window can never be
@@ -204,7 +204,7 @@ export function sessionGrantShortLabel(request: ApprovalRequest): string | null 
  * What write_file will put on the server, as far as a dialog can show it.
  *
  * EVERY CHARACTER IN THIS FRAME WAS CHOSEN BY THE AGENT, so the frame is built
- * to be unmistakable for anything OpsMaxx says. It is monospace, bordered and
+ * to be unmistakable for anything OpsSwift says. It is monospace, bordered and
  * labelled as the agent's; it has a fixed maximum height and scrolls inside
  * itself, so a megabyte cannot push the answer buttons off the screen; and it
  * is one <pre> of text that React escapes, so nothing in it can become a row,
@@ -598,7 +598,7 @@ export function ApprovalDialog({
             <Row label={t('ai.approval.rowIntent')}>
               {/* THE ONE FIELD ON THIS SCREEN THE AGENT WROTE.
                   Rendered as an attributed quotation, in the agent's name, and
-                  never as OpsMaxx's own voice — the party asking for
+                  never as OpsSwift's own voice — the party asking for
                   permission also writes this sentence, so it is evidence about
                   the agent and never evidence about the action. It arrives
                   already flattened, stripped and capped (sanitizeAgentIntent);

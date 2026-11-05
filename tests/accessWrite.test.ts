@@ -224,7 +224,7 @@ describe('rule 1 — never remove the key this session is on', () => {
   it('refuses to touch the connecting account at all when the server will not say', async () => {
     // ExposeAuthInfo is off by default, so this is what most hosts look like.
     // Without that fact nothing can prove the key being removed is not the one
-    // holding the connection open — so the account OpsMaxx connects as is
+    // holding the connection open — so the account OpsSwift connects as is
     // off limits.
     const plan = revoke({ fingerprint: B_FP, targets: [target(host({ self: 'ops' }), 'ops')] })
     expect(plan.write).toBeNull()
@@ -790,7 +790,7 @@ describe.skipIf(process.platform === 'win32')('the staged write, run for real', 
 
   it('puts the file back by itself when nobody confirms the change', async () => {
     // RULE 2, watched rather than asserted. This is the only property that
-    // survives OpsMaxx being the thing that is locked out.
+    // survives OpsSwift being the thing that is locked out.
     const h = fakeHome([`ssh-ed25519 ${A} alice@laptop`, `ssh-ed25519 ${B} bob@desktop`, ''])
     h.run(buildRevokeKeyCommand({ path: h.file, blob: A, token: 't2', rollbackSeconds: 1 }))
     expect(h.read()).not.toContain(A)

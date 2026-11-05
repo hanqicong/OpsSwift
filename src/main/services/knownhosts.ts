@@ -54,7 +54,7 @@ export function knownHostForget(id: string): void {
 }
 
 /**
- * Prompts that could not be shown because OpsMaxx had no window open, so the
+ * Prompts that could not be shown because OpsSwift had no window open, so the
  * connection error can say that instead of "not accepted" — which reads as
  * though somebody pressed Cancel.
  *

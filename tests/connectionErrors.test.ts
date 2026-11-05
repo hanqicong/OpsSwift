@@ -14,6 +14,12 @@ import type { ConnectionFault } from '../src/renderer/src/lib/connectionError'
 // problem back into a wall of driver output with no way out. Hence the fixtures.
 
 describe('classifyConnectionError', () => {
+  it('does not retry a permanent algorithm mismatch or confuse it with a changed host key', () => {
+    for (const message of ['Handshake failed: no matching key exchange algorithm', 'Handshake failed: no matching host key format', 'Handshake failed: no matching cipher']) {
+      expect(classifyConnectionError(message)).toBe('algorithm')
+      expect(adviseOnError(message)).toMatchObject({ retry: false, edit: true })
+    }
+  })
   it('reads a host key that no longer matches', () => {
     expect(classifyConnectionError('Handshake failed: host key verification failed')).toBe('host-key')
   })

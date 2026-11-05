@@ -10,6 +10,9 @@ import { join } from 'node:path'
 const userDataDir = mkdtempSync(join(tmpdir(), 'opsmaxx-test-'))
 
 export const app = {
+  setAboutPanelOptions: (_options: unknown): void => {},
+  setName: (_name: string): void => {},
+  setPath: (_name: string, _path: string): void => {},
   getPath: (_name: string): string => userDataDir,
   // clientConfig.ts derives the bridge script path from this; outside a
   // packaged build it is the project root, exactly as in `electron-vite dev`.

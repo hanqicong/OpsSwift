@@ -17,6 +17,9 @@ import { askToUse, serverCredentialHeld, serverFieldsNow, SyncHeldError } from '
 // Names only, and only for an error message: a hop is addressed by the
 // friendly name of a saved server, so that is what a failure has to say.
 import { getCachedServer } from './mcpDataCache'
+import { sshCompatibilityFromTags } from '../../shared/networkDevice'
+import { withLegacySshRetry } from './sshCompatibility'
+import { defaultSshCompatibility } from './sshPolicy'
 import { isPastableImage, removePastedImages, uploadPastedImage } from './pastedImage'
 import { isEncryptedPrivateKey, isSecurityKeyPrivateKey, defaultIdentityPath } from './sshKeys'
 import {
@@ -371,8 +374,23 @@ export function setDemoConnector(fn: (hop: SshHop) => Client): void {
 
 async function connectClient(
   hop: SshHop,
-  sock?: NodeJS.ReadableStream,
+  openSocket?: () => Promise<NodeJS.ReadableStream>,
   allowPrompt = true
+): Promise<Client> {
+  const id = (hop as SshHop & { serverId?: string }).serverId
+  const compatibility = hop.sshCompatibility ?? sshCompatibilityFromTags(id ? getCachedServer(id)?.tags : undefined, defaultSshCompatibility())
+  return withLegacySshRetry(compatibility, async (algorithms) => {
+    // A failed SSH handshake consumes its transport. Every retry owns a NEW TCP socket or jump forward.
+    const sock = openSocket ? await openSocket() : undefined
+    return connectClientOnce(hop, sock, allowPrompt, algorithms)
+  })
+}
+
+async function connectClientOnce(
+  hop: SshHop,
+  sock?: NodeJS.ReadableStream,
+  allowPrompt = true,
+  algorithms?: ConnectConfig['algorithms']
 ): Promise<Client> {
   if (demoConnector) return demoConnector(hop)
   // The credentials are settled BEFORE a socket exists. Resolving them can
@@ -455,10 +473,11 @@ async function connectClient(
     // Set by the host verifier below when WE hung up, so the error handler can
     // tell that apart from the host going away.
     let refusedHostKey = false
-    // ...and when that was because OpsMaxx had no window to ask in.
+    // ...and when that was because OpsSwift had no window to ask in.
     let noWindowToAsk = false
 
     const config: ConnectConfig = {
+      ...(algorithms ? { algorithms } : {}),
       host: hop.host,
       port: hop.port || 22,
       username: hop.username,
@@ -602,6 +621,7 @@ async function connectClient(
     )
     client.on('error', (err) => {
       clearDeadline()
+      client.destroy()
       // An unattended caller cannot establish trust for the first time -- that
       // decision needs a person -- so a background sweep against a server the
       // user has only ever reached interactively fails here, silently and
@@ -612,11 +632,11 @@ async function connectClient(
         reject(
           new Error(
             noWindowToAsk
-              ? `OpsMaxx has no trusted host key for ${keyId} and no open window to ask in. ` +
-                'Open OpsMaxx and connect to this server once to confirm its fingerprint.'
+              ? `OpsSwift has no trusted host key for ${keyId} and no open window to ask in. ` +
+                'Open OpsSwift and connect to this server once to confirm its fingerprint.'
               : allowPrompt
                 ? `The host key for ${hop.hostKeyId ?? `${hop.host}:${hop.port || 22}`} was not accepted.`
-                : `OpsMaxx has no trusted host key for ${hop.hostKeyId ?? `${hop.host}:${hop.port || 22}`}, ` +
+                : `OpsSwift has no trusted host key for ${hop.hostKeyId ?? `${hop.host}:${hop.port || 22}`}, ` +
                   'and a background check is not allowed to ask for one. Open a terminal to this server ' +
                   'once and confirm its fingerprint; checks will run on their own after that.'
           )
@@ -905,7 +925,6 @@ async function openChainDirect(
 ): Promise<{ clients: Client[]; client: Client }> {
   const hops = cfg.hops ?? []
   const clients: Client[] = []
-  let sock: NodeJS.ReadableStream | undefined
   try {
     for (let i = 0; i < hops.length; i++) {
       onHop?.(i, hops.length)
@@ -913,17 +932,14 @@ async function openChainDirect(
       // sshTest and the ephemeral forwards a database dials all come through
       // this one, and a chain failure has to say which hop on every path that
       // can show one to a person.
-      const client = await connectClient(hops[i], sock, allowPrompt).catch((err) => {
+      const previous = clients.at(-1)
+      const client = await connectClient(hops[i], previous ? () => hopForward(previous, hops[i], { hop: hops[i - 1], index: i - 1, count: hops.length }) : undefined, allowPrompt).catch((err) => {
         throw atHop(err, hops[i], i, hops.length)
       })
       clients.push(client)
-      sock = await hopForward(client, i + 1 < hops.length ? hops[i + 1] : cfg, {
-        hop: hops[i],
-        index: i,
-        count: hops.length
-      })
     }
-    const client = await connectClient(cfg, sock, allowPrompt)
+    const previous = clients.at(-1)
+    const client = await connectClient(cfg, previous ? () => hopForward(previous, cfg, { hop: hops[hops.length - 1], index: hops.length - 1, count: hops.length }) : undefined, allowPrompt)
     clients.push(client)
     return { clients, client }
   } catch (err) {
@@ -1058,7 +1074,9 @@ export function hopKey(
   const via = hop.vpnProfileId ? `|vpn:${hop.vpnProfileId}` : ''
   const tag = hop.poolTag ? `|${hop.poolTag}` : ''
   const rev = hop.rev ? `|rev:${hop.rev}` : ''
-  return parentKey ? `${parentKey}>${self}${via}${tag}${rev}` : `${self}${via}${tag}${rev}`
+  const compatibility = hop.sshCompatibility ?? sshCompatibilityFromTags(hop.serverId ? getCachedServer(hop.serverId)?.tags : undefined, defaultSshCompatibility())
+  const compat = compatibility !== 'strict' ? `|compat:${compatibility}` : ''
+  return parentKey ? `${parentKey}>${self}${via}${tag}${rev}${compat}` : `${self}${via}${tag}${rev}${compat}`
 }
 
 function destroy(conn: PooledConnection): void {
@@ -1145,8 +1163,7 @@ async function acquireOne(
 
   const promise = (async () => {
     // Reached through the bastion when there is one.
-    const sock = parent ? await hopForward(parent.client, hop, via) : undefined
-    const client = await connectClient(hop, sock, allowPrompt)
+    const client = await connectClient(hop, parent ? () => hopForward(parent.client, hop, via) : undefined, allowPrompt)
     const conn: PooledConnection = {
       key,
       id: mintConnectionId('pooled'),

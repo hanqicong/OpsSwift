@@ -718,11 +718,11 @@ describe('modes on the live bridge', () => {
     expect(queries).toEqual([])
   })
 
-  it('no mode lets an agent save a connection to the OpsMaxx machine itself', async () => {
+  it('no mode lets an agent save a connection to the OpsSwift machine itself', async () => {
     const { c } = await agent('bypass')
     for (const host of ['127.0.0.1', 'localhost', '::1']) {
       const out = await call(c, 'add_server', { name: `Local ${host}`, host, workspaceName: 'Prod' })
-      expect(out, host).toMatch(/^Denied: .*machine OpsMaxx itself runs on/)
+      expect(out, host).toMatch(/^Denied: .*machine OpsSwift itself runs on/)
     }
     expect(asked).toEqual([])
   })

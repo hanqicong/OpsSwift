@@ -381,7 +381,7 @@ export function createOpenVpnDriver(opts: OpenVpnDriverOptions = {}): OpenVpnDri
         )
       }
       if (spec.binaryPath !== undefined && spec.binaryPath.trim() === '') {
-        error('binaryPath', 'empty-path', 'The program path is blank. Clear it to use the OpenVPN that came with OpsMaxx.')
+        error('binaryPath', 'empty-path', 'The program path is blank. Clear it to use the OpenVPN that came with OpsSwift.')
       }
       if (spec.httpProxy) {
         if (!spec.httpProxy.host.trim()) {
@@ -562,7 +562,7 @@ export function createOpenVpnDriver(opts: OpenVpnDriverOptions = {}): OpenVpnDri
         session.proc = await launcher.launch({
           spec: supervised,
           ctx,
-          reason: `OpsMaxx needs administrator rights to bring up the “${profile.name}” VPN tunnel.`,
+          reason: `OpsSwift needs administrator rights to bring up the “${profile.name}” VPN tunnel.`,
           onLine: (line) => ctx.log(line.text, line.stream),
           isConnected: () => session.connected,
           onGone: (exit) => {
@@ -700,7 +700,7 @@ function describe(e: unknown): string {
 
 /** Why OpenVPN is not here, and what to do about it.
  *
- *  OpsMaxx ships `openvpn` on macOS and Linux, built from a pinned tag by
+ *  OpsSwift ships `openvpn` on macOS and Linux, built from a pinned tag by
  *  `scripts/build-openvpn.sh`, so on those two "not found" means the install
  *  is damaged rather than incomplete. Windows is the exception and the hint
  *  below is the only one that still asks the user to install anything. */
@@ -714,7 +714,7 @@ function absentReason(e: unknown, platform: NodeJS.Platform): string {
 
 function installHint(platform: NodeJS.Platform): string {
   if (platform === 'win32') {
-    // Windows is the one platform where OpsMaxx still cannot supply
+    // Windows is the one platform where OpsSwift still cannot supply
     // OpenVPN. OpenVPN needs a tun adapter driver — tap-windows6, or Wintun —
     // and neither can be installed by copying a file: openvpn.exe opens an
     // adapter that already exists rather than creating one. The official
@@ -722,9 +722,9 @@ function installHint(platform: NodeJS.Platform): string {
     // service is what removes the permission prompt on every connect (E05).
     return 'Install OpenVPN from openvpn.net/community-downloads. Its installer also adds the OpenVPN Interactive Service, so tunnels connect without a Windows permission prompt each time.'
   }
-  // Not "install openvpn": OpsMaxx shipped one, so the copy that should be
+  // Not "install openvpn": OpsSwift shipped one, so the copy that should be
   // here has gone. Quarantine is the usual reason and reinstalling is the fix;
   // sending the reader to Homebrew or apt would have them solve a different
   // problem and still not know why the bundled engine vanished.
-  return 'Reinstall OpsMaxx — antivirus software sometimes quarantines bundled programs. You can also point this profile at an OpenVPN you installed yourself.'
+  return 'Reinstall OpsSwift — antivirus software sometimes quarantines bundled programs. You can also point this profile at an OpenVPN you installed yourself.'
 }

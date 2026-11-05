@@ -10,13 +10,13 @@ import { demoProfileDir } from '../src/main/demoGuard'
  *
  *   1. A packaged app can never enter it, whatever the environment says.
  *   2. It can never be pointed at the real profile. A dev run's userData IS
- *      the installed app's (productName is OpsMaxx either way), so this is not
+ *      the installed app's (productName is OpsSwift either way), so this is not
  *      hypothetical: a bundler chunk split once made the services resolve the
  *      real paths, and only the seed's "is the profile empty" check stopped it.
  *   3. A production build does not contain it at all.
  */
 
-const REAL = '/Users/someone/Library/Application Support/OpsMaxx'
+const REAL = '/Users/someone/Library/Application Support/OpsSwift'
 
 describe('when the demo profile is used', () => {
   it('is used in a development run that asks for it', () => {
@@ -35,7 +35,7 @@ describe('when the demo profile is used', () => {
   it('refuses the real profile, however it is spelled', () => {
     expect(() => demoProfileDir({ OPSMAXX_DEMO_PROFILE: REAL }, false, REAL)).toThrow(/real profile/)
     expect(() => demoProfileDir({ OPSMAXX_DEMO_PROFILE: `${REAL}/` }, false, REAL)).toThrow(/real profile/)
-    expect(() => demoProfileDir({ OPSMAXX_DEMO_PROFILE: `${REAL}/../OpsMaxx` }, false, REAL)).toThrow(/real profile/)
+    expect(() => demoProfileDir({ OPSMAXX_DEMO_PROFILE: `${REAL}/../OpsSwift` }, false, REAL)).toThrow(/real profile/)
   })
 })
 

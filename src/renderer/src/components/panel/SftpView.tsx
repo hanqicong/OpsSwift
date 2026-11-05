@@ -425,7 +425,7 @@ function RealSftp({ server, tabId }: { server?: Server; tabId?: string }): React
       : !session
         ? t('panel.files.terminalNotConnected')
         : // The quoting is POSIX. A local shell that reports its folder is one
-          // OpsMaxx instrumented — zsh, bash or fish — and cmd, PowerShell or
+          // OpsSwift instrumented — zsh, bash or fish — and cmd, PowerShell or
           // WSL never do, so this is what keeps a Windows path out of them.
           local && !termCwd
           ? t('panel.files.cd.needsReporting')

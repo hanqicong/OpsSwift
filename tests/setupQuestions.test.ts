@@ -34,7 +34,7 @@ describe('what the card can switch on', () => {
     // `rules` is the only unattended execution path in the app; `keyRevoke`
     // removes people's SSH access; `access` reads other accounts' authorized_keys
     // with sudo on every host. `cicdTrigger` starts a build on infrastructure
-    // OpsMaxx does not administer and cannot stop once it has begun — and the
+    // OpsSwift does not administer and cannot stop once it has begun — and the
     // question that WOULD have carried it ("do your servers get changed by a
     // pipeline?") asks what you have, not what you want to be able to do, so
     // ticking it must not also hand over a deploy button. Each is deliberately
@@ -261,9 +261,9 @@ describe('the preference controls', () => {
 
   it('summarises a group from what is actually showing', () => {
     const look = PREF_GROUPS.find((g) => g.id === 'look')!
-    expect(prefSummary(look, {})).toContain('OpsMaxx')
+    expect(prefSummary(look, {})).toContain('LYiTECH Dark')
     expect(prefSummary(look, { theme: 'dark' })).toContain('Classic dark')
-    expect(prefSummary(look, { theme: 'opsmaxx-light' })).toContain('OpsMaxx Light')
+    expect(prefSummary(look, { theme: 'opsmaxx-light' })).toContain('LYiTECH Light')
   })
 
   it('never summarises a group as a bare yes or no', () => {

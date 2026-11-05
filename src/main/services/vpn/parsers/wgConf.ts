@@ -75,7 +75,7 @@ const PEER_MODELLED = new Set([
 // Reported rather than swallowed so the import report stays complete.
 const IFACE_UNMODELLED: Record<string, string> = {
   listenport: 'The userspace stack binds its own source port, so a fixed ListenPort has no effect.',
-  table: 'Table only means something to wg-quick, which manages system routes. OpsMaxx does not.'
+  table: 'Table only means something to wg-quick, which manages system routes. OpsSwift does not.'
 }
 
 interface Ctx {
@@ -250,7 +250,7 @@ function build(text: string, opts: WgParseOptions, ctx: Ctx): VpnImportResultInt
       drop(ctx, key, known)
       continue
     }
-    drop(ctx, key, `Not a setting OpsMaxx understands (value "${entry.value}").`)
+    drop(ctx, key, `Not a setting OpsSwift understands (value "${entry.value}").`)
   }
 
   // --------------------------------------------------------------- [Peer]
@@ -276,7 +276,7 @@ function build(text: string, opts: WgParseOptions, ctx: Ctx): VpnImportResultInt
       drop(
         ctx,
         'Peer',
-        `The peer with public key ${publicKey} has no Endpoint, so OpsMaxx cannot dial it. The rest of the profile was imported without it.`
+        `The peer with public key ${publicKey} has no Endpoint, so OpsSwift cannot dial it. The rest of the profile was imported without it.`
       )
       continue
     }
@@ -326,7 +326,7 @@ function build(text: string, opts: WgParseOptions, ctx: Ctx): VpnImportResultInt
 
     for (const [key, entry] of section.values) {
       if (PEER_MODELLED.has(key)) continue
-      drop(ctx, key, `Not a [Peer] setting OpsMaxx understands (value "${entry.value}").`)
+      drop(ctx, key, `Not a [Peer] setting OpsSwift understands (value "${entry.value}").`)
     }
 
     peers.push(peer)
@@ -353,7 +353,7 @@ function build(text: string, opts: WgParseOptions, ctx: Ctx): VpnImportResultInt
     // E17: 0.0.0.0/0 reads like "everything goes through the VPN", and in
     // userspace mode it does not. Saying so at import beats a support ticket.
     ctx.warnings.push(
-      'AllowedIPs includes 0.0.0.0/0. In userspace mode OpsMaxx changes no system routes, so only the connections you send through this tunnel’s local listeners use it.'
+      'AllowedIPs includes 0.0.0.0/0. In userspace mode OpsSwift changes no system routes, so only the connections you send through this tunnel’s local listeners use it.'
     )
   }
 

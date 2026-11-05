@@ -13,7 +13,7 @@ import {
 } from '../src/shared/access'
 
 /**
- * Revoking a key from an account OpsMaxx is not connected as.
+ * Revoking a key from an account OpsSwift is not connected as.
  *
  * Every command this module builds resolves `$HOME/.ssh/authorized_keys`,
  * which is what lets ONE approved command text cover a whole selection — and

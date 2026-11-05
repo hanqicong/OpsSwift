@@ -79,7 +79,7 @@ describe('Wintun is redistributed on the terms it allows', () => {
 
 describe('the notices say what actually ships', () => {
   it('states plainly that a proprietary component is included', () => {
-    // OpsMaxx is presented as open source. The single exception has to be
+    // OpsSwift is presented as open source. The single exception has to be
     // findable by someone skimming, not buried in a table cell.
     expect(notices).toMatch(/not open source/i)
     expect(notices).toMatch(/wintun\.dll` is proprietary|Wintun is bundled on Windows/i)

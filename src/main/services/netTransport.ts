@@ -7,7 +7,7 @@ import type { HttpVia } from '../../shared/httpClient'
 /**
  * Opening a socket to somewhere, by whichever of three routes was asked for.
  *
- * This is the piece that makes OpsMaxx's HTTP client different from a
+ * This is the piece that makes OpsSwift's HTTP client different from a
  * standalone one, and it is shared rather than copied because there are now
  * two protocols riding it: requests (`httpClient.ts`) and WebSockets
  * (`wsClient.ts`). The SSH channel shim in particular is subtle enough that a

@@ -249,7 +249,7 @@ describe('a notice whose bytes are not there yet', () => {
   })
 })
 
-describe('a notice from OpsMaxx 0.59.0', () => {
+describe('a notice from OpsSwift 0.59.0', () => {
   it('is refused, acknowledged, and says to update the sender', async () => {
     // The old notice is a collection object under the epoch key: it says
     // nothing about which device wrote it, so it cannot be accepted.
@@ -266,7 +266,7 @@ describe('a notice from OpsMaxx 0.59.0', () => {
       getObject: async () => null,
       deleteObject: async () => undefined
     }
-    await expect(collectFiles(deps(relay))).rejects.toThrow(/Update OpsMaxx on the sending device/)
+    await expect(collectFiles(deps(relay))).rejects.toThrow(/Update OpsSwift on the sending device/)
     expect(acked).toEqual([[7]])
   })
 })

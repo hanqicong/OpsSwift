@@ -121,15 +121,15 @@ describe('tool metadata', () => {
     expect(byName('delete_file').annotations?.destructiveHint).toBe(true)
   })
 
-  it('claims an open world only for the tools that reach outside OpsMaxx', () => {
+  it('claims an open world only for the tools that reach outside OpsSwift', () => {
     // A shell command and a database statement both act on a system whose
-    // contents OpsMaxx does not model; everything else operates on things
+    // contents OpsSwift does not model; everything else operates on things
     // it already knows about. A new tool appearing here should be a decision,
     // not a default — hence the exact list.
     //
     // The CI/CD tools are the strongest case on the bridge: they reach a third
     // party the user does not administer at all, whose pipeline definitions
-    // OpsMaxx has never read and whose behaviour it cannot predict or stop.
+    // OpsSwift has never read and whose behaviour it cannot predict or stop.
     const open = tools.filter((t) => t.annotations?.openWorldHint).map((t) => t.name).sort()
     expect(open).toEqual([
       'cancel_run',
@@ -139,24 +139,36 @@ describe('tool metadata', () => {
       'list_ci_connections',
       'list_pipelines',
       'list_runs',
-      // Arbitrary text run inside a container, whose effects OpsMaxx does not
+      // Network operations reach a saved physical/virtual network device; capability/profile reads do not.
+      'network_apply_change',
+      'network_backup_config',
+      'netconf_read',
+      'netconf_rpc',
+      'jsonrpc_get_state',
+      'jsonrpc_call',
+      'windows_get_facts',
+      'windows_run_script',
+      'network_get_state',
+      'network_plan_change',
+      'network_verify_change',
+      // Arbitrary text run inside a container, whose effects OpsSwift does not
       // model -- execute_command's reason, one hop further in.
       'pod_command',
       'query_database',
       'rerun_run',
       // Dials a real host and hangs up. It runs nothing and returns nothing
       // from the far end, but whether the connection comes up is a fact about
-      // the outside world and not about OpsMaxx's own configuration.
+      // the outside world and not about OpsSwift's own configuration.
       'test_connection',
       // The database half of test_connection, for the same reason.
       'test_database',
       'trigger_run'
-    ])
+    ].sort())
   })
 
   it('does not let a tunnel tool claim an open world', () => {
     // set_tunnel can only run a tunnel the user already defined, so its effects
-    // are fully described by OpsMaxx's own configuration.
+    // are fully described by OpsSwift's own configuration.
     expect(byName('set_tunnel').annotations?.openWorldHint).toBeFalsy()
   })
 

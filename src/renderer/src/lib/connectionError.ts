@@ -62,6 +62,12 @@ export interface FaultAdvice {
 }
 
 const ADVICE: Record<ConnectionFault, AdviceKeys> = {
+  algorithm: {
+    cause: 'lib.connectionError.algorithm.cause',
+    retry: false,
+    edit: true,
+    hint: 'lib.connectionError.algorithm.hint'
+  },
   'host-key': {
     cause: 'lib.connectionError.hostKey.cause',
     // Deliberately neither. A changed host key is a decision — rebuilt server,

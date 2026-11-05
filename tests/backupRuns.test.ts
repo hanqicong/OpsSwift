@@ -167,14 +167,14 @@ describe('verifyBundle', () => {
     // valid empty database and reported a successful recovery.
     const v = await verifyBundle(Buffer.alloc(0), PASSPHRASE)
     expect(v.ok).toBe(false)
-    expect(v.error).toBe('That file is not a OpsMaxx backup.')
+    expect(v.error).toBe('That file is not a OpsSwift backup.')
   })
 
   it('detects a truncated upload', async () => {
     const { bytes } = await buildBundle(PASSPHRASE)
     const v = await verifyBundle(bytes.subarray(0, Math.floor(bytes.length / 2)), PASSPHRASE)
     expect(v.ok).toBe(false)
-    expect(v.error).toBe('That file is not a OpsMaxx backup.')
+    expect(v.error).toBe('That file is not a OpsSwift backup.')
   })
 
   it('detects a single flipped byte in the ciphertext', async () => {
@@ -198,7 +198,7 @@ describe('verifyBundle', () => {
   it('detects a file that is not one of ours at all', async () => {
     const v = await verifyBundle(Buffer.from('{"magic":"something-else"}'), PASSPHRASE)
     expect(v.ok).toBe(false)
-    expect(v.error).toBe('That file is not a OpsMaxx backup.')
+    expect(v.error).toBe('That file is not a OpsSwift backup.')
   })
 
   it('rejects the wrong passphrase rather than returning an empty payload', async () => {
@@ -393,7 +393,7 @@ describe('retention during a run', () => {
     expect(readdirSync(dir).sort()).toEqual([...older].sort())
   })
 
-  it('leaves files that are not OpsMaxx backups alone', async () => {
+  it('leaves files that are not OpsSwift backups alone', async () => {
     const dir = temp()
     for (const name of older) writeFileSync(join(dir, name), 'an older bundle')
     writeFileSync(join(dir, 'photos.zip'), 'somebody else’s file')
@@ -426,7 +426,7 @@ describe('retention during a run', () => {
 // ---------------------------------------------------------------------------
 
 describe('restore from a destination', () => {
-  it('lists only OpsMaxx backups, newest first', async () => {
+  it('lists only OpsSwift backups, newest first', async () => {
     const dir = temp()
     writeFileSync(join(dir, 'opsmaxx-20240101T000000Z.spbackup'), 'a')
     writeFileSync(join(dir, 'opsmaxx-20240301T000000Z.spbackup'), 'b')
@@ -474,11 +474,11 @@ describe('restore from a destination', () => {
     expect(readdirSync(USER_DATA).filter((f) => f.startsWith('staged-'))).toEqual([])
   })
 
-  it('refuses a name that is not a OpsMaxx backup', async () => {
+  it('refuses a name that is not a OpsSwift backup', async () => {
     const dir = temp()
     const inspected = await inspectRemoteBackup(localDest(dir), '../../etc/passwd', PASSPHRASE)
     expect(inspected.ok).toBe(false)
-    expect(inspected.error).toBe('“../../etc/passwd” is not a OpsMaxx backup name.')
+    expect(inspected.error).toBe('“../../etc/passwd” is not a OpsSwift backup name.')
   })
 
   it('reports a destination that cannot be reached rather than an empty list', async () => {
@@ -890,13 +890,13 @@ describe('staged downloads', () => {
    * file the user could write. Checked under both platforms' rules.
    */
   it('refuses a path that climbs out of the staged name', () => {
-    const ud = 'C:\\Users\\u\\AppData\\Roaming\\OpsMaxx'
+    const ud = 'C:\\Users\\u\\AppData\\Roaming\\OpsSwift'
     expect(isStagedPath(`${ud}\\staged-abc`, ud, win32)).toBe(true)
     expect(isStagedPath(`${ud}\\staged-\\..\\opsmaxx-spec-files.seeded`, ud, win32)).toBe(false)
     expect(isStagedPath(`${ud}\\staged-/../x`, ud, win32)).toBe(false)
     expect(isStagedPath(`${ud}\\staged-\\..\\..\\..\\Documents\\x`, ud, win32)).toBe(false)
 
-    const pd = '/home/u/.config/OpsMaxx'
+    const pd = '/home/u/.config/OpsSwift'
     expect(isStagedPath(`${pd}/staged-abc`, pd, posix)).toBe(true)
     expect(isStagedPath(`${pd}/staged-/../opsmaxx-spec-files.seeded`, pd, posix)).toBe(false)
     expect(isStagedPath(`${pd}/sub/staged-abc`, pd, posix)).toBe(false)

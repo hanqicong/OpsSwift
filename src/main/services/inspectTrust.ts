@@ -36,7 +36,7 @@ const run = promisify(execFile)
 //     worse than telling them nothing.
 
 const CERT_BASENAME = 'opsmaxx-inspector-ca.crt'
-const NSS_NICKNAME = 'OpsMaxx Traffic Inspector'
+const NSS_NICKNAME = 'OpsSwift Traffic Inspector'
 const LINUX_ANCHOR_DEBIAN = '/usr/local/share/ca-certificates'
 const LINUX_ANCHOR_RHEL = '/etc/pki/ca-trust/source/anchors'
 const DARWIN_SYSTEM_KEYCHAIN = '/Library/Keychains/System.keychain'
@@ -280,7 +280,7 @@ async function systemTrustState(ctx: TrustContext): Promise<InspectTrustStore> {
       // `installDarwinTrust`), so the sentence promises the second, different
       // attempt and the printed command that follows if that is refused too.
       hint: installed
-        ? 'The certificate is in your keychain but macOS has attached no trust setting, so every HTTPS request still fails. Install once more: OpsMaxx will ask macOS a second way and, if that is refused, show you the exact command to run.'
+        ? 'The certificate is in your keychain but macOS has attached no trust setting, so every HTTPS request still fails. Install once more: OpsSwift will ask macOS a second way and, if that is refused, show you the exact command to run.'
         : 'Install the certificate to intercept HTTPS in Safari, Chrome and native apps.'
     }
   }
@@ -359,7 +359,7 @@ async function nssTrustState(ctx: TrustContext): Promise<InspectTrustStore> {
       installable: false,
       hint: which('certutil')
         ? 'No NSS database found. Firefox creates one the first time it runs.'
-        : 'Install nss-tools (certutil) and OpsMaxx can add the certificate for Firefox.'
+        : 'Install nss-tools (certutil) and OpsSwift can add the certificate for Firefox.'
     }
   }
   const { stdout } = await tryRun('certutil', ['-d', `sql:${dbDir}`, '-L', '-n', NSS_NICKNAME])
@@ -372,7 +372,7 @@ async function nssTrustState(ctx: TrustContext): Promise<InspectTrustStore> {
   }
 }
 
-/** Stores OpsMaxx deliberately does not touch. Reporting them is the whole
+/** Stores OpsSwift deliberately does not touch. Reporting them is the whole
  *  contribution: each one is a real reason an intercepted request fails, and
  *  each has a one-line fix the user can apply themselves. */
 function reportOnlyStores(ctx: TrustContext): InspectTrustStore[] {
@@ -382,14 +382,14 @@ function reportOnlyStores(ctx: TrustContext): InspectTrustStore[] {
       label: 'Node.js',
       state: 'unknown',
       installable: false,
-      hint: `Node ignores the system store. Set NODE_EXTRA_CA_CERTS=${ctx.certPath} — sessions OpsMaxx starts get this automatically.`
+      hint: `Node ignores the system store. Set NODE_EXTRA_CA_CERTS=${ctx.certPath} — sessions OpsSwift starts get this automatically.`
     },
     {
       id: 'python',
       label: 'Python requests',
       state: 'unknown',
       installable: false,
-      hint: `requests uses its own bundle. Set REQUESTS_CA_BUNDLE=${ctx.certPath} — sessions OpsMaxx starts get this automatically.`
+      hint: `requests uses its own bundle. Set REQUESTS_CA_BUNDLE=${ctx.certPath} — sessions OpsSwift starts get this automatically.`
     },
     {
       id: 'java',
@@ -462,7 +462,7 @@ export interface TrustChangeResult {
 //   • Other CAs on the same machine *did* have admin trust settings, so MDM
 //     was not blocking trust settings outright.
 //
-// The decisive experiment: the user ran the byte-for-byte command OpsMaxx
+// The decisive experiment: the user ran the byte-for-byte command OpsSwift
 // runs, in Terminal, under `sudo`:
 //
 //   sudo security add-trusted-cert -d -r trustRoot -p ssl \
@@ -614,7 +614,7 @@ async function installLinuxTrust(ctx: TrustContext): Promise<TrustChangeResult> 
     return { ok: false, message: probe.reason ?? 'This machine has no way to ask for administrator rights.' }
   }
 
-  const reason = 'OpsMaxx needs administrator rights once to trust its traffic-inspection certificate.'
+  const reason = 'OpsSwift needs administrator rights once to trust its traffic-inspection certificate.'
   // Debian and RHEL keep anchors in different places and update them with
   // different commands. Running the pair that exists, rather than detecting
   // the distribution, is both shorter and correct on the derivatives that
@@ -669,7 +669,7 @@ async function installDarwinTrust(ctx: TrustContext): Promise<TrustChangeResult>
   const probe = await elevator.probe()
   if (probe.available) {
     const proc = await elevator.run({
-      reason: 'OpsMaxx needs administrator rights once to trust its traffic-inspection certificate.',
+      reason: 'OpsSwift needs administrator rights once to trust its traffic-inspection certificate.',
       command: 'sh',
       args: ['-c', darwinAdminTrustScript(ctx.certPath)]
     })
@@ -687,7 +687,7 @@ async function installDarwinTrust(ctx: TrustContext): Promise<TrustChangeResult>
     return {
       ok: true,
       message:
-        'macOS would not let OpsMaxx write the machine-wide trust setting, so the certificate is trusted for your user account instead. Safari, Chrome and anything else running as you will accept it; other accounts on this Mac will not.'
+        'macOS would not let OpsSwift write the machine-wide trust setting, so the certificate is trusted for your user account instead. Safari, Chrome and anything else running as you will accept it; other accounts on this Mac will not.'
     }
   }
 
@@ -699,7 +699,7 @@ async function installDarwinTrust(ctx: TrustContext): Promise<TrustChangeResult>
     // rejected the write or the user closed the dialog — claiming the former
     // when it was the latter would be the app telling the user a small lie.
     message:
-      'The trust setting was not written, machine-wide or for your account. Run this in Terminal — it works where OpsMaxx cannot, because a terminal keeps your login session — then press Install again.'
+      'The trust setting was not written, machine-wide or for your account. Run this in Terminal — it works where OpsSwift cannot, because a terminal keeps your login session — then press Install again.'
   }
 }
 
@@ -815,7 +815,7 @@ export async function removeSystemTrust(ctx: TrustContext): Promise<TrustChangeR
   if (!probe.available) {
     return { ok: false, message: probe.reason ?? 'This machine has no way to ask for administrator rights.' }
   }
-  const reason = 'OpsMaxx needs administrator rights once to remove its traffic-inspection certificate.'
+  const reason = 'OpsSwift needs administrator rights once to remove its traffic-inspection certificate.'
   let command: string
   let args: string[]
   if (ctx.platform === 'darwin') {
@@ -1132,7 +1132,7 @@ export async function engageSystemProxy(
       return { ok: false, message: probe.reason ?? 'No way to ask for administrator rights.' }
     }
     const proc = await elevator.run({
-      reason: 'OpsMaxx needs administrator rights to route this machine’s traffic through its inspector.',
+      reason: 'OpsSwift needs administrator rights to route this machine’s traffic through its inspector.',
       command: 'sh',
       args: ['-c', script]
     })
@@ -1209,7 +1209,7 @@ export async function engageSystemProxy(
       return {
         ok: false,
         message:
-          'This desktop exposes no proxy setting OpsMaxx can change. Use “Copy shell setup” and point applications at the proxy yourself.'
+          'This desktop exposes no proxy setting OpsSwift can change. Use “Copy shell setup” and point applications at the proxy yourself.'
       }
     }
     const get = async (schema: string, k: string): Promise<string> =>
@@ -1281,7 +1281,7 @@ export async function restoreSystemProxy(): Promise<TrustChangeResult> {
       return { ok: false, message: 'Cannot restore the proxy settings without administrator rights.' }
     }
     const proc = await elevator.run({
-      reason: 'OpsMaxx needs administrator rights to restore this machine’s proxy settings.',
+      reason: 'OpsSwift needs administrator rights to restore this machine’s proxy settings.',
       command: 'sh',
       args: ['-c', script]
     })
@@ -1292,7 +1292,7 @@ export async function restoreSystemProxy(): Promise<TrustChangeResult> {
       return {
         ok: false,
         declined: exit.declined,
-        message: 'The proxy settings were not restored. OpsMaxx will try again next time it starts.'
+        message: 'The proxy settings were not restored. OpsSwift will try again next time it starts.'
       }
     }
     await clearBackup()

@@ -156,6 +156,6 @@ describe('a locked vault always comes with a way to unlock it', () => {
     // model ends up inventing a way to "unlock" something.
     const mcp = readFileSync('src/main/services/mcpServer.ts', 'utf8')
     expect(mcp).toContain('VAULT_LOCKED')
-    expect(mcp).toContain('Ask the person running OpsMaxx to unlock the vault')
+    expect(mcp).toContain('Ask the person running OpsSwift to unlock the vault')
   })
 })

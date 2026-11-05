@@ -15,7 +15,7 @@ import type { MessageKey, Translate } from '../../../../shared/i18n'
 //
 // WHY THERE IS A FORM AND NOT A BUTTON. The probe opens a TCP connection to a
 // host and port through the operator's tunnel, and there is no address this app
-// may pick on their behalf -- a default would be OpsMaxx deciding to talk to
+// may pick on their behalf -- a default would be OpsSwift deciding to talk to
 // a third party over somebody's VPN. So the target is typed, and a probe with
 // the fields empty still runs: the handshake check needs no target, and
 // "connected" with a three-minute-old handshake is the single most useful thing

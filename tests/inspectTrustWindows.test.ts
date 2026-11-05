@@ -173,9 +173,9 @@ ZHr66U+xoUl9FzWn1/AT75aUC6A9lgIADw==
 
 const ctx = (pem = CERT_PEM): TrustContext => ({
   platform: 'win32',
-  certPath: 'C:\\Users\\x\\AppData\\Roaming\\OpsMaxx\\inspect\\opsmaxx-inspector-ca.crt',
+  certPath: 'C:\\Users\\x\\AppData\\Roaming\\OpsSwift\\inspect\\opsmaxx-inspector-ca.crt',
   certPem: pem,
-  commonName: 'OpsMaxx Traffic Inspector CA'
+  commonName: 'OpsSwift Traffic Inspector CA'
 })
 
 /** `certutil` is always invoked as `-user <verb> Root …`, so the verb is

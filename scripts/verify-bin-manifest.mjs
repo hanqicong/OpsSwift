@@ -27,7 +27,7 @@ const BIN_ROOT = join(ROOT, 'resources', 'bin')
 // The lists differ by platform, and the two differences are both deliberate:
 //
 //   * `openvpn` is bundled on macOS and Linux only. On Windows OpenVPN needs
-//     an adapter driver OpsMaxx cannot install, so the Windows build still
+//     an adapter driver OpsSwift cannot install, so the Windows build still
 //     drives a system install — see docs/VPN.md.
 //   * `wintun.dll` is Windows-only by nature. It is not an executable, so it
 //     is listed with its extension and gets no `.exe`.
@@ -95,7 +95,7 @@ async function main() {
 
   const required = REQUIRED[process.platform]
   if (!required) {
-    console.error(`::error::no engine list for ${process.platform}; OpsMaxx is not built there.`)
+    console.error(`::error::no engine list for ${process.platform}; OpsSwift is not built there.`)
     process.exit(1)
   }
 

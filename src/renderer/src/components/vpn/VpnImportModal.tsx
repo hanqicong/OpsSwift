@@ -259,7 +259,7 @@ export function VpnImportModal({ kind, onClose }: VpnImportModalProps): React.JS
   /**
    * Profiles already on this machine, offered rather than waited for.
    *
-   * The reported complaint was that OpsMaxx ignores an OpenVPN install that is
+   * The reported complaint was that OpsSwift ignores an OpenVPN install that is
    * already there: it neither found the binary nor offered the profiles the
    * official installers had left in their own directories. Discovery is a
    * read of a handful of known directories, so it runs when the modal opens
@@ -370,7 +370,7 @@ export function VpnImportModal({ kind, onClose }: VpnImportModalProps): React.JS
             {found.map((profile) => {
               // A file that will not import is listed with its reason rather
               // than hidden: a profile the user can see in Explorer and cannot
-              // find here reads as OpsMaxx having missed it.
+              // find here reads as OpsSwift having missed it.
               const usable = profile.report.ok && !!profile.report.spec
               return (
                 <div key={profile.sourcePath} className="row" style={{ gap: 8 }}>

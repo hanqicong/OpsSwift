@@ -35,14 +35,14 @@ export function isVpnError(e: unknown): e is VpnError {
 // reads instead of clicking. The CLI and the log still print the sentence, so
 // it has to stand alone; it does not have to teach.
 export const VPN_ERROR_HINT: Record<VpnErrorCode, string> = {
-  // Deliberately empty. OpsMaxx now ships the sidecar, frpc, and — on macOS
+  // Deliberately empty. OpsSwift now ships the sidecar, frpc, and — on macOS
   // and Linux — OpenVPN, so "install it" is wrong for three of the four
   // engines, and which advice is right depends on both the engine and the
   // platform. `resolveBundled` and `absentReason` already build a detail that
   // knows both (reinstall vs. antivirus vs. openvpn.net), and describeVpnError
   // appends this after it. A generic sentence here could only contradict them.
   'binary-missing': '',
-  'binary-untrusted': 'Reinstall OpsMaxx — antivirus software sometimes alters bundled files.',
+  'binary-untrusted': 'Reinstall OpsSwift — antivirus software sometimes alters bundled files.',
   // The engine is one this app attaches to rather than starts, so the action is
   // in the engine's own client and not anywhere in here.
   'engine-stopped': 'Start it from its own app or service, then connect again.',
@@ -70,7 +70,7 @@ export const VPN_ERROR_HINT: Record<VpnErrorCode, string> = {
   'crash-loop': 'Open the log to see why it stopped.',
   'vault-locked': 'Unlock the vault to continue.',
   'proxy-required': 'Set a proxy in the profile.',
-  'version-mismatch': 'Update OpsMaxx, or ask the server operator which version to use.',
+  'version-mismatch': 'Update OpsSwift, or ask the server operator which version to use.',
   'interface-conflict': 'Stop the other tunnel using that interface first.',
   'already-running': '',
   'clock-skew': 'Correct your system clock.',

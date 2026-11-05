@@ -119,7 +119,7 @@ describe('a file written before any of this existed', () => {
   })
 
   it('is sealed on the first read, not on the next edit', () => {
-    // A user who opens OpsMaxx to look at a server and closes it again has
+    // A user who opens OpsSwift to look at a server and closes it again has
     // changed nothing, and "your estate is encrypted, as soon as you edit
     // something" is not a property anyone can rely on.
     writeFileSync(DATA, JSON.stringify(ESTATE))

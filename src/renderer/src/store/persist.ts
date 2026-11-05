@@ -11,7 +11,7 @@ const SEED_VERSION = 2
 
 // Which default theme the saved `theme` was written under. Not SEED_VERSION:
 // a mismatch there discards every saved server, and this only has to move one
-// field. Revision 1 is the OpsMaxx theme becoming the default.
+// field. Revision 1 is the OpsSwift theme becoming the default.
 const THEME_REVISION = 1
 
 /** A `'dark'` written before the revision existed: the old default, not a choice. */
@@ -38,7 +38,7 @@ interface Persisted {
    */
   theme?: unknown
   /**
-   * Absent in every save written before the OpsMaxx theme became the default.
+   * Absent in every save written before the OpsSwift theme became the default.
    * Every such save says `'dark'` whether or not anybody chose it, because
    * `save()` writes the theme unconditionally -- so an absent revision on a
    * `'dark'` save is the old default, and it moves once. A `'dark'` saved

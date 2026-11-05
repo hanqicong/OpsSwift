@@ -694,7 +694,7 @@ describe('a second, non-VPN consumer', () => {
     await sup.stop('proc-noun', { force: true })
 
     expect(await rejected).toBe(
-      'Something went wrong inside OpsMaxx. The process was stopped while it was starting.'
+      'Something went wrong inside OpsSwift. The process was stopped while it was starting.'
     )
   })
 
@@ -724,7 +724,7 @@ describe('a second, non-VPN consumer', () => {
     await sup.stop('vpn-noun', { force: true })
 
     expect(await rejected).toBe(
-      'Something went wrong inside OpsMaxx. The tunnel was stopped while it was starting.'
+      'Something went wrong inside OpsSwift. The tunnel was stopped while it was starting.'
     )
   })
 

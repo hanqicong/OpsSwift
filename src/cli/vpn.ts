@@ -54,7 +54,7 @@ Usage:
   opsmaxx vpn up <name>         Start a profile
   opsmaxx vpn down <name>       Stop a profile
 
-Profiles are created in the OpsMaxx app, not here — this command can only run
+Profiles are created in the OpsSwift app, not here — this command can only run
 one you have already defined, and it cannot change where a profile points.
 
 Starting a VPN changes which network your other sessions traverse, so it asks
@@ -115,7 +115,7 @@ export async function runVpnCommand(
     }
     return withClient(session.token, session.port, async (client) => {
       if (sub === 'up') {
-        console.error('Waiting for approval in OpsMaxx...')
+        console.error('Waiting for approval in OpsSwift...')
       }
       const result = await client.callTool({
         name: 'set_vpn',

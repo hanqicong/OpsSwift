@@ -204,7 +204,7 @@ describe('the timeline', () => {
     render(<ChangeLogPanel servers={SERVERS} />)
     const text = (await screen.findByTestId('changelog-entries')).textContent ?? ''
     expect(text).toContain('An agent · ran a terminal call · db-01')
-    expect(text).toContain('OpsMaxx itself · host-unreachable')
+    expect(text).toContain('OpsSwift itself · host-unreachable')
   })
 
   it('shows the commands and targets it was given', async () => {
@@ -372,7 +372,7 @@ describe('collapsing the noise', () => {
     // Two rows for fifteen entries: the burst, and the one thing that was not
     // the burst. That second row is what the fourteen were burying.
     expect(rows(container)).toHaveLength(2)
-    expect(rows(container)[0].textContent).toContain('OpsMaxx itself · fact-changed · Chain305')
+    expect(rows(container)[0].textContent).toContain('OpsSwift itself · fact-changed · Chain305')
     expect(rows(container)[0].textContent).toContain('×14')
     expect(rows(container)[1].textContent).toContain('zsh (default) exited on this machine')
 

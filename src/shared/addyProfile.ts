@@ -3,7 +3,7 @@
  * PLAINTEXT, deliberately.
  *
  * WHY ANY PLAINTEXT AT ALL. A brand-new device should pull a usable-looking
- * OpsMaxx before any pairing has happened -- the right theme, the right
+ * OpsSwift before any pairing has happened -- the right theme, the right
  * terminal font -- rather than presenting defaults and then rearranging itself
  * once the user finds their phrase. That is the entire justification, and it is
  * why the list is as short as it is.

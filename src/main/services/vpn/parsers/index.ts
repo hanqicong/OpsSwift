@@ -61,8 +61,8 @@ export function parseVpnConfig(
         ok: false,
         error:
           kind === 'ngrok'
-            ? 'ngrok is configured in OpsMaxx rather than imported. Add it from the Tunnels view and choose which ports to publish.'
-            : 'Tailscale has no configuration file to import. Add it from the Tunnels view — OpsMaxx runs its own node, with no client to install.',
+            ? 'ngrok is configured in OpsSwift rather than imported. Add it from the Tunnels view and choose which ports to publish.'
+            : 'Tailscale has no configuration file to import. Add it from the Tunnels view — OpsSwift runs its own node, with no client to install.',
         errorCode: 'unsupported',
         stripped: [],
         warnings: []

@@ -7,7 +7,7 @@ import { join } from 'node:path'
  * A clipboard the relay hands back after a restart.
  *
  * The sidecar refuses a mail it has already opened, but only from memory, so
- * after OpsMaxx restarts the relay could deliver a clipboard still inside its
+ * after OpsSwift restarts the relay could deliver a clipboard still inside its
  * window a second time, pasted into whatever terminal has focus. This device
  * now remembers what it applied, on disk, until each window closes.
  */

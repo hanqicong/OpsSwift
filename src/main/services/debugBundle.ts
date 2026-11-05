@@ -45,7 +45,7 @@ export function buildDebugBundle(probes: DiagnosticsProbes): DebugBundle {
   const trace = readDebugTrace()
 
   const head = [
-    'OpsMaxx bug report',
+    'OpsSwift bug report',
     `generated: ${new Date().toISOString()}`,
     status.startedAt === null
       ? 'debug trace: none — debug mode was not on for this report'

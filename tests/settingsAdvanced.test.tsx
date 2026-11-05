@@ -15,7 +15,7 @@ import { useNav } from '../src/renderer/src/store/nav'
 // showed its modules AND a stray "Reset modules" row. A page that renders content
 // must not also render the placeholder, which is what these two assertions pin.
 
-const DIAGNOSTICS = 'OpsMaxx diagnostics\nversion: 0.6.2\nservers: 3\n'
+const DIAGNOSTICS = 'OpsSwift diagnostics\nversion: 0.6.2\nservers: 3\n'
 
 beforeEach(() => {
   stubBridge({
