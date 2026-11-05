@@ -8,7 +8,7 @@ body:
         The version and your operating system are the only two things we really need from
         you. Everything below them helps, and none of it is worth abandoning the report over.
 
-        **If you got here from the bug button in OpsMaxx, drag the saved report file into
+        **If you got here from the bug button in OpsSwift, drag the saved report file into
         this form.** That file is the single most useful thing you can attach — it carries
         your versions and feature states, and, if debug mode was on, what the app actually
         did before it went wrong.
@@ -30,7 +30,7 @@ body:
   - type: input
     id: version
     attributes:
-      label: OpsMaxx version
+      label: OpsSwift version
       placeholder: "0.1.0 — installer / portable / built from source"
     validations: { required: true }
   - type: dropdown
