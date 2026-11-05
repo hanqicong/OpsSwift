@@ -46,6 +46,7 @@ export const clipboard = {
 // A no-op "encryption" so secrets.ts can be exercised without a real OS
 // keychain. Good enough for tests that only check the shape of the flow.
 export const safeStorage = {
+  getSelectedStorageBackend: (): string => 'gnome_libsecret',
   isEncryptionAvailable: (): boolean => true,
   encryptString: (s: string): Buffer => Buffer.from(s, 'utf8'),
   decryptString: (b: Buffer): string => b.toString('utf8')

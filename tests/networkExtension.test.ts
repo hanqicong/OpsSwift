@@ -118,6 +118,20 @@ describe('network plan binding, locking and protected artifacts', () => {
     const spy = vi.spyOn(safeStorage, 'isEncryptionAvailable').mockReturnValue(false)
     expect(() => storeNetworkBackup('configuration')).toThrow('encryption'); spy.mockRestore()
   })
+  it('accepts Linux keyring-backed encryption and refuses the basic_text fallback', () => {
+    const platform = Object.getOwnPropertyDescriptor(process, 'platform')!
+    Object.defineProperty(process, 'platform', { value: 'linux', configurable: true })
+    const backend = vi.spyOn(safeStorage, 'getSelectedStorageBackend')
+    try {
+      backend.mockReturnValue('gnome_libsecret')
+      expect(storeNetworkBackup('linux-keyring-fixture').encrypted).toBe(true)
+      backend.mockReturnValue('basic_text')
+      expect(() => storeNetworkBackup('must-not-persist')).toThrow('encryption')
+    } finally {
+      backend.mockRestore()
+      Object.defineProperty(process, 'platform', platform)
+    }
+  })
   it('writes and reads back a protected complete envelope, returns metadata only', () => {
     const result = storeNetworkBackup('interface GE1/0/1\n description fixture\n#')
     expect(Object.keys(result).sort()).toEqual(['bytes', 'encrypted', 'id', 'sha256'])
