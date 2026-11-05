@@ -54,6 +54,8 @@ Developer guide for the independent OpsSwift product. Start here for feature wor
 
 ### 增加设备或协议
 
+中文字节编码、USG 配置合同及候选固件边界见 [CHINESE-AND-USG.md](CHINESE-AND-USG.md)。CLI 始终先保留字节，再用每个独立流的解码器组装字符；Telnet IAC 协商先于文字解码，不能提前 `toString()`。新增编码须贯通表单、保存标签、原生连接和 MCP，RPC 的协议编码另行处理。
+
 新增设备先选现有档案中最接近的命令风格，建立按型号／固件划分的资格记录。只有只读查询通过时就只声明只读资格；不要把相同品牌、相似 CLI 或一条版本命令等同于配置能力已验收。
 
 网络 CLI 新功能沿用 `read → plan → apply → verify` 的边界：计划绑定会话、目标、基线和内容；实际写入前核对有效权限、过期和漂移，验证加密备份，再消费计划并执行。超时／部分执行作为未知或部分结果报告，不能自动重放或承诺业务转发健康。

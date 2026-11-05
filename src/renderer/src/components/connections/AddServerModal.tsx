@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { NETWORK_PROFILES, networkProfileFromTags, sshCompatibilityFromTags, parseSshCompatibility } from '../../../../shared/networkDevice'
 import { REMOTE_TRANSPORTS, remoteTransport, TRANSPORT_PORTS, type RemoteTransport } from '../../../../shared/remoteProtocol'
+import { TERMINAL_ENCODINGS, terminalEncodingFromTags } from '../../../../shared/terminalEncoding'
 import {
   KeyRound,
   Lock,
@@ -456,7 +457,7 @@ export function AddServerModal(): React.JSX.Element {
     cloud: cloudProvider ? { provider: cloudProvider, target: cloudTarget } : null
   }, t)
   const tagsOverflow = new Set(tagsText.split(',').map((x) => x.trim().toLowerCase()).filter(Boolean)).size > MAX_TAGS
-  const protocolValid = (() => { try { remoteTransport(parseTags(tagsText)); return true } catch { return false } })()
+  const protocolValid = (() => { try { remoteTransport(parseTags(tagsText)); terminalEncodingFromTags(parseTags(tagsText)); return true } catch { return false } })()
   const valid = missing === null && sharesIssue === null && !tagsOverflow && protocolValid
 
   /**
@@ -553,6 +554,7 @@ export function AddServerModal(): React.JSX.Element {
         sessionId: `test-${Date.now()}`,
         sshCompatibility: sshCompatibilityFromTags(parseTags(tagsText), sshDefault),
         remoteTransport: remoteTransport(parseTags(tagsText)),
+        terminalEncoding: terminalEncodingFromTags(parseTags(tagsText)),
         serverId: editId ?? undefined,
         host: host.trim(),
         port: Number(port) || 22,
@@ -983,6 +985,14 @@ export function AddServerModal(): React.JSX.Element {
           <label><input type="checkbox" checked={parseTags(tagsText).includes('network:configure')} onChange={(e) => setTagsText([...parseTags(tagsText).filter((x) => x !== 'network:configure'), ...(e.target.checked ? ['network:configure'] : [])].join(', '))} /> {t('networkExtension.configureLabel')}</label>
           <span className="field-hint">{t('networkExtension.configureHint')}</span>
         </div>}
+        <div className="field">
+          <label className="field-label" htmlFor="terminal-encoding">{t('networkExtension.encodingLabel')}</label>
+          <select id="terminal-encoding" className="input" value={(() => { try { return terminalEncodingFromTags(parseTags(tagsText)) } catch { return '' } })()} onChange={(e) => { setTagsText([...parseTags(tagsText).filter((x) => !x.startsWith('encoding:')), ...(e.target.value === 'utf8' ? [] : [`encoding:${e.target.value}`])].join(', ')); setTestResult(null) }}>
+            <option value="" disabled>{t('networkExtension.invalidEncoding')}</option>
+            {TERMINAL_ENCODINGS.map((encoding) => <option key={encoding} value={encoding}>{t(`networkExtension.encoding_${encoding}`)}</option>)}
+          </select>
+          <span className="field-hint">{t('networkExtension.encodingHint')}</span>
+        </div>
         <div className="field">
           <label className="field-label" htmlFor="ssh-compatibility">{t('networkExtension.compatibilityLabel')}</label>
           <select id="ssh-compatibility" className="input" value={parseTags(tagsText).some((x) => x.startsWith('ssh-compat:')) ? sshCompatibilityFromTags(parseTags(tagsText)) : 'inherit'} onChange={(e) => setTagsText([...parseTags(tagsText).filter((x) => !x.startsWith('ssh-compat:')), ...(e.target.value === 'inherit' ? [] : [`ssh-compat:${e.target.value}`])].join(', '))}>

@@ -79,7 +79,21 @@ describe('bounded network CLI', () => {
   it('recognizes common error families and strips terminal escapes', () => {
     expect(cliHasError('% Invalid input detected at ^ marker.')).toBe(true)
     expect(cliHasError('Command fail. Return code -61')).toBe(true)
+    expect(cliHasError('错误：命令不存在')).toBe(true)
+    expect(cliHasError('输入错误：0，输出错误：0')).toBe(false)
     expect(normalizeCli('\x1b[31mVRP\x1b[0m\r\n')).toBe('VRP\n')
+  })
+  it('does not treat a description containing pager words as a request for another page', async () => {
+    const { s, cli } = await ready(); const p = cli.command('display current-configuration')
+    s.emit('data', Buffer.from('interface GE1/0/1\n description Press SPACE\n#\n<Switch>'))
+    await vi.advanceTimersByTimeAsync(110); expect(await p).toContain('description Press SPACE')
+    expect(s.writes).toEqual(['display current-configuration\r']); cli.close()
+  })
+  it('refuses malformed text before returning a corrupted configuration baseline', async () => {
+    const { s, cli } = await ready(); const p = cli.command('display current-configuration')
+    const assertion = expect(p).rejects.toThrow('matching terminal encoding')
+    s.emit('data', Buffer.from([0xff, 0x3c, 0x46, 0x57, 0x3e])); await assertion
+    expect(s.destroyed).toBe(true)
   })
 })
 describe('network plan binding, locking and protected artifacts', () => {
