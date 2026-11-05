@@ -3,9 +3,9 @@ name: CI
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [main, codex/lts-1.0]
   pull_request:
-    branches: [main]
+    branches: [main, codex/lts-1.0]
 
 # The default GITHUB_TOKEN is broadly scoped; this workflow only ever reads the
 # repository, so it says so. Nothing here calls `gh` or the API.

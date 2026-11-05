@@ -44,4 +44,6 @@ Original project: [OpsMaxx/OpsMaxx](https://github.com/OpsMaxx/OpsMaxx), baselin
 
 ## Developing OpsSwift
 
+Use your own GitHub identity to contribute through forks and pull requests. Read the [collaboration and authentication guide](docs/COLLABORATION.md) for access, review and CI rules.
+
 Start with the [developer guide](docs/DEVELOPMENT.md) and [repository instructions](AGENTS.md). The versioned [OpsSwift development skill](.agents/skills/opsswift-development/SKILL.md) supports feature work, protocol adapters, bilingual UI, compatibility checks and release maintenance. It preserves the scope of your request; production changes require their own authorization.

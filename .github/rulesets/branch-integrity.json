@@ -1,0 +1,23 @@
+{
+  "target": "branch",
+  "enforcement": "active",
+  "conditions": {
+    "ref_name": {
+      "include": [
+        "refs/heads/main",
+        "refs/heads/codex/lts-1.0"
+      ],
+      "exclude": []
+    }
+  },
+  "name": "OpsSwift protected branch integrity",
+  "bypass_actors": [],
+  "rules": [
+    {
+      "type": "deletion"
+    },
+    {
+      "type": "non_fast_forward"
+    }
+  ]
+}
