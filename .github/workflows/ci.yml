@@ -31,8 +31,8 @@ jobs:
       - run: npm run typecheck
       - run: npm run build
       # The WireGuard sidecar is a Go program in this repo, so it is covered by
-      # CI like the TypeScript is. Building it here also proves the six-target
-      # cross-compile still works before a release depends on it.
+      # CI like the TypeScript is. This job builds the native engine needed
+      # by its protocol fixtures; the manual release candidate builds all targets.
       #
       # This runs *before* `npm run test`: the driver's integration tests drive
       # the real binary, and on a clean runner it does not exist until this step
@@ -55,8 +55,8 @@ jobs:
         run: |
           go vet ./...
           go test ./...
-      - name: Sidecar cross-compile
-        run: npm run build:sidecar
+      - name: Build native sidecar for protocol fixtures
+        run: npm run build:sidecar -- linux-x64
       # The engine build scripts only ever run in the release workflow, so a
       # typo in one of them is discovered by a failed release. A parse check
       # costs a second and catches the whole class. It is not a substitute for
