@@ -41,3 +41,7 @@ The 1.x MCP client registration retains the **`opsmaxx` compatibility key** so e
 ## Attribution
 
 Original project: [OpsMaxx/OpsMaxx](https://github.com/OpsMaxx/OpsMaxx), baseline `v0.60.2` / `40c8f17bc09ea979d24428475eb8ac94a0c0930c`. Original MIT notice is retained in [LICENSE](LICENSE). Original documentation remains under `docs/upstream/`; bundled components and their licenses are listed in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md). OpsSwift changes are maintained in this repository and do not imply endorsement by upstream authors.
+
+## Developing OpsSwift
+
+Start with the [developer guide](docs/DEVELOPMENT.md) and [repository instructions](AGENTS.md). The versioned [OpsSwift development skill](.agents/skills/opsswift-development/SKILL.md) supports feature work, protocol adapters, bilingual UI, compatibility checks and release maintenance. It preserves the scope of your request; production changes require their own authorization.

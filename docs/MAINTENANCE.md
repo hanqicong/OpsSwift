@@ -26,3 +26,7 @@ macOS Safe Storage identity `OpsMaxx`, legacy `opsmaxx-*` data filenames and the
 - Personal runtime logs/caches continue to use their existing bounded retention rules. Release/build caches are reproducible and excluded from version control.
 
 A rollback restores the previous app, data-directory choice and client binding. Restoring an old data snapshot can discard later user changes; preserve the newer profile first. Future maintenance ends only when an explicit end-of-support notice or replacement line is published; this is a maintenance process, not a guarantee of a fixed service period.
+
+## Development knowledge
+
+Use [DEVELOPMENT.md](DEVELOPMENT.md) for the implementation map, isolated development and change-specific verification. Documentation or skill-only changes do not require rebuilding or replacing the installed application. Preserve existing release tags and artifact bytes.

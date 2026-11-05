@@ -1,0 +1,4 @@
+interface:
+  display_name: "OpsSwift 开发维护"
+  short_description: "根据业务需求扩展 OpsSwift，并维护协议、加密兼容、双语界面及发布流程"
+  default_prompt: "使用 $opsswift-development 按我的需求开发 OpsSwift，并说明实际验证与交付结果。"

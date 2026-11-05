@@ -27,3 +27,5 @@ OpsSwift 使用独立的 `OpsSwift.app`、`com.lyitech.opsswift` 和 `OpsSwift` 
 ## 开发与来源
 
 Node 24，依次运行 `npm ci`、`npm run typecheck`、`npm test`、`npm run lint`、`npm run build`。Apple Silicon 打包脚本为 `scripts/opsswift-package.py`，网络引擎必须由固定源码构建并通过清单校验。原项目、MIT 许可与第三方组件说明见 [English README](README.md#attribution) 与 [LICENSE](LICENSE)。
+
+按业务需求继续开发，请从[开发指南](docs/DEVELOPMENT.md)和[仓库协作入口](AGENTS.md)开始；可复用 [OpsSwift 开发技能](.agents/skills/opsswift-development/SKILL.md)。具体代码地图、隔离开发、兼容边界和验收选择均在指南中维护。
