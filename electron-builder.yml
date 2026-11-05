@@ -9,6 +9,8 @@ directories:
   output: release
 
 files:
+  - LICENSE
+  - THIRD-PARTY-NOTICES.md
   - out/**
   - bin/**
   - resources/**

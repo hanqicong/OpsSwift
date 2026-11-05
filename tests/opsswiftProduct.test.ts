@@ -12,6 +12,8 @@ describe('OpsSwift LTS product contract', () => {
     expect(pkg).toMatchObject({ name: 'opsswift', version: '1.0.0', productName: 'OpsSwift' })
     expect(read('electron-builder.yml')).toContain('appId: com.lyitech.opsswift')
     expect(read('LICENSE')).toContain('Copyright (c) 2026 OpsMaxx contributors')
+    expect(read('electron-builder.yml')).toContain('  - LICENSE')
+    expect(read('electron-builder.yml')).toContain('  - THIRD-PARTY-NOTICES.md')
   })
   it('supplies a Windows icon large enough to package', () => {
     const icon = readFileSync(resolve('build/icon.ico'))
