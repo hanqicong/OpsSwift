@@ -1,5 +1,5 @@
 import { Duplex } from 'node:stream'
-import { StringDecoder } from 'node:string_decoder'
+import { terminalDecoder, encodeTerminal } from './terminalCodec'
 import { openProtocolSocket, type ProtocolTarget, type ProtocolContext } from './protocolWire'
 
 /** RFC 854 parser: handles split IAC, bounded subnegotiation, escaped data and option refusals. */
@@ -64,6 +64,9 @@ export async function openTelnet(cfg: ProtocolTarget, ctx: ProtocolContext, size
   // Login fields are line-delimited, so terminal controls/newlines would create extra commands.
   // eslint-disable-next-line no-control-regex
   if (/[\x00-\x1f\x7f]/.test(cfg.username + cfg.password)) throw new Error('Telnet credentials contain unsupported control characters')
+  // Validate before opening the socket; an unrepresentable password must never be submitted partially.
+  const username = encodeTerminal(cfg.username + '\r\n', cfg.terminalEncoding)
+  const password = encodeTerminal(cfg.password + '\r\n', cfg.terminalEncoding)
   const raw = await openProtocolSocket(cfg, ctx)
   const codec = new TelnetCodec(size)
   const decoded = new Duplex({
@@ -80,26 +83,26 @@ export async function openTelnet(cfg: ProtocolTarget, ctx: ProtocolContext, size
       let buffer = ''
       let sentUser = false
       let sentPassword = false
-      const decoder = new StringDecoder('utf8')
+      const decoder = terminalDecoder(cfg.terminalEncoding)
       const cleanup = (): void => { decoded.removeListener('data', onData); decoded.removeListener('error', onError); decoded.removeListener('close', onClose); ctx.signal.removeEventListener('abort', onClose) }
       const fail = (): void => { cleanup(); reject(new Error('Telnet login failed; no automatic credential retry')) }
       const onError = (): void => fail()
       const onClose = (): void => fail()
       const onData = (chunk: Buffer): void => {
         buffer += decoder.write(chunk)
-        if (Buffer.byteLength(buffer) > 64 * 1024 || /(?:authentication failed|login incorrect|access denied|bad password|password incorrect)/i.test(buffer)) return fail()
+        if (Buffer.byteLength(buffer) > 64 * 1024 || /(?:authentication failed|login incorrect|access denied|bad password|password incorrect|认证失败|验证失败|登录失败|密码错误)/i.test(buffer)) return fail()
         const tail = buffer.replace(/[\r\0]/g, '').trimEnd().split('\n').at(-1)?.trim() ?? ''
         try {
-          if (/(?:username|login|user name)\s*:\s*$/i.test(tail)) {
+          if (/(?:username|login|user name|用户名|用户名称)\s*[:：]\s*$/i.test(tail)) {
             if (sentUser || sentPassword) return fail()
-            ctx.check(); decoded.write(cfg.username + '\r\n'); sentUser = true; buffer = ''
-          } else if (/password\s*:\s*$/i.test(tail)) {
+            ctx.check(); decoded.write(username); sentUser = true; buffer = ''
+          } else if (/(?:password|密码|口令)\s*[:：]\s*$/i.test(tail)) {
             if (sentPassword) return fail()
-            ctx.check(); decoded.write(cfg.password + '\r\n'); sentPassword = true; buffer = ''
+            ctx.check(); decoded.write(password); sentPassword = true; buffer = ''
           } else if (tail.length > 0 && tail.length < 180 && /^(?:(?:HRP_[MS])?(?:<[^<>\n]+>|\[[^[\]\n]+\])|[\w.@:-]+(?:\([\w ./:-]+\))?[#>])$/.test(tail)) {
             // A naked prompt must not turn a credential-less connection into anonymous access.
             if (!sentPassword) return fail()
-            cleanup(); decoded.pause(); decoded.unshift(Buffer.from(tail)); resolve()
+            cleanup(); decoded.pause(); decoded.unshift(encodeTerminal(tail, cfg.terminalEncoding)); resolve()
           }
         } catch { fail() }
       }

@@ -1,6 +1,8 @@
 /** Network profiles are selected by a person in the connection editor, never by an MCP caller. */
-export type NetworkQuery = 'version' | 'interfaces' | 'vlans' | 'routes' | 'neighbors' | 'arp' | 'mac' | 'ha' | 'cpu' | 'memory'
-export type ConfigStyle = 'vrp' | 'ios' | 'junos'
+import { isUsgChange, plainCliText, type UsgChange } from './huaweiUsg'
+export const NETWORK_QUERIES = ['version', 'interfaces', 'vlans', 'routes', 'neighbors', 'arp', 'mac', 'ha', 'cpu', 'memory', 'security_policies', 'nat_policies', 'address_objects', 'ipsec_sa'] as const
+export type NetworkQuery = typeof NETWORK_QUERIES[number]
+export type ConfigStyle = 'vrp' | 'ios' | 'junos' | 'usg'
 export interface NetworkProfile {
   id: string
   label: string
@@ -23,7 +25,7 @@ const vrpConfig = { style: 'vrp' as const, enter: 'system-view', leave: 'return'
 /** These are candidate adapters, NOT a claim of hardware/firmware certification. */
 export const NETWORK_PROFILES: readonly NetworkProfile[] = [
   profile('huawei_vrp', 'Huawei VRP / S / CloudEngine', 'Huawei', ['screen-length 0 temporary'], vrp, 'display current-configuration', vrpConfig),
-  profile('huawei_usg', 'Huawei USG', 'Huawei', ['screen-length 0 temporary'], { version: vrp.version, interfaces: vrp.interfaces, ha: 'display hrp state', cpu: vrp.cpu, memory: vrp.memory }, 'display current-configuration'),
+  profile('huawei_usg', 'Huawei USG / V500R005 configuration candidate', 'Huawei', ['screen-length 0 temporary'], { version: vrp.version, interfaces: vrp.interfaces, routes: vrp.routes, arp: vrp.arp, ha: 'display hrp state', cpu: vrp.cpu, memory: vrp.memory, security_policies: 'display security-policy rule all', nat_policies: 'display nat-policy rule all', address_objects: 'display current-configuration', ipsec_sa: 'display ipsec sa' }, 'display current-configuration', { style: 'usg', enter: 'system-view', leave: 'return', save: 'save' }),
   profile('huawei_wlan', 'Huawei WLAN AC', 'Huawei', ['screen-length 0 temporary'], { version: 'display version', interfaces: 'display interface brief', neighbors: 'display ap all' }, 'display current-configuration'),
   profile('h3c_comware', 'H3C / HPE Comware', 'H3C', ['screen-length disable'], vrp, 'display current-configuration', { ...vrpConfig, save: 'save force' }),
   profile('cisco_ios', 'Cisco IOS / IOS XE', 'Cisco', ['terminal length 0', 'terminal width 511'], ios, 'show running-config', iosConfig),
@@ -65,23 +67,25 @@ export function sshCompatibilityFromTags(tags: readonly string[] = [], fallback:
   if (selected.length !== 1) return 'strict'
   return selected[0] === 'ssh-compat:huawei-sha1' ? 'huawei-sha1' : selected[0] === 'ssh-compat:huawei-legacy' ? 'huawei-legacy' : 'strict'
 }
-export interface NetworkChange {
+export interface InterfaceNetworkChange {
   kind: 'interface_description' | 'interface_admin' | 'vlan_name' | 'access_vlan'
   target: string
   value: string
 }
+export type NetworkChange = InterfaceNetworkChange | UsgChange
 export function compileNetworkChanges(p: NetworkProfile, changes: readonly NetworkChange[]): string[] {
   if (!p.style || !p.enter || !p.leave) throw new Error('This adapter supports read-only operations; configuration has not been enabled')
   if (!changes.length || changes.length > 16) throw new Error('A plan needs 1–16 changes')
   const commands: string[] = [p.enter]
   for (const c of changes) {
+    if (p.style === 'usg' || isUsgChange(c)) throw new Error('USG changes require their bounded compiler and a complete baseline')
     if (!/^[A-Za-z][A-Za-z0-9/_.:-]{0,79}$/.test(c.target) && c.kind !== 'vlan_name') throw new Error('Invalid interface name')
     if (c.kind === 'vlan_name' || c.kind === 'access_vlan') {
       const vlan = c.kind === 'vlan_name' ? c.target : c.value
       if (!/^[1-9]\d{0,3}$/.test(vlan) || Number(vlan) > 4094) throw new Error('VLAN must be between 1 and 4094')
     }
     if (c.kind === 'interface_description' || c.kind === 'vlan_name') {
-      if (!/^[A-Za-z0-9][A-Za-z0-9 _.:/-]{0,79}$/.test(c.value)) throw new Error('Description/name must be 1–80 plain characters')
+      if (!plainCliText(c.value)) throw new Error('Description/name must be 1–80 plain characters')
     }
     if (c.kind === 'interface_admin' && !['up', 'down'].includes(c.value)) throw new Error('Interface state must be up or down')
     if (p.style === 'junos') {

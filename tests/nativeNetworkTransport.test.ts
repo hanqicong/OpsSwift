@@ -8,8 +8,8 @@ describe('terminal payload from saved connection settings', () => {
   it.each([['ssh', ['ssh-compat:huawei-sha1'], 'huawei-sha1'], ['telnet', ['transport:telnet'], 'strict']] as const)('passes %s and its compatibility policy through the renderer bridge', async (protocol, tags, compatibility) => {
     const connect = vi.fn().mockResolvedValue(undefined)
     stubBridge({ ssh: { connect } })
-    const server = { id: 'fixture', name: 'Fixture', host: '192.0.2.1', port: protocol === 'telnet' ? 23 : 22, username: 'fixture', auth: 'password', route: [], tags: [...tags] } as unknown as Server
+    const server = { id: 'fixture', name: 'Fixture', host: '192.0.2.1', port: protocol === 'telnet' ? 23 : 22, username: 'fixture', auth: 'password', route: [], tags: [...tags, 'encoding:gb18030'] } as unknown as Server
     await sshTransport(server, () => {}).connect('session', 120, 40)
-    expect(connect).toHaveBeenCalledWith(expect.objectContaining({ remoteTransport: protocol, sshCompatibility: compatibility, serverId: 'fixture', cols: 120, rows: 40 }))
+    expect(connect).toHaveBeenCalledWith(expect.objectContaining({ terminalEncoding: 'gb18030', remoteTransport: protocol, sshCompatibility: compatibility, serverId: 'fixture', cols: 120, rows: 40 }))
   })
 })

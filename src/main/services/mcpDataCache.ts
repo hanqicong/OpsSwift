@@ -7,6 +7,7 @@
 // store.ts's job.
 import { loadData } from './store'
 import { sshCompatibilityFromTags } from '../../shared/networkDevice'
+import { terminalEncodingFromTags } from '../../shared/terminalEncoding'
 import { defaultSshCompatibility, refreshSshPolicy } from './sshPolicy'
 import type { SshAuth, SshHop } from '../../shared/ssh'
 import type { DbKind } from '../../shared/db'
@@ -366,6 +367,7 @@ export function serverToSshConfig(
     username: server.username,
     auth: server.auth,
     sshCompatibility: sshCompatibilityFromTags(server.tags, defaultSshCompatibility()),
+    terminalEncoding: terminalEncodingFromTags(server.tags),
     serverId: server.id,
     // Carried so a bridge caller invalidates on an edit the same way the app
     // does. Its caches are in the `mcp:` namespace and so never collide with

@@ -1,7 +1,8 @@
 import { createHash, randomUUID } from 'node:crypto'
 import { constants, mkdirSync, readdirSync, lstatSync, readFileSync, writeFileSync, unlinkSync, openSync, closeSync, fsyncSync, renameSync, chmodSync } from 'node:fs'
 import { join } from 'node:path'
-import { StringDecoder } from 'node:string_decoder'
+import { terminalDecoder, encodeTerminal } from './terminalCodec'
+import { TerminalEncodingError, type TerminalEncoding } from '../../shared/terminalEncoding'
 import { app, safeStorage } from 'electron'
 import type { ClientChannel } from 'ssh2'
 import { acquire, release } from './ssh'
@@ -10,6 +11,7 @@ import type { NetworkChange, NetworkProfile, NetworkQuery } from '../../shared/n
 import { compileNetworkChanges } from '../../shared/networkDevice'
 import { boundedProtocol, abortable } from './protocolWire'
 import { openTelnet } from './protocolTelnet'
+import { compileUsgChanges, isUsgChange, verifyUsgChanges } from '../../shared/huaweiUsg'
 
 export const NETWORK_LIMITS = { commandMs: 20_000, workflowMs: 55_000, outputBytes: 5 * 1024 * 1024, planMs: 10 * 60_000, plans: 32, backupBytes: 128 * 1024 * 1024, backupCount: 200, backupDays: 30 }
 export function normalizeCli(raw: string): string {
@@ -17,8 +19,8 @@ export function normalizeCli(raw: string): string {
   return raw.replace(/\x1b\][^\x07]*(?:\x07|\x1b\\)/g, '').replace(/\x1b\[[0-?]*[ -/]*[@-~]/g, '').replace(/[^\n]\x08/g, '').replace(/\r/g, '').replace(/\x00/g, '')
 }
 export function configHash(raw: string): string { return createHash('sha256').update(normalizeCli(raw).trim()).digest('hex') }
-const CLI_ERROR = /(?:^|\n)\s*(?:%\s*(?:Invalid|Error|Unknown|Incomplete|Ambiguous|Unrecognized|Authorization)|Error:|Unrecognized command|Unknown command|Invalid input|Incomplete command|Ambiguous command|syntax error|error:|Command fail|Permission denied|Not enough privileges|Info:.*(?:failed|failure)|.*\^.*error)/i
-const PAGER = /(?:----\s*More\s*----|<---\s*More\s*--->|--\s*[Mm]ore\s*--|Press (?:any key|SPACE|space)|\(q\)uit)/
+const CLI_ERROR = /(?:^|\n)\s*(?:%\s*(?:Invalid|Error|Unknown|Incomplete|Ambiguous|Unrecognized|Authorization)|Error:|Unrecognized command|Unknown command|Invalid input|Incomplete command|Ambiguous command|syntax error|error:|Command fail|Permission denied|Not enough privileges|Info:.*(?:failed|failure)|错误[:：]|未识别的命令|命令不完整|命令不存在|权限不足|无权执行|.*\^.*error)/i
+const PAGER = /(?:----\s*(?:More|更多)\s*----|<---\s*More\s*--->|--\s*[Mm]ore\s*--|Press (?:any key|SPACE|space)|\(q\)uit)\s*$/
 export function cliHasError(text: string): boolean { return CLI_ERROR.test(text) }
 export function promptAtEnd(text: string): string | null {
   const tail = normalizeCli(text).trimEnd().split('\n').at(-1)?.trim() ?? ''
@@ -31,7 +33,7 @@ export function promptAtEnd(text: string): string | null {
 export interface CliStream {
   on(event: string, listener: (...args: any[]) => void): unknown
   removeListener(event: string, listener: (...args: any[]) => void): unknown
-  write(data: string): unknown
+  write(data: string | Buffer): unknown
   end(): unknown
   destroy(): unknown
 }
@@ -39,14 +41,15 @@ export interface CliStream {
 export class NetworkCli {
   private pending: { resolve: (s: string) => void; reject: (e: Error) => void; timer: ReturnType<typeof setTimeout>; initial: boolean; confirmSave: boolean; confirmed: boolean } | null = null
   private buffer = ''
-  private decoder = new StringDecoder('utf8')
+  private decoder: ReturnType<typeof terminalDecoder>
   private closed = false
   private bytes = 0
   private pages = 0
   private endTimer: ReturnType<typeof setTimeout>
   private quietTimer?: ReturnType<typeof setTimeout>
   private lastPrompt: string | null = null
-  constructor(private stream: CliStream, private signal?: AbortSignal, private beforeWrite: () => void = () => {}) {
+  constructor(private stream: CliStream, private signal?: AbortSignal, private beforeWrite: () => void = () => {}, private encoding: TerminalEncoding = 'utf8') {
+    this.decoder = terminalDecoder(encoding)
     stream.on('data', this.onData)
     stream.on('error', this.onError)
     stream.on('close', this.onClose)
@@ -61,7 +64,9 @@ export class NetworkCli {
     if (this.quietTimer) { clearTimeout(this.quietTimer); this.quietTimer = undefined }
     this.bytes += Buffer.byteLength(chunk)
     if (this.bytes > NETWORK_LIMITS.outputBytes) return this.fail(new Error('Network output limit exceeded; result is incomplete'))
-    this.buffer += this.decoder.write(typeof chunk === 'string' ? Buffer.from(chunk) : chunk)
+    const decoded = this.decoder.write(chunk)
+    if (decoded.includes('\uFFFD')) return this.fail(new TerminalEncodingError('Device output cannot be decoded losslessly; select the matching terminal encoding and reconnect'))
+    this.buffer += decoded
     if (!this.pending) return
     const clean = normalizeCli(this.buffer)
     // Exact save-only confirmation. Never answer a generic password/overwrite/delete prompt.
@@ -72,7 +77,7 @@ export class NetworkCli {
     }
     if (PAGER.test(clean.slice(-300))) {
       if (++this.pages > 100) return this.fail(new Error('Network pagination limit exceeded; result is incomplete'))
-      this.buffer = this.buffer.replace(PAGER, '')
+      this.buffer = clean.replace(PAGER, '')
       try { this.beforeWrite(); this.stream.write(' ') } catch { this.fail(new Error('Network access revoked during pagination')) }
       return
     }
@@ -103,6 +108,7 @@ export class NetworkCli {
     })
   }
   async ready(): Promise<void> { await this.wait(true) }
+  currentPrompt(): string { return this.lastPrompt ?? '' }
   async command(command: string, confirmSave = false): Promise<string> {
     if (this.closed) throw new Error('Network CLI is closed')
     if (this.pending) throw new Error('A network command is already running')
@@ -113,7 +119,7 @@ export class NetworkCli {
     this.buffer = ''
     this.pages = 0
     const pending = this.wait(false, confirmSave)
-    try { this.stream.write(command + '\r') } catch { this.fail(new Error('Network CLI write failed; device state is unknown')) }
+    try { this.stream.write(this.encoding === 'utf8' ? command + '\r' : encodeTerminal(command + '\r', this.encoding)) } catch { this.fail(new Error('Network CLI encoding/write failed; device state is unknown')) }
     const result = await pending
     const lines = result.split('\n')
     if (lines[0]?.trim() === command) lines.shift()
@@ -148,7 +154,7 @@ export async function withNetworkCli<T>(cfg: SshHop & { serverId?: string; hops?
   return boundedProtocol(async (ctx) => {
   if (transport === 'telnet') {
     const raw = await openTelnet(cfg, ctx)
-    const cli = new NetworkCli(raw.stream, ctx.signal, ctx.check)
+    const cli = new NetworkCli(raw.stream, ctx.signal, ctx.check, cfg.terminalEncoding)
     raw.stream.resume()
     try { await cli.ready(); for (const command of p.paging) await cli.command(command); return await fn(cli) }
     finally { cli.close(); raw.close() }
@@ -166,7 +172,7 @@ export async function withNetworkCli<T>(cfg: SshHop & { serverId?: string; hops?
         else resolve(stream)
       })
     })
-    cli = new NetworkCli(stream, ctx.signal, ctx.check)
+    cli = new NetworkCli(stream, ctx.signal, ctx.check, cfg.terminalEncoding)
     await cli.ready()
     for (const command of p.paging) await cli.command(command)
     return await fn(cli)
@@ -204,16 +210,19 @@ export function getNetworkPlan(id: string, hash: string, sessionId: string, serv
   return structuredClone(p)
 }
 export function consumeNetworkPlan(id: string): void { const p = plans.get(id); if (!p || p.used) throw new Error('Network plan already consumed'); p.used = true }
-export function buildNetworkCommands(p: NetworkProfile, changes: NetworkChange[], persist: boolean): string[] {
-  const commands = compileNetworkChanges(p, changes)
+export function buildNetworkCommands(p: NetworkProfile, changes: NetworkChange[], persist: boolean, baseline?: string): string[] {
+  if (p.style === 'usg' && !changes.every(isUsgChange)) throw new Error('This USG adapter supports bounded object/rule creation only')
+  const commands = p.style === 'usg' ? compileUsgChanges(changes.filter(isUsgChange), baseline ?? '') : compileNetworkChanges(p, changes)
   if (p.style === 'junos' && !persist) throw new Error('Junos changes require persist=true because commit is part of the transaction')
   if (persist && p.save) commands.push(p.save)
   return commands
 }
 
 export function verifyNetworkChanges(p: NetworkProfile, raw: string, changes: NetworkChange[]): { kind: string; target: string; matched: boolean }[] {
+  if (p.style === 'usg') return changes.every(isUsgChange) ? verifyUsgChanges(raw, changes.filter(isUsgChange)) : changes.map(c => ({ kind: c.kind, target: c.target, matched: false }))
   const lines = normalizeCli(raw).split('\n').map((l) => l.trim())
   return changes.map((c) => {
+    if (isUsgChange(c)) return { kind: c.kind, target: c.target, matched: false }
     if (p.style === 'junos') {
       const prefix = `set interfaces ${c.target} `
       const matched = c.kind === 'interface_description'

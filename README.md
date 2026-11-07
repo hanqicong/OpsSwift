@@ -8,6 +8,7 @@
 - LYiTECH orange branding, light/dark themes, SSH/SFTP, tunnels, databases and encrypted local credentials.
 - 22 candidate network OS profiles; SSH and Telnet terminal windows; NETCONF, HTTPS JSON-RPC and Windows WinRM/SSH PowerShell through MCP.
 - Modern SSH algorithms first, optional per-connection or global legacy compatibility, host-key verification and bounded negotiation fallback.
+- Source enhancements: streaming UTF-8/GBK/GB18030/Big5 CLI and bounded Huawei USG diagnostics/object/policy/NAT workflows. See [encoding and USG support](docs/CHINESE-AND-USG.md) for firmware and release boundaries.
 - 75 MCP tools, including 14 network/protocol extensions. Candidate profiles require device/model/firmware qualification; real writes retain approvals.
 
 ## Releases

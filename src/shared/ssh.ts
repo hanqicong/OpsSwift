@@ -14,6 +14,8 @@ import type { DiskMount } from './mounts'
 export type SshAuth = 'password' | 'key' | 'agent' | 'certificate'
 
 export interface SshHop {
+  /** Human-selected CLI byte encoding; SSH authentication itself keeps the SSH protocol encoding. */
+  terminalEncoding?: import('./terminalEncoding').TerminalEncoding
   /** Per-connection, human-selected compatibility; never disables host key verification. */
   sshCompatibility?: import('./networkDevice').SshCompatibility
   host: string

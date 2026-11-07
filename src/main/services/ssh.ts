@@ -20,6 +20,8 @@ import { getCachedServer } from './mcpDataCache'
 import { sshCompatibilityFromTags } from '../../shared/networkDevice'
 import { withLegacySshRetry } from './sshCompatibility'
 import { defaultSshCompatibility } from './sshPolicy'
+import { terminalDecoder, encodeTerminal } from './terminalCodec'
+import { parseTerminalEncoding, type TerminalEncoding } from '../../shared/terminalEncoding'
 import { isPastableImage, removePastedImages, uploadPastedImage } from './pastedImage'
 import { isEncryptedPrivateKey, isSecurityKeyPrivateKey, defaultIdentityPath } from './sshKeys'
 import {
@@ -32,6 +34,8 @@ import {
 interface Session {
   conn: PooledConnection | null
   stream: ClientChannel | null
+  encoding?: TerminalEncoding
+  owner?: WebContents
   /** The saved server this terminal is to, when it is one. */
   serverId?: string
   /** A shell inside a container, whose filesystem is not the host's /tmp. */
@@ -1668,20 +1672,25 @@ export function poolDisposeAll(): void {
 export async function sshConnect(wc: WebContents, cfg: SshConnectConfig): Promise<void> {
   const { sessionId } = cfg
   const serverId = (cfg as { serverId?: unknown }).serverId
-  sessions.set(sessionId, {
+  if (sessions.has(sessionId)) cleanup(sessionId)
+  const opening: Session = {
     conn: null,
     stream: null,
     ...(typeof serverId === 'string' && serverId ? { serverId } : {}),
     ...(cfg.initialCommand ? { container: true } : {})
-  })
+  }
+  sessions.set(sessionId, opening)
 
   try {
+    const encoding = parseTerminalEncoding(cfg.terminalEncoding)
+    const session = sessions.get(sessionId)
+    if (session) { session.encoding = encoding; session.owner = wc }
     status(wc, sessionId, 'connecting')
     const conn = await acquire(cfg, (i, count) =>
       status(wc, sessionId, 'hop', { hopIndex: i, hopCount: count })
     )
     const current = sessions.get(sessionId)
-    if (!current) {
+    if (current !== opening) {
       // Closed while connecting.
       release(conn)
       return
@@ -1708,12 +1717,13 @@ export async function sshConnect(wc: WebContents, cfg: SshConnectConfig): Promis
     }
     open((err, stream) => {
       if (err) {
+        if (sessions.get(sessionId) !== opening) return
         status(wc, sessionId, 'error', { message: err.message })
         cleanup(sessionId)
         return
       }
       const s = sessions.get(sessionId)
-      if (!s) {
+      if (s !== opening) {
         stream.close()
         return
       }
@@ -1733,15 +1743,16 @@ export async function sshConnect(wc: WebContents, cfg: SshConnectConfig): Promis
         if (pending.length === 0) return
         const payload = pending.length === 1 ? pending[0] : pending.join('')
         pending = []
-        send(wc, `ssh:data:${sessionId}`, payload)
+        if (sessions.get(sessionId) === opening) send(wc, `ssh:data:${sessionId}`, payload)
       }
-      const push = (d: Buffer): void => {
-        pending.push(d.toString('utf8'))
+      const stdout = terminalDecoder(encoding), stderr = terminalDecoder(encoding)
+      const push = (text: string): void => {
+        pending.push(text)
         if (!flushTimer) flushTimer = setTimeout(flush, 0)
       }
 
-      stream.on('data', push)
-      stream.stderr.on('data', push)
+      stream.on('data', (d: Buffer) => push(stdout.write(d)))
+      stream.stderr.on('data', (d: Buffer) => push(stderr.write(d)))
 
       // 'exit' carries why the shell ended and always arrives before 'close'.
       // Worth forwarding: "signal HUP" is a server-side idle timeout, while
@@ -1754,12 +1765,13 @@ export async function sshConnect(wc: WebContents, cfg: SshConnectConfig): Promis
 
       stream.on('close', () => {
         if (flushTimer) clearTimeout(flushTimer)
+        pending.push(stdout.end(), stderr.end())
         flush()
-        send(wc, `ssh:close:${sessionId}`, exit)
-        cleanup(sessionId)
+        if (sessions.get(sessionId) === opening) { send(wc, `ssh:close:${sessionId}`, exit); cleanup(sessionId) }
       })
     })
   } catch (err) {
+    if (sessions.get(sessionId) !== opening) return
     // The tab says ours in the user's language; ssh2's and the server's own words pass through, and
     // only those are what the connection-error classifier reads.
     const message =
@@ -1770,7 +1782,10 @@ export async function sshConnect(wc: WebContents, cfg: SshConnectConfig): Promis
 }
 
 export function sshWrite(sessionId: string, data: string): void {
-  sessions.get(sessionId)?.stream?.write(data)
+  const s = sessions.get(sessionId)
+  if (!s?.stream) return
+  try { s.stream.write(s.encoding === 'utf8' || !s.encoding ? data : encodeTerminal(data, s.encoding)) }
+  catch (error) { if (s.owner) status(s.owner, sessionId, 'error', { message: error instanceof Error ? error.message : 'Terminal encoding failed' }) }
 }
 
 export function sshResize(sessionId: string, cols: number, rows: number): void {
@@ -1888,7 +1903,7 @@ export async function sshExec(
       `Timed out after ${timeoutMs}ms connecting`,
       release
     )
-    const first = await execOn(conn.client, command, timeoutMs)
+    const first = await execOn(conn.client, command, timeoutMs, cfg.terminalEncoding)
     if (!isChannelOpenFailure(first.error)) return first
 
     /**
@@ -1916,7 +1931,7 @@ export async function sshExec(
       `Timed out after ${timeoutMs}ms connecting`,
       release
     )
-    const second = await execOn(conn.client, command, timeoutMs)
+    const second = await execOn(conn.client, command, timeoutMs, cfg.terminalEncoding)
     if (!isChannelOpenFailure(second.error)) return second
     // Twice on a connection that was new the second time is the server's
     // answer, not a stale socket. Say which, because "open failed" on its own
@@ -1952,7 +1967,7 @@ export async function sshExec(
  * safety properties, and a second copy of them written for the verification
  * path would be a second thing to drift.
  */
-function execOn(client: Client, command: string, timeoutMs: number): Promise<ExecResult> {
+function execOn(client: Client, command: string, timeoutMs: number, encoding?: TerminalEncoding): Promise<ExecResult> {
   return new Promise<ExecResult>((resolve) => {
     let settled = false
     const done = (result: ExecResult): void => {
@@ -2000,23 +2015,26 @@ function execOn(client: Client, command: string, timeoutMs: number): Promise<Exe
         let stderr = ''
         let truncated = false
         let elided = 0
-        const append = (current: string, chunk: Buffer): string => {
+        const stdoutDecoder = terminalDecoder(encoding), stderrDecoder = terminalDecoder(encoding)
+        const append = (current: string, text: string, bytes: number): string => {
           if (current.length >= EXEC_OUTPUT_CAP) {
             truncated = true
             // Counted rather than merely noted. A caller that writes this
             // result down has to be able to say how much went; see ExecResult.
-            elided += chunk.length
+            elided += bytes
             return current
           }
-          return current + chunk.toString('utf8')
+          return current + text
         }
         stream.on('data', (d: Buffer) => {
-          stdout = append(stdout, d)
+          stdout = append(stdout, stdoutDecoder.write(d), d.length)
         })
         stream.stderr.on('data', (d: Buffer) => {
-          stderr = append(stderr, d)
+          stderr = append(stderr, stderrDecoder.write(d), d.length)
         })
         stream.on('close', (code: number | null, signal?: string) => {
+          stdout = append(stdout, stdoutDecoder.end(), 0)
+          stderr = append(stderr, stderrDecoder.end(), 0)
           done({ ok: true, stdout, stderr, code: code ?? null, signal: signal ?? null, truncated, elided })
         })
       })
@@ -2205,9 +2223,13 @@ export async function sshExecStream(
         reject(err)
         return
       }
-      stream.on('data', (c: Buffer) => handlers.onStdout(c.toString('utf8')))
-      stream.stderr.on('data', (c: Buffer) => handlers.onStderr(c.toString('utf8')))
+      const stdoutDecoder = terminalDecoder(cfg.terminalEncoding), stderrDecoder = terminalDecoder(cfg.terminalEncoding)
+      stream.on('data', (c: Buffer) => handlers.onStdout(stdoutDecoder.write(c)))
+      stream.stderr.on('data', (c: Buffer) => handlers.onStderr(stderrDecoder.write(c)))
       stream.on('close', (code: number | null) => {
+        const out = stdoutDecoder.end(), err = stderrDecoder.end()
+        if (out) handlers.onStdout(out)
+        if (err) handlers.onStderr(err)
         releaseOnce()
         handlers.onClose(code ?? null)
       })
