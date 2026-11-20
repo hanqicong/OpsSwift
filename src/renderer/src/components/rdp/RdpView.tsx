@@ -5,6 +5,8 @@ import { clsx } from '../../lib/format'
 import { bridgeHas } from '../../lib/bridge'
 import { t as tr, useT } from '../../lib/i18n'
 import type { MessageKey } from '../../../../shared/i18n'
+import { useApp } from '../../store/app'
+import { openSettings } from '../../store/nav'
 
 // A remote desktop, drawn by the IronRDP WebAssembly client into a canvas
 // owned by the <iron-remote-desktop> web component.
@@ -227,6 +229,7 @@ export function RdpView({
   visible: boolean
 }): React.JSX.Element {
   const t = useT()
+  const openServerEditor = useApp((s) => s.openServerEditor)
   const hostRef = useRef<HTMLDivElement>(null)
   const uiRef = useRef<UserInteraction | null>(null)
   const [phase, setPhase] = useState<Phase>('idle')
@@ -798,9 +801,17 @@ export function RdpView({
                   {ended ? t('rdp.view.endedTitle') : t('rdp.view.failedTitle')}
                 </div>
                 <div className="rdp-overlay-msg">{error}</div>
-                <button type="button" className="btn" onClick={retry}>
-                  <RotateCw size={14} /> {t('rdp.view.reconnect')}
-                </button>
+                <div className="row" style={{ gap: 'var(--sp-2)', flexWrap: 'wrap', justifyContent: 'center' }}>
+                  <button type="button" className="btn" onClick={retry}>
+                    <RotateCw size={14} /> {t('rdp.view.reconnect')}
+                  </button>
+                  <button type="button" className="btn" onClick={() => openServerEditor(server.id)}>
+                    {t('rdp.view.editSignIn')}
+                  </button>
+                  <button type="button" className="btn" onClick={() => openSettings('security')}>
+                    {t('settingsPage.rdpCerts.title')}
+                  </button>
+                </div>
               </>
             ) : (
               <div className="rdp-overlay-msg">

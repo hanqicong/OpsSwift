@@ -140,7 +140,7 @@ nsis:
   allowToChangeInstallationDirectory: true
   createDesktopShortcut: always
   createStartMenuShortcut: true
-  shortcutName: OpsMaxx
+  shortcutName: OpsSwift
   # Adds the CLI launcher's folder to the user's PATH on install — see the
   # script itself for why it deliberately does not undo that on uninstall.
   include: build/installer.nsh
@@ -289,7 +289,7 @@ dmg:
 linux:
   icon: build/icon.png
   category: Development
-  maintainer: ghauri01 <aliwaqarofficial@gmail.com>
+  maintainer: OpsSwift maintainers <hanqicong@users.noreply.github.com>
   synopsis: Your DevOps workstation, everywhere.
   description: >-
     Free, open-source SSH client, SFTP browser, SSH tunnel manager, multi-engine
@@ -297,7 +297,7 @@ linux:
     alternative to MobaXterm, PuTTY and Termius.
   desktop:
     entry:
-      Name: OpsMaxx
+      Name: OpsSwift
       Comment: SSH, SFTP, tunnels and databases in one place
       Comment[de]: SSH, SFTP, Tunnel und Datenbanken an einem Ort
       Comment[es]: SSH, SFTP, túneles y bases de datos en un solo lugar

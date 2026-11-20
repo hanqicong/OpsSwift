@@ -4505,7 +4505,8 @@
   "connections.addServer.rdpSignInAs": "登录身份",
   "connections.addServer.rdpAccountOptional": "RDP 账户（可选）",
   "connections.addServer.rdpPasswordLabel": "RDP 密码",
-  "connections.addServer.rdpPasswordUnchanged": "未更改",
+  "connections.addServer.rdpPasswordUnchanged": "输入新密码，留空则保留已保存的密码",
+  "connections.addServer.rdpPasswordSaveFailed": "无法保存 RDP 密码。请检查系统凭据存储后重试。",
   "connections.addServer.rdpPortLabel": "RDP 端口",
   "connections.addServer.domainLabel": "域（可选）",
   "connections.addServer.nlaLabel": "网络级别身份验证",
@@ -6233,6 +6234,7 @@
   "rdp.view.sessionEnded": "远程桌面会话已结束。",
   "rdp.view.ctrlAltDel": "发送 Ctrl+Alt+Del",
   "rdp.view.reconnect": "重新连接",
+  "rdp.view.editSignIn": "编辑 RDP 登录信息",
   "rdp.view.endedTitle": "远程桌面会话已结束",
   "rdp.view.failedTitle": "无法打开桌面",
   "rdp.view.ready": "就绪。",
@@ -8183,5 +8185,11 @@
   "opsswift.brandName": "LYiTECH",
   "opsswift.productName": "OpsSwift",
   "opsswift.ltsTag": "LTS",
-  "opsswift.versionLabel": "OpsSwift {{version}} · LTS"
+  "opsswift.versionLabel": "OpsSwift {{version}} · LTS",
+  "settingsPage.rdpCerts.title": "受信任的 RDP 证书",
+  "settingsPage.rdpCerts.desc": "已保存的远程桌面证书指纹。核实证书变更后可忘记旧记录，下次连接时重新确认新证书。",
+  "settingsPage.rdpCerts.empty": "暂无已保存的 RDP 证书。",
+  "settingsPage.rdpCerts.error": "无法更新 RDP 证书列表，请刷新核对已保存的状态。",
+  "settingsPage.rdpCerts.forget": "忘记 {{host}} 的 RDP 证书",
+  "settingsPage.rdpCerts.forgot": "已忘记 {{host}} 的 RDP 证书，下次连接时将重新询问。"
 }

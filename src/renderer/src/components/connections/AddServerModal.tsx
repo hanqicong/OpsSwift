@@ -335,6 +335,8 @@ export function AddServerModal(): React.JSX.Element {
 
   const [rdpUsername, setRdpUsername] = useState(existing?.rdp?.username ?? '')
   const [rdpPassword, setRdpPassword] = useState('')
+  const [savingRdpPassword, setSavingRdpPassword] = useState(false)
+  const [rdpSaveFailed, setRdpSaveFailed] = useState(false)
   const [rdpPort, setRdpPort] = useState(String(existing?.rdp?.port ?? 3389))
   const [rdpDomain, setRdpDomain] = useState(existing?.rdp?.domain ?? '')
   // Defaults on, like RdpSettings.nla: every supported Windows Server requires
@@ -629,7 +631,7 @@ export function AddServerModal(): React.JSX.Element {
   }
 
   const save = async (): Promise<void> => {
-    if (!valid) return
+    if (!valid || savingRdpPassword) return
     /**
      * The account the desktop signs in as.
      *
@@ -682,6 +684,25 @@ export function AddServerModal(): React.JSX.Element {
             nla: rdpNla
           }
         : undefined
+    }
+    if (editId && speaks !== 'ssh' && rdpPassword) {
+      setSavingRdpPassword(true)
+      setRdpSaveFailed(false)
+      try {
+        const saved = await window.opsmaxx?.secrets.set(
+          rdpSecretId(editId),
+          JSON.stringify({ password: rdpPassword })
+        )
+        if (!saved) {
+          setRdpSaveFailed(true)
+          return
+        }
+      } catch {
+        setRdpSaveFailed(true)
+        return
+      } finally {
+        setSavingRdpPassword(false)
+      }
     }
     const id = editId ? (updateServer(editId, fields), editId) : addServer(fields)
     if (sharesLoaded && (shares.length || editId)) {
@@ -843,7 +864,7 @@ export function AddServerModal(): React.JSX.Element {
      * Only written when something was typed: an empty box while editing means
      * "unchanged", which is what its placeholder says.
      */
-    if (speaks !== 'ssh' && rdpPassword) {
+    if (!editId && speaks !== 'ssh' && rdpPassword) {
       await storeSecret(rdpSecretId(id), { password: rdpPassword }, `${fields.name} (RDP)`)
     }
 
@@ -893,6 +914,9 @@ export function AddServerModal(): React.JSX.Element {
       footerNote={
         <>
           {missing && <span className="field-hint danger">{missing.why}</span>}
+          {rdpSaveFailed && speaks !== 'ssh' && (
+            <span role="alert" className="field-hint danger">{t('connections.addServer.rdpPasswordSaveFailed')}</span>
+          )}
           {!missing && sharesIssue && <span className="field-hint danger">{t('connections.addServer.sharesProblem', { message: sharesIssue.message })}</span>}
           {!missing && !sharesIssue && testResult && (
             <span className={clsx('field-hint', testResult.ok ? 'ok' : 'danger')}>{testResult.text}</span>
@@ -922,7 +946,7 @@ export function AddServerModal(): React.JSX.Element {
       confirm={{
         label: editId ? t('connections.addServer.saveChanges') : t('connections.addServer.addButton'),
         onClick: () => void save(),
-        disabled: !valid
+        disabled: !valid || savingRdpPassword
       }}
     >
       <div className="field">
@@ -1418,7 +1442,8 @@ export function AddServerModal(): React.JSX.Element {
                 className="input"
                 type="password"
                 value={rdpPassword}
-                onChange={(e) => setRdpPassword(e.target.value)}
+                autoComplete="new-password"
+                onChange={(e) => { setRdpPassword(e.target.value); setRdpSaveFailed(false) }}
                 placeholder={editId ? t('connections.addServer.rdpPasswordUnchanged') : ''}
               />
             </label>

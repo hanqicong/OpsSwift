@@ -13,7 +13,7 @@
 
 ## 发布与维护
 
-从 [OpsSwift 发布页](https://github.com/hanqicong/OpsSwift/releases)下载。首个已验证安装包面向 **macOS Apple Silicon**；保留 Windows／Linux 源码与构建方案，本次不声明这些平台已完成安装验收。
+`1.0.1` 面向 macOS Apple Silicon、Linux x64 和 Windows x64。对应安装包、校验值和验收范围见各版本说明。[OpsSwift 发布页](https://github.com/hanqicong/OpsSwift/releases)
 
 `1.0.x` 为本产品的 LTS 维护线，以兼容、缺陷修复和安全修复为主。上游新版本先进入本仓库审查、合并、构建和验证，再发布 OpsSwift 安装包。未来版本兼容性需要逐版核验；不承诺任意官方安装包自动保留定制能力。详见[维护与升级规则](docs/MAINTENANCE.md)。
 

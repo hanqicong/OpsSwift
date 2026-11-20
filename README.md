@@ -13,7 +13,7 @@
 
 ## Releases
 
-Download from [OpsSwift releases](https://github.com/hanqicong/OpsSwift/releases). The initial qualified installer targets **macOS Apple Silicon**. Windows/Linux build recipes remain in source; those installers are not qualified by this release.
+The 1.0.1 release targets macOS Apple Silicon, Linux x64 and Windows x64. See each release for the available installers, checksums and verification scope. [OpsSwift releases](https://github.com/hanqicong/OpsSwift/releases)
 
 This is the **1.0.x LTS line**. Changes to this line prioritize compatibility, defect fixes and security fixes. Upstream releases are reviewed and merged into this repository, rebuilt and tested before distribution. Official OpsMaxx updates never automatically replace OpsSwift. See [maintenance and upgrade policy](docs/MAINTENANCE.md).
 

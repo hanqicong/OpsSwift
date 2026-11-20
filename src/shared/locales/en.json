@@ -4691,7 +4691,8 @@
   "connections.addServer.rdpSignInAs": "Sign in as",
   "connections.addServer.rdpAccountOptional": "RDP account (optional)",
   "connections.addServer.rdpPasswordLabel": "RDP password",
-  "connections.addServer.rdpPasswordUnchanged": "Unchanged",
+  "connections.addServer.rdpPasswordUnchanged": "Enter the new password, or leave blank to keep the saved one",
+  "connections.addServer.rdpPasswordSaveFailed": "Could not save the RDP password. Check the system credential store, then try again.",
   "connections.addServer.rdpPortLabel": "RDP port",
   "connections.addServer.domainLabel": "Domain (optional)",
   "connections.addServer.nlaLabel": "Network Level Authentication",
@@ -6453,6 +6454,7 @@
   "rdp.view.sessionEnded": "The remote desktop session ended.",
   "rdp.view.ctrlAltDel": "Send Ctrl+Alt+Del",
   "rdp.view.reconnect": "Reconnect",
+  "rdp.view.editSignIn": "Edit RDP sign-in",
   "rdp.view.endedTitle": "The remote desktop session ended",
   "rdp.view.failedTitle": "Could not open the desktop",
   "rdp.view.ready": "Ready.",
@@ -8465,5 +8467,11 @@
   "opsswift.brandName": "LYiTECH",
   "opsswift.productName": "OpsSwift",
   "opsswift.ltsTag": "LTS",
-  "opsswift.versionLabel": "OpsSwift {{version}} · LTS"
+  "opsswift.versionLabel": "OpsSwift {{version}} · LTS",
+  "settingsPage.rdpCerts.title": "Trusted RDP certificates",
+  "settingsPage.rdpCerts.desc": "Saved remote desktop certificate fingerprints. Forget a certificate after verifying a legitimate change. The next connection will ask you to review the new certificate.",
+  "settingsPage.rdpCerts.empty": "No saved RDP certificates.",
+  "settingsPage.rdpCerts.error": "Could not update the RDP certificate list. Refresh to check the saved state.",
+  "settingsPage.rdpCerts.forget": "Forget the RDP certificate for {{host}}",
+  "settingsPage.rdpCerts.forgot": "Forgot the saved RDP certificate for {{host}}. The next connection will ask again."
 }

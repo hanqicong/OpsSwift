@@ -11,6 +11,8 @@ The 1.0.x line owns its version numbers and release channel. The upstream tag an
 5. Verify saved connection counts, credential ciphertexts, vault, permissions and MCP scope; verify SSH/Telnet using an authorized read-only target. Archive redacted acceptance evidence outside the source repository.
 6. Create an immutable version tag and attach installer, source archive, SHA256SUMS, release notes and corresponding OpenVPN sources. Do not overwrite released assets with different bytes under the same version.
 
+Run the manual **OpsSwift release candidate** workflow on the release source commit. It produces the macOS Apple Silicon ZIP, Linux x64 AppImage and Debian package, and Windows x64 installer and portable executable. Verify the CI checks for the same source tree and compare the platform artifacts before creating the GitHub Release. The workflow can build candidates with read-only repository access.
+
 ## Upstream intake
 
 Fetch upstream tags into a separate branch/checkout. Review upstream security and dependency changes, merge with this fork, resolve conflicts, then run the same gates. Do not install an unmodified upstream bundle over OpsSwift. No future version is prequalified by an earlier patch replay.

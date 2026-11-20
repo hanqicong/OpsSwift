@@ -9,7 +9,9 @@ const read = (p: string) => readFileSync(resolve(p), 'utf8')
 describe('OpsSwift LTS product contract', () => {
   it('has an independent product identity and retains the upstream licence', () => {
     const pkg = JSON.parse(read('package.json'))
-    expect(pkg).toMatchObject({ name: 'opsswift', version: '1.0.0', productName: 'OpsSwift' })
+    expect(pkg).toMatchObject({ name: 'opsswift', productName: 'OpsSwift' })
+    expect(pkg.version).toMatch(/^1\.0\.\d+$/)
+    expect(JSON.parse(read('package-lock.json')).packages[''].version).toBe(pkg.version)
     expect(read('electron-builder.yml')).toContain('appId: com.lyitech.opsswift')
     expect(read('LICENSE')).toContain('Copyright (c) 2026 OpsMaxx contributors')
     expect(read('electron-builder.yml')).toContain('  - LICENSE')

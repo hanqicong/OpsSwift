@@ -33,6 +33,7 @@ import { AddySetup } from '../addy/AddySetup'
 import { UpdatePanel } from './UpdatePanel'
 import { useOnboarding } from '../../store/onboarding'
 import { SshSessions } from './SshSessions'
+import { RdpCertificates } from './RdpCertificates'
 import { WebhookAlertSettings } from './WebhookAlertSettings'
 import { CredProxyPanel } from './CredProxyPanel'
 import { MachineGrants } from './MachineGrants'
@@ -345,6 +346,7 @@ const SETTING_INDEX: SettingEntry[] = [
   { section: 'monitoring', titleKey: 'settingsPage.monitoring.dbSize.title', descKey: 'settingsPage.index.dbSize.desc', aliases: 'database size sampler growth disk history' },
   { section: 'security', titleKey: 'settingsPage.vault.autoLock.title', descKey: 'settingsPage.index.autoLock.desc', aliases: 'vault auto lock secure timeout idle' },
   { section: 'security', titleKey: 'settingsPage.knownHosts.title', descKey: 'settingsPage.index.knownHosts.desc', aliases: 'known hosts fingerprint host key mismatch' },
+  { section: 'security', titleKey: 'settingsPage.rdpCerts.title', descKey: 'settingsPage.rdpCerts.desc', aliases: 'RDP remote desktop certificate fingerprint trust mismatch 证书 远程桌面' },
   { section: 'security', titleKey: 'settingsPage.index.keychain.title', descKey: 'settingsPage.index.keychain.desc', aliases: 'keychain secrets password storage' },
   { section: 'security', titleKey: 'settingsPage.index.autoLockWorkspaces.title', descKey: 'settingsPage.index.autoLockWorkspaces.desc', aliases: 'workspace lock idle' },
   { section: 'security', titleKey: 'settingsPage.index.confirmDestructive.title', descKey: 'settingsPage.index.confirmDestructive.desc', aliases: 'confirmation dangerous guard' },
@@ -1464,6 +1466,7 @@ export function Settings(): React.JSX.Element {
                 onChange={(v) => setSettings({ accessWriteEnabled: v })}
               />
               <KnownHosts />
+              <RdpCertificates />
               {/* Credential storage is not a choice, so it is not a switch.
                   A switch here read as a guarantee the user could withdraw --
                   and the three rows that used to sit below this one (keychain,

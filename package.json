@@ -1,6 +1,6 @@
 {
   "name": "opsswift",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "LYiTECH infrastructure operations desktop \u2014 bilingual SSH, Telnet, network RPC, Windows management and MCP. Long-term support fork of OpsMaxx.",
   "keywords": [
     "ssh",

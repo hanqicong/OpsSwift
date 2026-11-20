@@ -211,6 +211,7 @@ import type {
 } from '../shared/vpn'
 import type { VaultIndexResult } from '../shared/vaultIndex'
 import type { KnownHost } from '../main/services/knownhosts'
+import type { TrustedRdpCert } from '../main/services/rdpTrust'
 import type { SshConfigHost } from '../shared/sshconfig'
 import type {
   BackupDestination,
@@ -1827,6 +1828,10 @@ const api = {
   knownHosts: {
     list: (): Promise<KnownHost[]> => ipcRenderer.invoke('knownhosts:list'),
     forget: (id: string): Promise<void> => ipcRenderer.invoke('knownhosts:forget', id)
+  },
+  rdpTrust: {
+    list: (): Promise<TrustedRdpCert[]> => ipcRenderer.invoke('rdptrust:list'),
+    forget: (id: string): Promise<void> => ipcRenderer.invoke('rdptrust:forget', id)
   },
   // Remote desktop. Deliberately two calls and no more: main mints a ticket
   // for one saved server, and the renderer connects with it. There is no

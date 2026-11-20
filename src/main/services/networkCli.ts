@@ -5,11 +5,10 @@ import { terminalDecoder, encodeTerminal } from './terminalCodec'
 import { TerminalEncodingError, type TerminalEncoding } from '../../shared/terminalEncoding'
 import { app, safeStorage } from 'electron'
 import type { ClientChannel } from 'ssh2'
-import { acquire, release } from './ssh'
-import type { SshHop } from '../../shared/ssh'
+import { acquire, closeChain, openChain, release } from './ssh'
 import type { NetworkChange, NetworkProfile, NetworkQuery } from '../../shared/networkDevice'
 import { compileNetworkChanges } from '../../shared/networkDevice'
-import { boundedProtocol, abortable } from './protocolWire'
+import { boundedProtocol, abortable, type ProtocolTarget } from './protocolWire'
 import { openTelnet } from './protocolTelnet'
 import { compileUsgChanges, isUsgChange, verifyUsgChanges } from '../../shared/huaweiUsg'
 
@@ -150,7 +149,7 @@ export async function withNetworkLock<T>(serverId: string, fn: () => Promise<T>)
   locks.add(serverId)
   try { return await fn() } finally { locks.delete(serverId) }
 }
-export async function withNetworkCli<T>(cfg: SshHop & { serverId?: string; hops?: SshHop[] }, p: NetworkProfile, fn: (cli: NetworkCli) => Promise<T>, signal?: AbortSignal, beforeWrite?: () => void, transport: 'ssh' | 'telnet' = 'ssh'): Promise<T> {
+export async function withNetworkCli<T>(cfg: ProtocolTarget, p: NetworkProfile, fn: (cli: NetworkCli) => Promise<T>, signal?: AbortSignal, beforeWrite?: () => void, transport: 'ssh' | 'telnet' = 'ssh'): Promise<T> {
   return boundedProtocol(async (ctx) => {
   if (transport === 'telnet') {
     const raw = await openTelnet(cfg, ctx)
@@ -159,13 +158,20 @@ export async function withNetworkCli<T>(cfg: SshHop & { serverId?: string; hops?
     try { await cli.ready(); for (const command of p.paging) await cli.command(command); return await fn(cli) }
     finally { cli.close(); raw.close() }
   }
-  const conn = await abortable(acquire(cfg), ctx.signal, release)
+  // Some USG SSH servers refuse additional session channels on a connection
+  // after opening a shell. Give each bounded workflow its own connection.
+  const chain = p.id === 'huawei_usg'
+    ? await abortable(openChain(cfg, undefined, false), ctx.signal, closeChain)
+    : undefined
+  const pooled = chain ? undefined : await abortable(acquire(cfg), ctx.signal, release)
   let cli: NetworkCli | undefined
   try {
+    ctx.check()
+    const client = chain?.client ?? pooled!.client
     const stream = await new Promise<ClientChannel>((resolve, reject) => {
       let expired = false
       const timer = setTimeout(() => { expired = true; reject(new Error('Network shell open timed out')) }, NETWORK_LIMITS.commandMs)
-      conn.client.shell({ term: 'vt100', cols: 511, rows: 1000 }, (err, stream) => {
+      client.shell({ term: 'vt100', cols: 511, rows: 1000 }, (err, stream) => {
         clearTimeout(timer)
         if (err) reject(new Error('Device refused the network CLI shell'))
         else if (ctx.signal.aborted || expired) { stream.destroy(); reject(new Error('Network request cancelled or shell open expired')) }
@@ -176,7 +182,11 @@ export async function withNetworkCli<T>(cfg: SshHop & { serverId?: string; hops?
     await cli.ready()
     for (const command of p.paging) await cli.command(command)
     return await fn(cli)
-  } finally { cli?.close(); release(conn) }
+  } finally {
+    cli?.close()
+    if (chain) closeChain(chain)
+    if (pooled) release(pooled)
+  }
   }, beforeWrite ?? (() => {}), signal)
 }
 export async function networkRead(cli: NetworkCli, p: NetworkProfile, query: NetworkQuery): Promise<string> {

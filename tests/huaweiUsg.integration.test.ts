@@ -44,9 +44,12 @@ beforeAll(async () => {
   const key = generateKeyPairSync('rsa', { modulusLength: 2048, privateKeyEncoding: { type: 'pkcs1', format: 'pem' }, publicKeyEncoding: { type: 'pkcs1', format: 'pem' } }).privateKey
   target = new SshServer({ hostKeys: [key] }, connection => {
     connections.push(connection); connection.on('error', () => {}); connection.on('authentication', c => c.accept())
-    connection.on('ready', () => connection.on('session', accept => {
+    let shellOpened = false
+    connection.on('ready', () => connection.on('session', (accept, reject) => {
+      if (shellOpened) { reject(); return }
       const session = accept(); session.on('pty', yes => yes?.())
       session.on('shell', yes => {
+        shellOpened = true
         const channel = yes(), decoder = terminalDecoder('gbk'); let input = '', view = '', current: string[] | undefined
         const prompt = (): string => `HRP_${standby ? 'S' : 'M'}${view ? '[USG-' + view + ']' : '<USG>'}`
         const send = (text: string): void => { const b = encodeTerminal(text, 'gbk'); channel.write(b.subarray(0, 1)); setTimeout(() => { if (!channel.destroyed) channel.write(b.subarray(1)) }, 2) }
@@ -86,6 +89,20 @@ beforeEach(() => {
 })
 afterAll(async () => { unsubscribe(); await stopMcpServer(); poolDisposeAll(); connections.forEach(c => c.end()); await new Promise<void>(r => target.close(() => r())) })
 describe('USG GBK shell through authenticated MCP', () => {
+  it('runs back-to-back reads on separate SSH connections when only one shell is allowed per connection', async () => {
+    const client = await mcp()
+    try {
+      const count = connections.length
+      const version = await client.callTool({ name: 'network_get_state', arguments: { serverName: 'USG fixture', query: 'version' } })
+      const ha = await client.callTool({ name: 'network_get_state', arguments: { serverName: 'USG fixture', query: 'ha' } })
+      expect(data(version).output).toContain('领益防火墙')
+      expect(data(ha).output).toContain('Role: active')
+      expect(connections).toHaveLength(count + 2)
+      expect(received).not.toContain('system-view')
+    } finally {
+      await client.close()
+    }
+  })
   it('advertises bounded capabilities and reads Chinese inventory without unrelated secrets', async () => {
     const client = await mcp()
     const caps = data(await client.callTool({ name: 'network_get_capabilities', arguments: { serverName: 'USG fixture' } }))
