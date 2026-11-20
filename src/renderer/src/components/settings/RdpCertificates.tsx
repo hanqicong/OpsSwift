@@ -66,7 +66,7 @@ export function RdpCertificates(): React.JSX.Element {
         <div className="setting-row" key={certificate.id}>
           <div className="s-info">
             <div className="s-title mono">{certificate.id}</div>
-            <div className="s-desc mono" style={{ fontSize: 11, overflowWrap: 'anywhere' }}>
+            <div className="s-desc mono" style={{ overflowWrap: 'anywhere' }}>
               {certificate.fingerprint}
             </div>
           </div>
