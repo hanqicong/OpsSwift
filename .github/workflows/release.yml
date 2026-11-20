@@ -68,7 +68,12 @@ jobs:
         shell: bash
         run: |
           npm run build
-          npx electron-builder --x64 --publish never
+          if [ "$RUNNER_OS" = Linux ]; then
+            # The Ubuntu 22.04 default GCC cannot compile Electron's V8 headers.
+            CC=clang-15 CXX=clang++-15 npx electron-builder --x64 --publish never
+          else
+            npx electron-builder --x64 --publish never
+          fi
           node scripts/verify-local-pty-pack.mjs release
           if [ "$RUNNER_OS" = Windows ]; then
             node scripts/verify-bin-manifest.mjs release/win-unpacked/resources/bin
