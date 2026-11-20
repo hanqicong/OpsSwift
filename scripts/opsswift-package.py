@@ -29,7 +29,7 @@ def main():
         env.pop(key, None)
     env.update({'CSC_IDENTITY_AUTO_DISCOVERY':'false','ELECTRON_BUILDER_CACHE':'/private/tmp/opsswift-builder-cache','npm_config_cache':'/private/tmp/opsmaxx-network-npm-cache'})
     run(['npm','run','build'], env=env)
-    run(['npx','electron-builder','--dir','--mac','--arm64','-c.npmRebuild=false','-c.electronDist=node_modules/electron/dist'], env=env)
+    run(['npx','electron-builder','--dir','--mac','--arm64','--publish','never','-c.npmRebuild=false'], env=env)
     app = ROOT / 'release/mac-arm64/OpsSwift.app'
     run(['node','scripts/verify-local-pty-pack.mjs',str(app.parent)])
     sign = ['codesign','--force','--sign','-','--options','runtime','--entitlements',str(ROOT/'build/entitlements.mac.plist')]
