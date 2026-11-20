@@ -79,6 +79,9 @@ jobs:
             test -f release/OpsSwift-*.AppImage
             test -f release/OpsSwift-*.deb
           fi
+      - name: Collect corresponding OpenVPN source
+        if: runner.os != 'Windows'
+        run: cp .openvpn-src/*-source.tar.gz release/
       - uses: actions/upload-artifact@v4
         with:
           name: OpsSwift-${{ matrix.target }}-candidate
@@ -89,7 +92,7 @@ jobs:
             release/OpsSwift-*-setup.exe
             release/OpsSwift-*-portable.exe
             release/artifact.json
-            .openvpn-src/*-source.tar.gz
+            release/*-source.tar.gz
           if-no-files-found: error
           retention-days: 14
 # Publication is deliberately separate: a maintainer must review the actual native package,
