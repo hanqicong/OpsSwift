@@ -18,7 +18,8 @@ import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const BIN_ROOT = join(ROOT, 'resources', 'bin')
+const [binPath] = process.argv.slice(2).filter(arg => arg !== '--print-required-dirs')
+const BIN_ROOT = binPath ? resolve(binPath) : join(ROOT, 'resources', 'bin')
 
 // Every file the app expects to find, per platform. Keep this in step with the
 // drivers: something added to the app but not listed here would ship missing
@@ -57,11 +58,9 @@ function sha256File(path) {
   })
 }
 
-// Which platform-arch directories this build needs. A macOS release is a
-// universal-ish dual build (x64 and arm64 dmgs), so both are required there;
-// the other two ship a single arch.
+// OpsSwift ships one supported architecture per desktop platform.
 function requiredDirs() {
-  if (process.platform === 'darwin') return ['darwin-x64', 'darwin-arm64']
+  if (process.platform === 'darwin') return ['darwin-arm64']
   if (process.platform === 'win32') return ['win32-x64']
   return ['linux-x64']
 }
@@ -88,7 +87,7 @@ async function main() {
   try {
     manifest = JSON.parse(await readFile(join(BIN_ROOT, 'manifest.json'), 'utf8'))
   } catch (e) {
-    console.error(`::error::resources/bin/manifest.json is missing or unreadable (${e.message}).`)
+    console.error(`::error::Engine manifest is missing or unreadable in ${BIN_ROOT} (${e.message}).`)
     console.error('Run `npm run build:engines` before packaging.')
     process.exit(1)
   }

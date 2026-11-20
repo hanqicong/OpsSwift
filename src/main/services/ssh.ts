@@ -2163,7 +2163,7 @@ export async function sshOpenFresh(
 // Every client in the chain, not just the last: a bastion opened for this one
 // connection is this connection's to close, and leaving it up would be an
 // authenticated session nothing is tracking.
-function closeChain(chain: { clients: Client[]; close?: () => void }): void {
+export function closeChain(chain: { clients: Client[]; close?: () => void }): void {
   for (const c of chain.clients) {
     try {
       c.end()

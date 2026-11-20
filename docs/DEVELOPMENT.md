@@ -46,6 +46,7 @@ Developer guide for the independent OpsSwift product. Start here for feature wor
 | 远程协议 | `src/shared/remoteProtocol.ts`、`src/main/services/protocolWire.ts` | 保存的协议、路由、固定端点、边界和取消 |
 | NETCONF／JSON-RPC／Windows | `protocolNetconf.ts`、`protocolJsonRpc.ts`、`protocolWindows.ts`，均在 `src/main/services/` | SSH 子系统／严格 HTTPS、消息对应、写入语义和不确定结果 |
 | 资料及保险库 | `src/main/portable.ts`、`src/main/services/store.ts`、`secrets.ts`、`vault.ts` | 导入先后顺序、真实 userData、OS 密钥库及加密兼容 |
+| RDP 证书信任 | `src/main/services/rdpTrust.ts`、`src/renderer/src/components/settings/RdpCertificates.tsx` | `rdptrust:*` IPC 和 preload 列表／忘记入口、按 host:port 管理、失败后刷新、下次连接重新确认 |
 | 双语、品牌和主题 | `src/shared/locales/en.json`、`zh-CN.json`、`src/renderer/src/assets/`、`src/renderer/src/styles/` | 占位符、主题对比度、真实图标格式与原生菜单 |
 | 更新与打包 | `src/main/services/updater.ts`、`electron-builder.yml`、`scripts/opsswift-package.py` | 自有发布源、原生绑定、引擎、签名及许可文件 |
 | Go 引擎 | `sidecar/netd/`、`sidecar/addyd/`、`scripts/build-*.sh` | `go.mod`／`go.sum`、目标平台、清单和第三方许可 |

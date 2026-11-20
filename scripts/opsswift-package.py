@@ -29,7 +29,7 @@ def main():
         env.pop(key, None)
     env.update({'CSC_IDENTITY_AUTO_DISCOVERY':'false','ELECTRON_BUILDER_CACHE':'/private/tmp/opsswift-builder-cache','npm_config_cache':'/private/tmp/opsmaxx-network-npm-cache'})
     run(['npm','run','build'], env=env)
-    run(['npx','electron-builder','--dir','--mac','--arm64','-c.npmRebuild=false','-c.electronDist=node_modules/electron/dist'], env=env)
+    run(['npx','electron-builder','--dir','--mac','--arm64','--publish','never','-c.npmRebuild=false'], env=env)
     app = ROOT / 'release/mac-arm64/OpsSwift.app'
     run(['node','scripts/verify-local-pty-pack.mjs',str(app.parent)])
     sign = ['codesign','--force','--sign','-','--options','runtime','--entitlements',str(ROOT/'build/entitlements.mac.plist')]
@@ -38,6 +38,7 @@ def main():
     p = bins / 'manifest.json'; data = json.loads(p.read_text()); data['binaries'] = {n:e for n,e in data['binaries'].items() if (bins/n).is_file()};p.write_text(json.dumps(data,indent=2)+'\n')
     run(['node','-e',"require('./scripts/after-sign.cjs').rehashManifest(process.argv[1])",str(bins)])
     run(sign + [str(app)]); run(['codesign','--verify','--strict','--deep',str(app)])
+    run(['node','scripts/verify-bin-manifest.mjs',str(bins)])
     info = plistlib.loads((app/'Contents/Info.plist').read_bytes())
     assert info['CFBundleIdentifier']=='com.lyitech.opsswift' and info['CFBundleShortVersionString']==pkg['version']
     target=ROOT/'release'/f'OpsSwift-{pkg["version"]}-mac-arm64.zip'

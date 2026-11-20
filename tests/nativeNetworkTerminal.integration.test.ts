@@ -42,15 +42,15 @@ beforeAll(async () => {
   tcp = createServer(socket => {
     sockets.add(socket); socket.on('error', () => {}); socket.once('close', () => sockets.delete(socket))
     let buffer = '', phase = 0; const codec = new TelnetCodec(), decoder = terminalDecoder(wireEncoding); const encoding = wireEncoding
-    socket.write(Buffer.from([255, 253, 31, 255, 253, 24])); socket.write(encodeTerminal(chineseLogin ? '用户名：' : 'Username: ', encoding))
+    socket.write(Buffer.from([255, 253, 31, 255, 253, 24])); socket.write(encodeTerminal(chineseLogin ? encoding === 'big5' ? '使用者名稱：' : '用户名：' : 'Username: ', encoding))
     socket.on('data', b => {
       control.push(b); buffer += decoder.write(codec.decode(b).data)
       let at: number
       while ((at = buffer.indexOf('\n')) >= 0) {
         const line = buffer.slice(0, at).replace(/\r/g, ''); buffer = buffer.slice(at + 1); lines.push(line)
-        if (phase++ === 0) socket.write(encodeTerminal(chineseLogin ? '密码：' : 'Password: ', encoding))
-        else if (phase === 2) { if (rejectPassword || line !== expectedPassword) socket.end('Login incorrect\r\nUsername: '); else socket.write('\r\n<Fixture>') }
-        else { const output = encodeTerminal(line + '\r\n华为终端\r\n<Fixture>', encoding); for (const byte of output) socket.write(Buffer.from([byte])) }
+        if (phase++ === 0) socket.write(encodeTerminal(chineseLogin ? encoding === 'big5' ? '密碼：' : '密码：' : 'Password: ', encoding))
+        else if (phase === 2) { if (rejectPassword || line !== expectedPassword) socket.end(encodeTerminal(chineseLogin && encoding === 'big5' ? '密碼錯誤\r\n使用者名稱：' : 'Login incorrect\r\nUsername: ', encoding)); else socket.write('\r\n<Fixture>') }
+        else { const output = encodeTerminal(line + (encoding === 'big5' ? '\r\n華為終端\r\n<Fixture>' : '\r\n华为终端\r\n<Fixture>'), encoding); for (const byte of output) socket.write(Buffer.from([byte])) }
       }
     })
   })
@@ -110,6 +110,20 @@ describe('actual native window transport paths', () => {
     nativeTelnetWrite(contents(w), 'native-fixture', 'description 😀\r')
     expect(w.messages.at(-1)?.value.message).toContain('cannot be represented')
     await new Promise(r => setTimeout(r, 20)); expect(lines).toHaveLength(before)
+  })
+  it('logs in with Traditional Chinese Big5 prompts and refuses a rejected password without retry', async () => {
+    wireEncoding = 'big5'; chineseLogin = true; expectedPassword = '測試密碼'; cache('telnet')
+    const w = new WindowFixture()
+    const cfg = config({ serverId: undefined, username: '測試用戶', password: expectedPassword, terminalEncoding: 'big5', remoteTransport: 'telnet' })
+    await nativeNetworkConnect(contents(w), cfg)
+    expect(w.messages.some(m => m.value.phase === 'ready')).toBe(true)
+    nativeTelnetWrite(contents(w), 'native-fixture', 'description 領益機房\r')
+    await vi.waitFor(() => expect(w.messages.filter(m => typeof m.value === 'string').map(m => m.value).join('')).toContain('華為終端'))
+    expect(lines).toEqual(['測試用戶', expectedPassword, 'description 領益機房'])
+    nativeTelnetClose(contents(w), 'native-fixture')
+    lines.length = 0; rejectPassword = true
+    expect((await nativeNetworkTest(cfg)).ok).toBe(false)
+    expect(lines).toEqual(['測試用戶', expectedPassword])
   })
   it.each(['utf8', 'gbk'] as const)('keeps split native SSH, exec and streaming stderr separate in %s', async encoding => {
     wireEncoding = encoding; cache('ssh', 'huawei-sha1')

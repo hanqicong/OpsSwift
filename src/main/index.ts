@@ -249,6 +249,7 @@ import { rdpAdvisory, rdpLastError, rdpMintTicket, stopRdpRelay } from './servic
 import type { RdpDesktopSize } from '../shared/rdp'
 import type { TunnelConfig, TunnelSshConfig } from '../shared/tunnel'
 import { knownHostList, knownHostForget } from './services/knownhosts'
+import { trustedRdpCertList, forgetRdpCert } from './services/rdpTrust'
 import { askToUseDatabase, askToUseRecord, confirmRecord, confirmSecretOwner, heldRecords, pendingWorkspace, seedLinkMarks } from './services/syncTrust'
 import { keychainOnly, moveCredentialsToVault } from './services/credentialMove'
 import { credentialToStore, vaultLinkOf } from './services/credentialLink'
@@ -5547,6 +5548,13 @@ onUpdaterStatus((s) => {
 // ---- Known hosts ----
 ipcMain.handle('knownhosts:list', () => knownHostList())
 ipcMain.handle('knownhosts:forget', (_e, id: string) => knownHostForget(id))
+ipcMain.handle('rdptrust:list', () => trustedRdpCertList())
+ipcMain.handle('rdptrust:forget', (_e, id: unknown) => {
+  if (typeof id !== 'string' || !trustedRdpCertList().some((cert) => cert.id === id)) {
+    throw new Error('Unknown RDP certificate')
+  }
+  forgetRdpCert(id)
+})
 
 // ---- Tunnels ----
 ipcMain.handle('tunnel:start', (e, cfg: TunnelConfig, ssh: TunnelSshConfig) =>

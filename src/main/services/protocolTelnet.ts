@@ -90,13 +90,13 @@ export async function openTelnet(cfg: ProtocolTarget, ctx: ProtocolContext, size
       const onClose = (): void => fail()
       const onData = (chunk: Buffer): void => {
         buffer += decoder.write(chunk)
-        if (Buffer.byteLength(buffer) > 64 * 1024 || /(?:authentication failed|login incorrect|access denied|bad password|password incorrect|认证失败|验证失败|登录失败|密码错误)/i.test(buffer)) return fail()
+        if (Buffer.byteLength(buffer) > 64 * 1024 || /(?:authentication failed|login incorrect|access denied|bad password|password incorrect|认证失败|認證失敗|验证失败|驗證失敗|登录失败|登錄失敗|登入失敗|密码错误|密碼錯誤)/i.test(buffer)) return fail()
         const tail = buffer.replace(/[\r\0]/g, '').trimEnd().split('\n').at(-1)?.trim() ?? ''
         try {
-          if (/(?:username|login|user name|用户名|用户名称)\s*[:：]\s*$/i.test(tail)) {
+          if (/(?:username|login|user name|用户名|用户名称|用戶名|用戶名稱|使用者名稱|使用者帳號)\s*[:：]\s*$/i.test(tail)) {
             if (sentUser || sentPassword) return fail()
             ctx.check(); decoded.write(username); sentUser = true; buffer = ''
-          } else if (/(?:password|密码|口令)\s*[:：]\s*$/i.test(tail)) {
+          } else if (/(?:password|密码|密碼|口令)\s*[:：]\s*$/i.test(tail)) {
             if (sentPassword) return fail()
             ctx.check(); decoded.write(password); sentPassword = true; buffer = ''
           } else if (tail.length > 0 && tail.length < 180 && /^(?:(?:HRP_[MS])?(?:<[^<>\n]+>|\[[^[\]\n]+\])|[\w.@:-]+(?:\([\w ./:-]+\))?[#>])$/.test(tail)) {

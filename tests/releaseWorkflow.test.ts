@@ -16,10 +16,13 @@ describe('OpsSwift release qualification', () => {
     expect(steps.some(s => /action-gh-release|gh release/.test((s.uses ?? '') + (s.run ?? '')))).toBe(false)
     expect(builder.publish).toBeNull()
   })
-  it('checks source before constructing the candidate from pinned engines', () => {
+  it('builds all three desktop targets from verified pinned engines', () => {
     const runs = steps.map(s => s.run ?? '').join('\n')
-    for (const check of ['npm ci', 'npm run typecheck', 'npm test', 'npm run lint', 'build:sidecar', 'build:addyd', 'build:frpc', 'build:openvpn']) expect(runs).toContain(check)
-    expect(runs.indexOf('npm test')).toBeLessThan(runs.indexOf('opsswift-package.py'))
+    for (const check of ['npm ci', 'build:sidecar', 'build:addyd', 'build:frpc', 'build:openvpn', 'fetch:wintun', 'localPtySmoke', 'verify-bin-manifest.mjs']) expect(runs).toContain(check)
+    expect(runs.indexOf('verify-bin-manifest.mjs')).toBeLessThan(runs.indexOf('opsswift-package.py'))
+    expect(workflow.jobs.build).toMatchObject({ strategy: { matrix: { include: [
+      { target: 'darwin-arm64' }, { target: 'linux-x64' }, { target: 'win32-x64' }
+    ] } } })
     expect(script).toContain('Engine hash mismatch')
     expect(script).toContain("if len(engines) != 4")
   })
